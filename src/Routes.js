@@ -18,7 +18,11 @@ import {
   UserForm as UserFormView,
   ProductForm as ProductFormView,
   ContactList as ContactListView,
-  ContactForm as ContactFormView
+  ContactForm as ContactFormView,
+  PetList as PetListView,
+  PetForm as PetFormView,
+  Parameters as ParametersView,
+  MedicalRecords as MedicalRecordsView 
 } from './views';
 
 const Routes = () => {
@@ -78,6 +82,34 @@ const Routes = () => {
         authenticated={true}
         path="/contacts/form"
       />
+      <RouteWithLayout
+        component={PetListView}
+        exact
+        layout={MainLayout}
+        authenticated={true}
+        path="/pets"
+      />
+      <RouteWithLayout
+        component={PetFormView}
+        exact
+        layout={MainLayout}
+        authenticated={true}
+        path="/pets/form"
+      />
+      <RouteWithLayout
+        component={ParametersView}
+        exact
+        layout={MainLayout}
+        authenticated={true}
+        path="/parameters"
+      />
+      <RouteWithLayout
+        component={MedicalRecordsView}
+        exact
+        layout={MainLayout}
+        authenticated={true}
+        path="/medicalRecords"
+      />      
       <RouteWithLayout
         component={TypographyView}
         exact

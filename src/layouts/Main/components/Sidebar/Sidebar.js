@@ -12,6 +12,7 @@ import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PetsIcon from '@material-ui/icons/Pets';
 import Lock from '@material-ui/icons/Lock';
+import Build from '@material-ui/icons/Build';
 import Swal from 'sweetalert2'
 //import { Profile, SidebarNav, UpgradePlan } from './components';
 
@@ -77,7 +78,7 @@ const Sidebar = props => {
 
   let pages = [
     {
-      title: 'Dashboard',
+      title: 'Analítica',
       href: '/dashboard',
       icon: <DashboardIcon />
     },
@@ -100,7 +101,12 @@ const Sidebar = props => {
       title: 'Pacientes',
       href: '/pets',
       icon: <PetsIcon />
-    },     
+    },
+    {
+      title: 'Parametrización',
+      href: '/parameters',
+      icon: <Build />
+    },      
     {
       title: 'Configuración',
       href: '/settings',

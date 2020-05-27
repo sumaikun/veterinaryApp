@@ -7,6 +7,12 @@ export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 
 export const SET_FETCHING = "SET_FETCHING";
 
+// ---------------- Apps Extended types --------------------------
+
+export const SET_BREEDS = "SET_BREEDS";
+
+export const SET_SPECIES = "SET_SPECIES";
+
 // ---------------- Users types --------------------------
 
 export const SET_USERS = "SET_USERS";
@@ -37,3 +43,25 @@ export const ADD_CONTACT = "ADD_CONTACT";
 export const REMOVE_CONTACT = "REMOVE_CONTACT";
 
 export const SELECT_CONTACT = "SELECT_CONTACT";
+
+// ---------------- Pets types --------------------------------
+
+export const SET_PETS = "SET_PETS";
+
+export const ADD_PET = "ADD_PET";
+
+export const REMOVE_PET = "REMOVE_PET";
+
+export const SELECT_PET = "SELECT_PET";
+
+// ---------------- Parameters types --------------------------------
+
+export const SET_PARAMETERS = "SET_PARAMETERS";
+
+export const ADD_PARAMETER = "ADD_PARAMETER";
+
+export const REMOVE_PARAMETER = "REMOVE_PARAMETER";
+
+export const SELECT_PARAMETER = "SELECT_PARAMETER";
+
+

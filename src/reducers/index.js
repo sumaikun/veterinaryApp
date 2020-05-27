@@ -4,6 +4,8 @@ import { app } from "./app";
 import { users } from "./users";
 import { products } from "./products";
 import { contacts } from "./contacts";
+import { pets } from "./pets";
+import { parameters } from "./parameters";
 
 
 const reducers = combineReducers({
@@ -11,7 +13,9 @@ const reducers = combineReducers({
   app,
   users,
   products,
-  contacts
+  contacts,
+  pets,
+  parameters
 });
 
 export default reducers;

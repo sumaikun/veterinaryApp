@@ -1,3 +1,6 @@
+0. npx create-react-app myApp
+
+
 1. Install react material
 
     npm install @material-ui/core

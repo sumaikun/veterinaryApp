@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { AppBar, Toolbar, Badge, Hidden, IconButton } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import PetsIcon from '@material-ui/icons/Pets';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
 import Swal from 'sweetalert2'
@@ -62,10 +63,10 @@ const Topbar = props => {
     >
       <Toolbar>
         <RouterLink to="/">
-          <img
-            alt="Logo"
-            src="/images/logos/logo--white.svg"
-          />
+          <IconButton color="white">
+            <PetsIcon style={{color:"white"}} />
+            <span style={{color:"white"}}>&nbsp;&nbsp;{"Sistema de gestión veterinaría"}</span>
+          </IconButton>
         </RouterLink>
         <div className={classes.flexGrow} />
         <Hidden mdDown>

@@ -19,6 +19,8 @@ import { connect } from "react-redux";
 
 import { loginUser } from "actions/auth";
 
+import { getBreeds, getSpecies } from "actions/app"
+
 import Swal from 'sweetalert2'
 
 const schema = {
@@ -186,6 +188,8 @@ const SignIn = props => {
     console.log(formState.values)
     props.loginUser(formState.values, ( success , error ) =>{
       if(success){
+        props.getBreeds()
+        props.getSpecies()
         history.push('/');
       }
       if(error){
@@ -387,6 +391,8 @@ SignIn.propTypes = {
 
 const mapDispatchToProps = {
   loginUser,
+  getBreeds,
+  getSpecies
  };
  
 export default connect(null, mapDispatchToProps)(withRouter(SignIn));

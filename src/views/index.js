@@ -12,3 +12,7 @@ export { default as UserForm } from './UserForm';
 export { default as ProductForm } from './ProductForm';
 export { default as ContactList } from './ContactList';
 export { default as ContactForm } from './ContactForm';
+export { default as PetList } from './PetList';
+export { default as PetForm } from './PetForm';
+export { default as Parameters } from './Parameters';
+export { default as MedicalRecords } from './MedicalRecords';

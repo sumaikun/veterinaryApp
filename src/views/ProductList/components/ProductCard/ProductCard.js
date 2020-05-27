@@ -21,8 +21,6 @@ import { getInitials } from 'helpers';
 const useStyles = makeStyles(theme => ({
   root: {},
   imageContainer: {
-    height: 64,
-    width: 64,
     margin: '0 auto',
     border: `1px solid ${theme.palette.divider}`,
     borderRadius: '5px',
@@ -33,6 +31,14 @@ const useStyles = makeStyles(theme => ({
   },
   image: {
     width: '100%'
+  },
+  avatar: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    height: 300,
+    width: 350,
+    flexShrink: 0,
+    flexGrow: 0
   },
   statsItem: {
     display: 'flex',

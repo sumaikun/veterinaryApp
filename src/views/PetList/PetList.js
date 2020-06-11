@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 
+import 'date-fns';
+
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 
-import { PetsToolbar, PetsTable } from './components';
+import { PetsToolbar, PetsTable, PetsModal } from './components';
 
 import { connect } from 'react-redux';
 
 import { getPets , getPet } from 'actions/pets';
+
+
 
 const useStyles = theme => ({
   root: {
@@ -15,6 +19,16 @@ const useStyles = theme => ({
   },
   content: {
     marginTop: theme.spacing(2)
+  },
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
   }
 });
 
@@ -27,7 +41,8 @@ class PetList extends Component{
     super(props)
     console.log("petlist props",props)
     this.state = {
-      pets:[]
+      pets:[],
+      open:false
     }   
   }
 
@@ -48,6 +63,10 @@ class PetList extends Component{
     this.addSelectedPet = this.addSelectedPet.bind(this)
     this.medicalRecordsButton = this.medicalRecordsButton.bind(this)
     this.medicalAppointmentButton = this.medicalAppointmentButton.bind(this)
+
+    this.handleOpen = this.handleOpen.bind(this)
+    this.handleClose = this.handleClose.bind(this)
+
   }
 
   addSelectedPet(id){
@@ -63,10 +82,15 @@ class PetList extends Component{
 
   medicalRecordsButton(){
     console.log('medicalRecordsButton')
+    this.props.history.push({
+      pathname: '/medicalRecords',
+      state: { id: this.state.selectedPet._id }
+    })
   }
 
   medicalAppointmentButton(){
     console.log('medicalAppointmentButton')
+    this.handleOpen()
   }
 
   createButton(){
@@ -89,6 +113,20 @@ class PetList extends Component{
   deleteButton(){
     console.log("delete Button");
   }
+
+  handleOpen = () => {
+    this.setState({
+      ...this.state,
+      open:true
+    })
+  };
+
+  handleClose = () => {
+    this.setState({
+      ...this.state,
+      open:false
+    })
+  };
 
   filteredPets(data){
     //console.log("data",data)
@@ -129,8 +167,7 @@ class PetList extends Component{
   render(){    
     const { classes } = this.props;
 
- 
-
+    
 
     return (
       <div className={classes.root}>
@@ -148,6 +185,7 @@ class PetList extends Component{
           addSelectedPet={this.addSelectedPet} 
           pets={this.state.pets} />
         </div>
+        <PetsModal  open={this.state.open} handleClose={this.handleClose} />
       </div>
     );  
   }

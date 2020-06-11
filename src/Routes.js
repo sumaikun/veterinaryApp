@@ -22,7 +22,8 @@ import {
   PetList as PetListView,
   PetForm as PetFormView,
   Parameters as ParametersView,
-  MedicalRecords as MedicalRecordsView 
+  MedicalRecords as MedicalRecordsView,
+  Agenda as  AgendaView
 } from './views';
 
 const Routes = () => {
@@ -95,6 +96,13 @@ const Routes = () => {
         layout={MainLayout}
         authenticated={true}
         path="/pets/form"
+      />
+      <RouteWithLayout
+        component={AgendaView}
+        exact
+        layout={MainLayout}
+        authenticated={true}
+        path="/agenda"
       />
       <RouteWithLayout
         component={ParametersView}

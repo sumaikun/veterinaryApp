@@ -16,3 +16,4 @@ export { default as PetList } from './PetList';
 export { default as PetForm } from './PetForm';
 export { default as Parameters } from './Parameters';
 export { default as MedicalRecords } from './MedicalRecords';
+export { default as Agenda } from './Agenda';

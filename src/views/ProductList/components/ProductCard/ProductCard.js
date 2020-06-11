@@ -82,7 +82,7 @@ const ProductCard = props => {
           align="center"
           variant="body1"
         >
-          {product.description}
+          { product.description.length > 50 ? product.description.substring(0,47)+"..." :  product.description }
         </Typography>
       </CardContent>
       <Divider />

@@ -50,7 +50,56 @@ const PhysiologicalConstants = props => {
   const classes = doStyles();
 
   useEffect(() => {
-  },[]);  
+  },[]); 
+  
+  const handleChange = event => {
+    
+    //console.log(event,event.target)
+    console.log(event.target.name,event.target.value,event.target.checked,event.target.type)
+    if( event.target.type === "checkbox" )
+    {
+        setData(event.target.name,event.target.checked)
+    }
+    else{
+        setData(event.target.name,event.target.value)
+    }
+
+  };
+
+  const [values, setValues] = useState({
+    tlic:"",
+    heartRate:"",
+    respiratoryRate:"",
+    HeartBeat:"",
+    temperature:"",
+    weight:"",
+    attitude:null,
+    bodyCondition:null,
+    hidrationStatus:null,
+    conjuntivalMucosa:"",
+    oralMucosa:"",
+    vulvallMucosa:"",
+    rectalMucosa:"",
+    physicalsEye:"",
+    physicalsEars:"",
+    physicalsLinfaticmodules:"",
+    physicalsSkinandanexes:"",
+    physicalsLocomotion:"",
+    physicalsMusclesqueletal:"",
+    physicalsNervoussystem:"",
+    physicalsCardiovascularsystem:"",
+    physicalsRespiratorysystem:"",
+    physicalsDigestivesystem:"",
+    physicalsGenitourinarysystem:""
+  })
+
+  const setData = (key , value) => {
+    setValues({
+        ...values,
+        [key]:value
+    })
+    
+  }
 
   return (
     <Grid lg={12} md={12} xs={12}>
@@ -65,11 +114,13 @@ const PhysiologicalConstants = props => {
                     fullWidth
                     label="T.LI.C"
                     margin="dense"
-                    name="name"
+                    name="tlic"
                     variant="outlined"
                     InputLabelProps={{
                         className: classes.floatingLabelFocusStyle,
                     }}
+                    onChange={handleChange}
+                    value={values.tlic}
                 />
             </Grid>
             <Grid lg={4} md={4} xs={12} >
@@ -77,11 +128,13 @@ const PhysiologicalConstants = props => {
                     fullWidth
                     label="F.C"
                     margin="dense"
-                    name="name"
+                    name="heartRate"
                     variant="outlined"
                     InputLabelProps={{
                         className: classes.floatingLabelFocusStyle,
                     }}
+                    onChange={handleChange}
+                    value={values.heartRate}
                 />
             </Grid>
             <Grid lg={4} md={4} xs={12} >
@@ -89,11 +142,13 @@ const PhysiologicalConstants = props => {
                     fullWidth
                     label="F.R"
                     margin="dense"
-                    name="name"
+                    name="respiratoryRate"
                     variant="outlined"
                     InputLabelProps={{
                         className: classes.floatingLabelFocusStyle,
                     }}
+                    onChange={handleChange}
+                    value={values.respiratoryRate}
                 />
             </Grid>
         </Grid>
@@ -108,11 +163,13 @@ const PhysiologicalConstants = props => {
                     fullWidth
                     label="PULSO"
                     margin="dense"
-                    name="name"
+                    name="HeartBeat"
                     variant="outlined"
                     InputLabelProps={{
                         className: classes.floatingLabelFocusStyle,
                     }}
+                    onChange={handleChange}
+                    value={values.HeartBeat}
                 />
             </Grid>
             <Grid lg={4} md={4} xs={12} >
@@ -120,11 +177,13 @@ const PhysiologicalConstants = props => {
                     fullWidth
                     label="TEMPERATURA"
                     margin="dense"
-                    name="name"
+                    name="temperature"
                     variant="outlined"
                     InputLabelProps={{
                         className: classes.floatingLabelFocusStyle,
                     }}
+                    onChange={handleChange}
+                    value={values.temperature}
                 />
             </Grid>
             <Grid lg={4} md={4} xs={12} >
@@ -132,11 +191,13 @@ const PhysiologicalConstants = props => {
                     fullWidth
                     label="PESO"
                     margin="dense"
-                    name="name"
+                    name="weight"
                     variant="outlined"
                     InputLabelProps={{
                         className: classes.floatingLabelFocusStyle,
                     }}
+                    onChange={handleChange}
+                    value={values.weight}
                 />
             </Grid>
         </Grid>
@@ -144,13 +205,15 @@ const PhysiologicalConstants = props => {
         <Divider/> 
         <Grid  container direction="row" justify="center" alignItems="center">
             <FormControl component="fieldset">
-                <RadioGroup style={useStyles.horizontalGroup}  aria-label="customerBenefit">
+                <RadioGroup style={useStyles.horizontalGroup} 
+                name="attitude" onChange={handleChange}
+                aria-label="attitude">
                     
-                    <FormControlLabel value="Asténico" control={<Radio />} 
+                    <FormControlLabel value="Astenico" control={<Radio/>} 
                     label="Asténico" />
-                    <FormControlLabel value="Apoplético" control={<Radio />}
+                    <FormControlLabel value="Apopletico" control={<Radio/>}
                     label="Apoplético" />
-                    <FormControlLabel value="CE" control={<Radio />} 
+                    <FormControlLabel value="Linfatico" control={<Radio/>} 
                     label="Linfático" />
                 
                 </RadioGroup>
@@ -160,17 +223,19 @@ const PhysiologicalConstants = props => {
         <Divider/>
         <Grid  container direction="row" justify="center" alignItems="center">
             <FormControl component="fieldset">
-                <RadioGroup style={useStyles.horizontalGroup}  aria-label="customerBenefit">
+                <RadioGroup style={useStyles.horizontalGroup} 
+                     name="bodyCondition" onChange={handleChange}
+                    aria-label="bodyCondition">
                     
-                    <FormControlLabel value="Asténico" control={<Radio />} 
+                    <FormControlLabel value="Caquetico" control={<Radio/>} 
                     label="Caquético" />
-                    <FormControlLabel value="Apoplético" control={<Radio />}
+                    <FormControlLabel value="Delgado" control={<Radio/>}
                     label="Delgado" />
-                    <FormControlLabel value="CE" control={<Radio />} 
+                    <FormControlLabel value="Normal" control={<Radio/>} 
                     label="Normal" />
-                    <FormControlLabel value="CE" control={<Radio />} 
+                    <FormControlLabel value="Obeso" control={<Radio/>} 
                     label="Obeso" />
-                    <FormControlLabel value="CE" control={<Radio />} 
+                    <FormControlLabel value="Sobrepeso" control={<Radio/>} 
                     label="Sobrepeso" />
                 
                 </RadioGroup>
@@ -180,17 +245,19 @@ const PhysiologicalConstants = props => {
         <Divider/>
         <Grid  container direction="row" justify="center" alignItems="center">
             <FormControl component="fieldset">
-                <RadioGroup style={useStyles.horizontalGroup}  aria-label="customerBenefit">
+                <RadioGroup style={useStyles.horizontalGroup}
+                    name="hidrationStatus" onChange={handleChange}
+                    aria-label="customerBenefit">
                     
-                    <FormControlLabel value="Asténico" control={<Radio />} 
+                    <FormControlLabel value="Normal" control={<Radio/>} 
                     label="Normal" />
-                    <FormControlLabel value="Apoplético" control={<Radio />}
+                    <FormControlLabel value="0-5%" control={<Radio/>}
                     label="Deshidr. 0-5%" />
-                    <FormControlLabel value="CE" control={<Radio />} 
+                    <FormControlLabel value="6-7%" control={<Radio/>} 
                     label="Deshidr. 6-7%" />
-                    <FormControlLabel value="CE" control={<Radio />} 
+                    <FormControlLabel value="8-9%" control={<Radio/>} 
                     label="Deshidr. 8-9%" />
-                    <FormControlLabel value="CE" control={<Radio />} 
+                    <FormControlLabel value="+10%" control={<Radio/>} 
                     label="Deshidr. +10%" />
                 
                 </RadioGroup>
@@ -204,13 +271,15 @@ const PhysiologicalConstants = props => {
                 fullWidth
                 label="Mucosa Conjuntival"
                 margin="dense"
-                name="description"
+                name="conjuntivalMucosa"
                 variant="outlined"
                 multiline
                 rows={3}
                 InputLabelProps={{
                     className: classes.floatingLabelFocusStyle,
                 }}
+                onChange={handleChange}
+                value={values.conjuntivalMucosa}
             />
         </Grid>
 
@@ -219,13 +288,15 @@ const PhysiologicalConstants = props => {
                 fullWidth
                 label="Mucosa Oral"
                 margin="dense"
-                name="description"
+                name="oralMucosa"
                 variant="outlined"
                 multiline
                 rows={3}
                 InputLabelProps={{
                     className: classes.floatingLabelFocusStyle,
                 }}
+                onChange={handleChange}
+                value={values.oralMucosa}
             />
         </Grid>
 
@@ -234,13 +305,15 @@ const PhysiologicalConstants = props => {
                 fullWidth
                 label="Mucosa Vulvar/prepucial"
                 margin="dense"
-                name="description"
+                name="vulvallMucosa"
                 variant="outlined"
                 multiline
                 rows={3}
                 InputLabelProps={{
                     className: classes.floatingLabelFocusStyle,
                 }}
+                onChange={handleChange}
+                value={values.vulvallMucosa}
             />
         </Grid>
 
@@ -249,13 +322,15 @@ const PhysiologicalConstants = props => {
                 fullWidth
                 label="Mucosa Rectal"
                 margin="dense"
-                name="description"
+                name="rectalMucosa"
                 variant="outlined"
                 multiline
                 rows={3}
                 InputLabelProps={{
                     className: classes.floatingLabelFocusStyle,
                 }}
+                onChange={handleChange}
+                value={values.rectalMucosa}
             />
         </Grid>
 
@@ -266,143 +341,165 @@ const PhysiologicalConstants = props => {
                 fullWidth
                 label="Ojos"
                 margin="dense"
-                name="description"
+                name="physicalsEye"
                 variant="outlined"
                 multiline
                 rows={3}
                 InputLabelProps={{
                     className: classes.floatingLabelFocusStyle,
                 }}
+                onChange={handleChange}
+                value={values.physicalsEye}
         />
 
         <TextField
                 fullWidth
                 label="Oidos"
                 margin="dense"
-                name="description"
+                name="physicalsEars"
                 variant="outlined"
                 multiline
                 rows={3}
                 InputLabelProps={{
                     className: classes.floatingLabelFocusStyle,
                 }}
+                onChange={handleChange}
+                value={values.physicalsEars}
         />
 
         <TextField
                 fullWidth
                 label="Modulos Linfáticos"
                 margin="dense"
-                name="description"
+                name="physicalsLinfaticmodules"
                 variant="outlined"
                 multiline
                 rows={3}
                 InputLabelProps={{
                     className: classes.floatingLabelFocusStyle,
                 }}
+                onChange={handleChange}
+                value={values.physicalsLinfaticmodules}
         />
 
         <TextField
                 fullWidth
                 label="Piel y anexos"
                 margin="dense"
-                name="description"
+                name="physicalsSkinandanexes"
                 variant="outlined"
                 multiline
                 rows={3}
                 InputLabelProps={{
                     className: classes.floatingLabelFocusStyle,
                 }}
+                onChange={handleChange}
+                value={values.physicalsSkinandanexes}
         />
 
         <TextField
                 fullWidth
                 label="Locomoción"
                 margin="dense"
-                name="description"
+                name="physicalsLocomotion"
                 variant="outlined"
                 multiline
                 rows={3}
                 InputLabelProps={{
                     className: classes.floatingLabelFocusStyle,
                 }}
+                onChange={handleChange}
+                value={values.physicalsLocomotion}
         />
 
         <TextField
                 fullWidth
                 label="Musculo esqueletico"
                 margin="dense"
-                name="description"
+                name="physicalsMusclesqueletal"
                 variant="outlined"
                 multiline
                 rows={3}
                 InputLabelProps={{
                     className: classes.floatingLabelFocusStyle,
                 }}
+                onChange={handleChange}
+                value={values.physicalsMusclesqueletal}
         />
 
         <TextField
                 fullWidth
                 label="Sistema nervioso"
                 margin="dense"
-                name="description"
+                name="physicalsNervoussystem"
                 variant="outlined"
                 multiline
                 rows={3}
                 InputLabelProps={{
                     className: classes.floatingLabelFocusStyle,
                 }}
+                onChange={handleChange}
+                value={values.physicalsNervoussystem}
         />
 
         <TextField
                 fullWidth
                 label="Sistema cardiovascular"
                 margin="dense"
-                name="description"
+                name="physicalsCardiovascularsystem"
                 variant="outlined"
                 multiline
                 rows={3}
                 InputLabelProps={{
                     className: classes.floatingLabelFocusStyle,
                 }}
+                onChange={handleChange}
+                value={values.physicalsCardiovascularsystem}
         />
 
         <TextField
                 fullWidth
                 label="Sistema respiratorio"
                 margin="dense"
-                name="description"
+                name="physicalsRespiratorysystem"
                 variant="outlined"
                 multiline
                 rows={3}
                 InputLabelProps={{
                     className: classes.floatingLabelFocusStyle,
                 }}
+                onChange={handleChange}
+                value={values.physicalsRespiratorysystem}
         />
 
         <TextField
                 fullWidth
                 label="Sistema digestivo"
                 margin="dense"
-                name="description"
+                name="physicalsDigestivesystem"
                 variant="outlined"
                 multiline
                 rows={3}
                 InputLabelProps={{
                     className: classes.floatingLabelFocusStyle,
                 }}
+                onChange={handleChange}
+                value={values.physicalsDigestivesystem}
         />
 
         <TextField
                 fullWidth
                 label="Sistema genitourinario"
                 margin="dense"
-                name="description"
+                name="physicalsGenitourinarysystem"
                 variant="outlined"
                 multiline
                 rows={3}
                 InputLabelProps={{
                     className: classes.floatingLabelFocusStyle,
                 }}
+                onChange={handleChange}
+                value={values.physicalsGenitourinarysystem}
         />
             
         <Typography variant="subtitle2">Opciones</Typography>

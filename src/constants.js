@@ -64,4 +64,24 @@ export const REMOVE_PARAMETER = "REMOVE_PARAMETER";
 
 export const SELECT_PARAMETER = "SELECT_PARAMETER";
 
+// ---------------- PatientReviews types --------------------------------
+
+export const SET_PATIENT_REVIEWS = "SET_PATIENT_REVIEWS";
+
+export const ADD_PATIENT_REVIEW = "ADD_PATIENT_REVIEW";
+
+export const REMOVE_PATIENT_REVIEW = "REMOVE_PATIENT_REVIEW";
+
+export const SELECT_PATIENT_REVIEW = "SELECT_PATIENT_REVIEW";
+
+// ---------------- PatientReviews types --------------------------------
+
+export const SET_PYSHIOLOGICAL_CONSTANTS = "SET_PYSHIOLOGICAL_CONSTANTS";
+
+export const ADD_PYSHIOLOGICAL_CONSTANT = "ADD_PYSHIOLOGICAL_CONSTANT";
+
+export const REMOVE_PYSHIOLOGICAL_CONSTANT = "REMOVE_PYSHIOLOGICAL_CONSTANT";
+
+export const SELECT_PYSHIOLOGICAL_CONSTANT = "SELECT_PYSHIOLOGICAL_CONSTANT";
+
 

@@ -11,7 +11,7 @@ import { SearchInput } from 'components';
 const useStyles = makeStyles(theme => ({
   root: {},
   row: {
-    height: '42px',
+    height: '50px',
     display: 'flex',
     alignItems: 'center',
     marginTop: theme.spacing(1)
@@ -62,7 +62,7 @@ const PetsToolbar = props => {
           onClick={props.medicalRecordsButton}>Ver historial medico</Button>
 
         <Button className={classes.importButton}  disabled={ props.selectedPet === null } 
-          onClick={props.medicalAppointmentButton}>Crear Cita</Button>
+          onClick={props.medicalAppointmentButton}>Cita</Button>
 
         <Button className={classes.importButton}  disabled={ props.selectedPet === null } 
           onClick={props.editButton}>Editar</Button>

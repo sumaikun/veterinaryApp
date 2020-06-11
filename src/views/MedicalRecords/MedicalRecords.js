@@ -45,7 +45,7 @@ const MedicalRecords = props => {
         <Typography variant={"h3"} style={{textAlign:"center"}}>Historial Medico</Typography>
       <div className={classes.root}>
         
-        <ExpansionPanel>
+        <ExpansionPanel expanded={true} >  
             <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"

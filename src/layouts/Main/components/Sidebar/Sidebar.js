@@ -13,6 +13,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import PetsIcon from '@material-ui/icons/Pets';
 import Lock from '@material-ui/icons/Lock';
 import Build from '@material-ui/icons/Build';
+import Book from '@material-ui/icons/Book';
 import Swal from 'sweetalert2'
 //import { Profile, SidebarNav, UpgradePlan } from './components';
 
@@ -106,6 +107,11 @@ const Sidebar = props => {
       title: 'Parametrización',
       href: '/parameters',
       icon: <Build />
+    },
+    {
+      title: 'Agenda',
+      href: '/agenda',
+      icon: <Book />
     },      
     {
       title: 'Configuración',

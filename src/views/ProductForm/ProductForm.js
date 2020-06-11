@@ -32,6 +32,8 @@ const ProductForm = props => {
     value: props.productsState.selectedProduct.value,
     description: props.productsState.selectedProduct.description,
     picture: props.productsState.selectedProduct.picture ? props.productsState.selectedProduct.picture : null,
+    administrationWay: props.productsState.selectedProduct.administrationWay,
+    presentation: props.productsState.selectedProduct.presentation,
     file: null
   });
 
@@ -56,7 +58,9 @@ const ProductForm = props => {
       product._id = props.productsState.selectedProduct.id
     }
 
-    if(product.name === "" || product.name === "" ||  product.value === "" || product.description === "") 
+    if(product.name === "" || product.name === "" 
+    ||  product.value === "" || product.description === ""
+    ||  product.administrationWay === "" || product.presentation === "") 
     {
       return Swal.fire({
         icon: 'error',

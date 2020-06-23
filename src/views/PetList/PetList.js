@@ -5,12 +5,17 @@ import 'date-fns';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 
-import { PetsToolbar, PetsTable, PetsModal } from './components';
+import { PetsToolbar, PetsTable, PetsModal, PetsMedicine, PetsOwner } from './components';
 
 import { connect } from 'react-redux';
 
 import { getPets , getPet } from 'actions/pets';
 
+import { getProducts  } from 'actions/products';
+
+import { getContacts } from 'actions/contacts';
+
+import Swal from 'sweetalert2' 
 
 
 const useStyles = theme => ({
@@ -42,7 +47,9 @@ class PetList extends Component{
     console.log("petlist props",props)
     this.state = {
       pets:[],
-      open:false
+      open:false,
+      open2:false,
+      open3:false
     }   
   }
 
@@ -55,6 +62,22 @@ class PetList extends Component{
         selectedPet:null,
       })
     })
+
+    this.props.getProducts((success,error)=>{
+      this.setState({
+        ...this.state,
+        products:this.props.productsState.products,
+        selectedProduct:null,
+      })
+    })
+
+    this.props.getContacts((success,error)=>{
+      this.setState({
+        ...this.state,
+        contacts:this.props.contactsState.contacts,
+        selectedContacts:[],
+      })
+    })
     
     this.createButton = this.createButton.bind(this)
     this.editButton = this.editButton.bind(this)
@@ -63,9 +86,16 @@ class PetList extends Component{
     this.addSelectedPet = this.addSelectedPet.bind(this)
     this.medicalRecordsButton = this.medicalRecordsButton.bind(this)
     this.medicalAppointmentButton = this.medicalAppointmentButton.bind(this)
+    this.ownersButton = this.ownersButton.bind(this)
 
     this.handleOpen = this.handleOpen.bind(this)
     this.handleClose = this.handleClose.bind(this)
+
+    this.handleOpen2 = this.handleOpen2.bind(this)
+    this.handleClose2 = this.handleClose2.bind(this)
+
+    this.selectProduct = this.selectProduct.bind(this) 
+
 
   }
 
@@ -91,6 +121,11 @@ class PetList extends Component{
   medicalAppointmentButton(){
     console.log('medicalAppointmentButton')
     this.handleOpen()
+  }
+
+  ownersButton(){
+    console.log('ownersButton')
+    this.handleOpen3()
   }
 
   createButton(){
@@ -128,6 +163,34 @@ class PetList extends Component{
     })
   };
 
+  handleOpen2 = () => {
+    this.setState({
+      ...this.state,
+      open2:true
+    })
+  };
+
+  handleClose2 = () => {
+    this.setState({
+      ...this.state,
+      open2:false
+    })
+  };
+
+  handleOpen3 = () => {
+    this.setState({
+      ...this.state,
+      open3:true
+    })
+  };
+
+  handleClose3 = () => {
+    this.setState({
+      ...this.state,
+      open3:false
+    })
+  };
+
   filteredPets(data){
     //console.log("data",data)
     //return this.props.petsState.pets
@@ -159,6 +222,18 @@ class PetList extends Component{
 
   }
 
+  selectProduct(product){
+    
+    console.log("select product",product)
+
+    this.setState({
+      ...this.state,
+      selectedProduct:product
+    })
+  }
+
+
+
   shouldComponentUpdate(nextProps, nextState) {
     //console.log("should update");
     return nextProps === this.props
@@ -174,6 +249,7 @@ class PetList extends Component{
         <PetsToolbar
           medicalRecordsButton={this.medicalRecordsButton}
           medicalAppointmentButton={this.medicalAppointmentButton}
+          ownersButton={this.ownersButton}
           selectedPet={this.state.selectedPet}  
           createButton={this.createButton} 
           editButton={this.editButton}
@@ -185,7 +261,23 @@ class PetList extends Component{
           addSelectedPet={this.addSelectedPet} 
           pets={this.state.pets} />
         </div>
-        <PetsModal  open={this.state.open} handleClose={this.handleClose} />
+        <PetsModal selectedProduct={this.state.selectedProduct}  openMedicinesModal={this.handleOpen2} open={this.state.open} handleClose={this.handleClose} />
+        
+        {
+          this.state.products ?  
+            <PetsMedicine  selectProduct={this.selectProduct}  products={this.state.products} open={this.state.open2} handleClose={this.handleClose2}  />:
+          null
+        }
+
+        {
+          this.state.contacts ?  
+            <PetsOwner  contacts={this.state.contacts} open={this.state.open3} handleClose={this.handleClose3}  />:
+          null
+        }
+        
+
+
+
       </div>
     );  
   }
@@ -196,7 +288,9 @@ const mapStateToProps = state => {
  
   return {
     petsState: state.pets,  
-    appState: state.app
+    appState: state.app,
+    productsState: state.products,
+    contactsState: state.contacts,  
   };
 }
 
@@ -206,4 +300,4 @@ PetList.propTypes = {
 
 const componentDefinition =  withStyles(useStyles)(PetList);
 
-export default  connect(mapStateToProps, { getPets , getPet } )(componentDefinition);
+export default  connect(mapStateToProps, { getPets , getPet, getProducts, getContacts } )(componentDefinition);

@@ -83,7 +83,7 @@ class Parameters extends Component{
 
   handleChange = event => {
   
-    //console.log("event",event.target.value)
+    console.log("event",event.target.value)
     
     switch (event.target.value) {
       case "Especie":
@@ -115,6 +115,49 @@ class Parameters extends Component{
         },"breeds")
  
         break;
+
+      case "Tipo de examen":
+
+        this.props.getParameters((success,error) =>{
+          success ?
+          this.setState({  ...this.state , headers:["Tipo de examen","descripción","Opciones"],
+            columns:["name","meta","date","options"],
+            newButtonText:"Crear nuevo tipo de examen",
+            mode:"examTypes",
+            data:this.props.parametersState.parameters
+          }):console.log(error)
+        },"examTypes")
+
+      break
+
+      case "Tipo de plan":
+
+        this.props.getParameters((success,error) =>{
+          success ?
+          this.setState({  ...this.state , headers:["Tipo de plan","descripción","Opciones"],
+            columns:["name","meta","date","options"],
+            newButtonText:"Crear nuevo tipo de plan",
+            mode:"planTypes",
+            data:this.props.parametersState.parameters
+          }):console.log(error)
+        },"planTypes")
+
+      break
+
+      case "Enfermedades":
+
+        this.props.getParameters((success,error) =>{
+          success ?
+          this.setState({  ...this.state , headers:["Nombre de enfermedad","Info adicional","Opciones"],
+            columns:["name","meta","date","options"],
+            newButtonText:"Agregar enfermedad",
+            mode:"diseases",
+            data:this.props.parametersState.parameters
+          }):console.log(error)
+        },"diseases")
+
+      break
+
       default:
         break;    
     }
@@ -152,7 +195,7 @@ class Parameters extends Component{
         if(!this.state.formData.name)
         {
           return Swal.fire({
-            icon: 'error',
+            icon: 'warning',
             title: 'Espera',
             text: "Debe llenar todos los datos obligatorios para continuar (nombre)",          
           })
@@ -161,12 +204,68 @@ class Parameters extends Component{
         if(!this.state.formData.name || !this.state.formData.species)
         {
           return Swal.fire({
-            icon: 'error',
+            icon: 'warning',
             title: 'Espera',
             text: "Debe llenar todos los datos obligatorios para continuar (nombre y especie)",          
           })
         }
+      case "examTypes":
+        if(!this.state.formData.name)
+        {
+          return Swal.fire({
+            icon: 'warning',
+            title: 'Espera',
+            text: "Debe llenar todos los datos obligatorios para continuar (nombre)",          
+          })
+        }
+        if(!this.state.formData.meta)
+        {
+          return Swal.fire({
+            icon: 'warning',
+            title: 'Espera',
+            text: "Debe llenar todos los datos obligatorios para continuar (descripción)",          
+          })
+        }
+      case  "planTypes":
+        if(!this.state.formData.name)
+        {
+          return Swal.fire({
+            icon: 'warning',
+            title: 'Espera',
+            text: "Debe llenar todos los datos obligatorios para continuar (nombre)",          
+          })
+        }
+        if(!this.state.formData.meta)
+        {
+          return Swal.fire({
+            icon: 'warning',
+            title: 'Espera',
+            text: "Debe llenar todos los datos obligatorios para continuar (descripción)",          
+          })
+        }
+
+      case  "diseases":
+        if(!this.state.formData.name)
+        {
+          return Swal.fire({
+            icon: 'warning',
+            title: 'Espera',
+            text: "Debe llenar todos los datos obligatorios para continuar (nombre)",          
+          })
+        }
+        if(!this.state.formData.meta)
+        {
+          return Swal.fire({
+            icon: 'warning',
+            title: 'Espera',
+            text: "Debe llenar todos los datos obligatorios para continuar (descripción)",          
+          })
+        }
+ 
+
     }
+
+    console.log("state",this.state)
 
     this.props.saveParameter(this.state.formData,(success,error)=>{
       if(success)

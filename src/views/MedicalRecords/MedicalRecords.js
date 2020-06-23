@@ -9,8 +9,11 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { connect } from 'react-redux';
 import Swal from 'sweetalert2' 
 import { PatientReview, PhysiologicalConstants, DiagnosticPlan,
-  TherapeuticPlan, Appointments  } from './components'
+  TherapeuticPlan, Appointments, Diseases, PatientFiles  } from './components'
 import 'date-fns';
+import { getPets , getPet } from 'actions/pets';
+
+import { getProducts  } from 'actions/products';
 
 
 const useStyles = makeStyles(theme => ({
@@ -26,6 +29,16 @@ const MedicalRecords = props => {
 
   const [values,setValues] = useState({})
 
+  const [products,setProducts] = useState(null)
+
+  useEffect(() => {
+    props.getProducts((success,error)=>{
+      setProducts(props.productsState.products)
+    })
+  },[]);  
+
+  
+
   const changeValues = (key,value) =>
   {
 
@@ -36,6 +49,8 @@ const MedicalRecords = props => {
     });
   
     console.log(values)
+
+    
   }
 
  
@@ -45,7 +60,7 @@ const MedicalRecords = props => {
         <Typography variant={"h3"} style={{textAlign:"center"}}>Historial Medico</Typography>
       <div className={classes.root}>
         
-        <ExpansionPanel expanded={true} >  
+        <ExpansionPanel  >  
             <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
@@ -94,7 +109,9 @@ const MedicalRecords = props => {
             <Typography className={classes.heading}>Planes terapeuticos</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
-              <TherapeuticPlan/>
+              {
+                products ? <TherapeuticPlan products={products} /> : false
+              }
             </ExpansionPanelDetails>
             
         </ExpansionPanel>
@@ -112,6 +129,35 @@ const MedicalRecords = props => {
             </ExpansionPanelDetails>
             
         </ExpansionPanel>
+
+
+        <ExpansionPanel>
+            <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel2a-content"
+            id="panel2a-header"
+            >
+            <Typography className={classes.heading}>Enfermedades detectadas</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <Diseases/>
+            </ExpansionPanelDetails>
+            
+        </ExpansionPanel>
+
+        <ExpansionPanel>
+            <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel2a-content"
+            id="panel2a-header"
+            >
+            <Typography className={classes.heading}>Archivos</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <PatientFiles/>
+            </ExpansionPanelDetails>
+            
+        </ExpansionPanel>
        
        </div>
     </div>
@@ -122,10 +168,11 @@ const MedicalRecords = props => {
 const mapStateToProps = state => {
  
   return {
-    petsState: state.pets,
-    appState: state.app  
+    //petsState: state.pets,
+    appState: state.app,
+    productsState: state.products,  
   };
 }
 
 
-export default  connect(mapStateToProps, {} )(MedicalRecords);
+export default  connect(mapStateToProps, { getProducts  } )(MedicalRecords);

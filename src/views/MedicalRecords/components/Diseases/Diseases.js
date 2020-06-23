@@ -26,9 +26,9 @@ import {
     DialogContentText,
     DialogActions,  
 } from '@material-ui/core';
+
 import  api  from 'middleware/api'
 
-import PetsMedicine from 'views/PetList/components/PetsMedicine'
 
 const doStyles = makeStyles(theme => ({
     root: {},
@@ -56,59 +56,34 @@ const useStyles = {
   flexDirection: 'row'}
 };
 
-const TherapeuticPlan = props => {
+const Diseases = props => {
 
   const classes = doStyles(); 
 
-  const {  products,  ...rest } = props;
+  const [open, setOpen] = useState(false);
 
-  const [ planTypes, setPlanTypes ] = useState([]);
+  const [ diseases, setDiseases ] = useState([]);
 
   useEffect(() => {
-    
-    const getPlanTypes = async () => {
-      const response = await api.getData("planTypes") 
+    const getDiseases = async () => {
+      const response = await api.getData("diseases") 
 
       let arrayData = [{label:"",value:""}]
       console.log(response.data)
       response.data.forEach( data => arrayData.push({label:data.name,value:data._id}) )
-      setPlanTypes(arrayData) 
+      setDiseases(arrayData) 
 
     }
 
-  getPlanTypes()
+    getDiseases()
   },[]);  
-
-  //Terapia de sosten
-  //Tratamiento preventivo
-  //Tratamiento sintomatico
-  //Tratamiento etiologico 
-
-  const [open, setOpen] = useState(false);
-
-  const [open2, setOpen2] = useState(false);
 
   const closeDialog = () =>{
     setOpen(false)
   }
 
-  const openMedicinesModal = () => {
-    setOpen2(true)
-  }
-
-  const selectProduct = (data) => {
-
-  }
-
-  const handleClose2 = () => {
-    setOpen2(false)
-  }
-
-
-
-
   return (
-    <Grid lg={12} md={12} xs={12}>   
+    <Grid lg={12} md={12} xs={12}>    
 
         <Grid  container direction="row" justify="center" alignItems="center">
             <PerfectScrollbar>
@@ -116,19 +91,15 @@ const TherapeuticPlan = props => {
                 <Table>
                 <TableHead>
                     <TableRow>                  
-                        <TableCell>Tipo de plan</TableCell>
-                        <TableCell>Principio activo a administrar</TableCell>
-                        <TableCell>Presentación</TableCell>
-                        <TableCell>Posologia</TableCell>
-                        <TableCell>Dosis total</TableCell>
-                        <TableCell>Via</TableCell>
-                        <TableCell>Frecuencia y duración</TableCell>
+                        <TableCell>Veterinario/a</TableCell>
+                        <TableCell>Enfermedad</TableCell>
+                        <TableCell>Criterio de diagnostico</TableCell>
+                        <TableCell>Observaciones</TableCell>
+                        <TableCell>Opciones</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     <TableRow>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
                         <TableCell></TableCell>
                         <TableCell></TableCell>
                         <TableCell></TableCell>
@@ -140,15 +111,17 @@ const TherapeuticPlan = props => {
             </div>
             </PerfectScrollbar>
         </Grid>
+
         <Typography variant="subtitle2">Opciones</Typography>
         <Divider/>    
         <Grid  container direction="row" justify="center" alignItems="center">        
-            <Button color="primary" variant="contained" style={{marginTop:"10px"}}  onClick={()=>{
+            <Button color="primary" variant="contained" style={{marginTop:"10px"}} onClick={()=>{
               setOpen(true)
-            }} >
-                Crear nuevo plan terapeutico
+            }}>
+                Asociar nueva cita
             </Button>
-        </Grid>       
+        </Grid>
+
 
         <Dialog
                 open={open}
@@ -161,60 +134,42 @@ const TherapeuticPlan = props => {
                 <DialogContent>
                 <DialogContentText>
                    Información de plan terapeutico
-                </DialogContentText>
-
-               
+                </DialogContentText>               
+                  
                   <Grid  container>
+
                     <Grid item md={12} xs={12}>
                         <TextField
-                            fullWidth label="Tipo de plan"
+                            fullWidth label="Enfemedad"
                             margin="dense" name="typeOfExam"
                             required
                             select                                   
                             variant="outlined"
                             SelectProps={{ native: true }}
                         >
-                            {planTypes.map(option => (
+                            { diseases.map(option => (
                             <option
                                 key={option.value}
                                 value={option.value}
                             >
                                 {option.label}
                             </option>
-                            ))}
+                            )) }
                         </TextField>
                     </Grid>
 
                     <Grid item md={12} xs={12}>
-                        <Button color="success" fullWidth variant="contained" style={{marginTop:"10px"}}
-                            onClick={ () => {
-                                openMedicinesModal()
-                            }}
-                        >
-                            Seleccionar medicamento
-                        </Button> 
-                        <Typography style={{ textAlign:"center" }} variant="button" >
-                            { props.selectedProduct ? "Producto seleccionado : "+props.selectedProduct.name : null }
-                        </Typography>                                   
+                        <TextField  fullWidth  label="Criterio de diagnostico" margin="dense"
+                            name="ResultsForConsultation"  variant="outlined"
+                            multiline rows={3} />          
                     </Grid>
 
                     <Grid item md={12} xs={12}>
-                        <TextField  fullWidth  label="Posología" margin="dense"
-                        name="laboratory"  variant="outlined"
-                    />
+                        <TextField  fullWidth  label="Observaciones" margin="dense"
+                            name="ResultsForConsultation"  variant="outlined"
+                            multiline rows={3} />          
                     </Grid>
-
-                    <Grid item md={12} xs={12}>
-                        <TextField  fullWidth  label="Dosis total" margin="dense"
-                        name="laboratory"  variant="outlined"
-                    />
-                    </Grid>
-
-                    <Grid item md={12} xs={12}>
-                        <TextField  fullWidth  label="Frecuencia y duración" margin="dense"
-                        name="laboratory"  variant="outlined"
-                    />
-                    </Grid>
+                    
 
                     <Divider></Divider>
                     <Grid container direction="row" justify="center" alignItems="center">
@@ -223,7 +178,7 @@ const TherapeuticPlan = props => {
                         </Button>
                     </Grid> 
 
-                </Grid>
+                  </Grid>
 
 
 
@@ -235,16 +190,14 @@ const TherapeuticPlan = props => {
                 </Button>
            
             </DialogActions>
-        </Dialog> 
-
-        <PetsMedicine selectProduct={selectProduct}  products={products} open={open2} handleClose={handleClose2} />
+        </Dialog>         
 
     </Grid>  
   );
 };
 
-TherapeuticPlan.propTypes = {
+Diseases.propTypes = {
   className: PropTypes.string
 };
 
-export default TherapeuticPlan;
+export default Diseases;

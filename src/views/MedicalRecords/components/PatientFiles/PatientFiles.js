@@ -53,7 +53,7 @@ const useStyles = {
   flexDirection: 'row'}
 };
 
-const Appointments = props => {
+const PatientFiles = props => {
 
   const classes = doStyles(); 
 
@@ -75,17 +75,15 @@ const Appointments = props => {
                 <Table>
                 <TableHead>
                     <TableRow>                  
-                    <TableCell>Veterinario/a</TableCell>
-                    <TableCell>Motivo de la consulta</TableCell>
-                    <TableCell>Resultados de la consulta</TableCell>
-                    <TableCell>Procesos relacionados</TableCell>
-                    <TableCell>Medicamentos</TableCell>
-                    <TableCell>Opciones</TableCell>
+                        <TableCell>Veterinario/a</TableCell>
+                        <TableCell>Nombre</TableCell>
+                        <TableCell>Descargar</TableCell>
+                        <TableCell>Descripción</TableCell>
+                        <TableCell>Opciones</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     <TableRow>
-                        <TableCell></TableCell>
                         <TableCell></TableCell>
                         <TableCell></TableCell>
                         <TableCell></TableCell>
@@ -104,7 +102,7 @@ const Appointments = props => {
             <Button color="primary" variant="contained" style={{marginTop:"10px"}} onClick={()=>{
               setOpen(true)
             }}>
-                Gestionar nueva cita
+                  Subir nuevo archivo
             </Button>
         </Grid>
 
@@ -115,23 +113,31 @@ const Appointments = props => {
                 aria-labelledby="draggable-dialog-title"
             >
                 <DialogTitle>
-                Plan terapeutico
+                Enfermedad detectada
                 </DialogTitle>
                 <DialogContent>
                 <DialogContentText>
-                   Información de plan terapeutico
+                   Información de enfermedad y diagnostico
                 </DialogContentText>               
+                  
                   <Grid  container>
 
+                  
+
                     <Grid item md={12} xs={12}>
-                        <TextField  fullWidth  label="Motivo de la consulta" margin="dense"
-                        
-                        name="ReasonForConsultation"  variant="outlined"
-                        multiline rows={3} />
+                        <TextField  fullWidth  label="Nombre del archivo" margin="dense"
+                            name="ResultsForConsultation"  variant="outlined"
+                             />          
                     </Grid>
 
                     <Grid item md={12} xs={12}>
-                        <TextField  fullWidth  label="Resultados y o conclusiones de la consulta" margin="dense"
+                        <TextField  fullWidth  type="file" margin="dense"
+                            name="ResultsForConsultation"  variant="outlined"
+                             />          
+                    </Grid>
+
+                    <Grid item md={12} xs={12}>
+                        <TextField  fullWidth  label="Descripción" margin="dense"
                             name="ResultsForConsultation"  variant="outlined"
                             multiline rows={3} />          
                     </Grid>
@@ -162,8 +168,8 @@ const Appointments = props => {
   );
 };
 
-Appointments.propTypes = {
+PatientFiles.propTypes = {
   className: PropTypes.string
 };
 
-export default Appointments;
+export default PatientFiles;

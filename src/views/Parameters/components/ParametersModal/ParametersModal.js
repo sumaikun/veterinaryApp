@@ -109,8 +109,32 @@ const ParametersModal = props => {
               </TextField>
       
       </div>
-      break;
+      break;          
     default:
+      if(props.newButtonText === "Crear nuevo tipo de examen" 
+          || props.newButtonText === "Crear nuevo tipo de plan"
+          || props.newButtonText === "Agregar enfermedad"){              
+          formContent = 
+          <div>
+            <TextField
+              fullWidth
+              label="Nombre"
+              value={props.formData.name}
+              onChange={handleChange}
+              name="name"   
+            >
+            </TextField>
+            <TextField
+              fullWidth
+              label="Descripción"
+              value={props.formData.meta}
+              onChange={handleChange}
+              name="meta"  
+              rows={2}
+              multiline  
+            >
+            </TextField>
+          </div> }
       break;
   }
 

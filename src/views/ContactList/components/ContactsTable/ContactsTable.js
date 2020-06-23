@@ -17,7 +17,9 @@ import {
   TableHead,
   TableRow,
   Typography,
-  TablePagination
+  TablePagination,
+  FormControlLabel,
+  Checkbox,
 } from '@material-ui/core';
 
 import { getInitials } from 'helpers';
@@ -43,20 +45,49 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ContactsTable = props => {
-  const { className, contacts, ...rest } = props;
+  const {  selectMultiple,  className, contacts, ...rest } = props;
 
   const classes = useStyles();
 
   const [selectedContact, setSelectedContact ] = useState({});
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
-
+  const [ checkedContacts, setCheckedContacts ] = useState([])
 
 
   const handleSelectOne = (event) => {    
     setSelectedContact(event.target.value)
     props.addSelectedContact(event.target.value)
   };
+
+  const handleSelectMultiple = (checkedStatus, id) => {
+
+    //console.log(checkedContacts,event.target.value,event.target.checked)
+
+    const data = id
+
+    const contacts = checkedContacts
+
+    if(checkedStatus)
+    { 
+      contacts.push(data)
+    }else{
+      const index = contacts.indexOf(data);
+      contacts.splice(index, 1);
+    }
+
+    console.log("checkedContacts",contacts)
+
+    if(props.addContactsSelected)
+    {
+      props.addContactsSelected(contacts)
+    }
+
+    window.setTimeout(function(){ setCheckedContacts( contacts ) }, 1000);
+
+    return
+    
+  }
 
   const handlePageChange = (event, page) => {
     console.log("handle change",event,page)
@@ -68,6 +99,8 @@ const ContactsTable = props => {
     setRowsPerPage(event.target.value);
     setPage(0)
   };
+
+
 
   return (
     <Card
@@ -100,14 +133,27 @@ const ContactsTable = props => {
                     key={contact.id}
                     
                   >
-                    <TableCell padding="checkbox">
-                      <Radio
-                        checked={selectedContact === contact._id}
-                        color="primary"
-                        name="selectedContact"
-                        onChange={handleSelectOne}
-                        value={contact._id}
-                      />
+                    <TableCell align="center" padding="checkbox">
+                      {
+                        !selectMultiple ? 
+
+                        <Radio
+                          checked={selectedContact === contact._id}
+                          color="primary"
+                          name="selectedContact"
+                          onChange={handleSelectOne}
+                          value={contact._id}
+                        /> :
+
+                        <FormControlLabel
+                            style={{marginLeft:"5px"}}
+                            control={<Checkbox color="primary"    />}
+                            onChange={(event) => handleSelectMultiple(event.target.checked,contact._id)}                            
+                        />
+
+                      }
+
+                      
                     </TableCell>
                     <TableCell>
                       <div className={classes.nameContainer}>

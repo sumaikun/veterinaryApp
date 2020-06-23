@@ -1,7 +1,8 @@
 import api from "../middleware/api";
 import {
     SET_BREEDS,
-    SET_SPECIES
+    SET_SPECIES,
+    SET_CURRENT_PATIENT
   } from "../constants";
 
 export function uploadFileToServer(file,cb){
@@ -35,6 +36,13 @@ function setSpecies(species) {
       type: SET_SPECIES,   
       payload:species
     };
+}
+
+function setCurrentPatient(patientId) {
+  return {
+    type: SET_CURRENT_PATIENT,   
+    payload:patientId
+  };
 }
 
 export function getBreeds(cb=null) {

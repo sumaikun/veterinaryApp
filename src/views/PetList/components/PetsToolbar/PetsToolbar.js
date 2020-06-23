@@ -4,7 +4,7 @@ import React  from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
-import { Button } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 
 import { SearchInput } from 'components';
 
@@ -26,7 +26,8 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(1)
   },
   searchInput: {
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(2),
+    marginTop:"20px"
   }
 }));
 
@@ -57,35 +58,40 @@ const PetsToolbar = props => {
     >
       <div className={classes.row}>
         <span className={classes.spacer} />
-        
-        <Button className={classes.importButton}  disabled={ props.selectedPet === null } 
-          onClick={props.medicalRecordsButton}>Ver historial medico</Button>
 
-        <Button className={classes.importButton}  disabled={ props.selectedPet === null } 
-          onClick={props.medicalAppointmentButton}>Cita</Button>
+        <Grid container>
+          <Button className={classes.importButton}  disabled={ props.selectedPet === null } 
+            onClick={props.ownersButton}>Dueños</Button>
+          
+          <Button className={classes.importButton}  disabled={ props.selectedPet === null } 
+            onClick={props.medicalRecordsButton}>Historial medico</Button>
 
-        <Button className={classes.importButton}  disabled={ props.selectedPet === null } 
-          onClick={props.editButton}>Editar</Button>
-        
-        <Button className={classes.exportButton} disabled={ props.selectedPet === null  } 
-          onClick={props.deleteButton}>Eliminar</Button>
-        
-        {/*<Button
-          color="primary"
-          variant="contained"
-          component={CustomRouterLink}
-          to="/pets/form"
-        >
-          Agregar Usuario
-        </Button>*/}
+          <Button className={classes.importButton}  disabled={ props.selectedPet === null } 
+            onClick={props.medicalAppointmentButton}>Cita</Button>
 
-        <Button
-          color="primary"
-          variant="contained"
-          onClick={props.createButton}
-        >
-          Agregar Mascota
-        </Button>
+          <Button className={classes.importButton}  disabled={ props.selectedPet === null } 
+            onClick={props.editButton}>Editar</Button>
+          
+          <Button className={classes.exportButton} disabled={ props.selectedPet === null  } 
+            onClick={props.deleteButton}>Eliminar</Button>
+          
+          {/*<Button
+            color="primary"
+            variant="contained"
+            component={CustomRouterLink}
+            to="/pets/form"
+          >
+            Agregar Usuario
+          </Button>*/}
+
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={props.createButton}
+          >
+            Agregar Mascota
+          </Button>
+        </Grid>
       </div>
       <div className={classes.row}>
         <SearchInput

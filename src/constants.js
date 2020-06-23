@@ -7,6 +7,8 @@ export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 
 export const SET_FETCHING = "SET_FETCHING";
 
+export const SET_CURRENT_PATIENT = "SET_CURRENT_PATIENT";
+
 // ---------------- Apps Extended types --------------------------
 
 export const SET_BREEDS = "SET_BREEDS";

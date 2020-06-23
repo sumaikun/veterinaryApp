@@ -1,7 +1,8 @@
 import {
     SET_FETCHING,
     SET_BREEDS,
-    SET_SPECIES
+    SET_SPECIES,
+    SET_CURRENT_PATIENT
   } from "../constants";
 
   export function app(
@@ -9,6 +10,7 @@ import {
       loading:false,
       breeds:[],
       species:[],
+      currentPatient:null
     },
     action
   ) {
@@ -27,6 +29,11 @@ import {
       case SET_SPECIES:
         return Object.assign({}, state, {
           species:action.payload
+      });
+
+      case SET_CURRENT_PATIENT:
+        return Object.assign({}, state, {
+          currentPatient:action.payload
       });
               
       default:

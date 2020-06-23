@@ -73,6 +73,9 @@ const ContactsToolbar = props => {
           Agregar Usuario
         </Button>*/}
 
+        <Button className={classes.exportButton} disabled={ props.selectedContact === null  } 
+          onClick={props.deleteButton}>Mascotas</Button>
+
         <Button
           color="primary"
           variant="contained"

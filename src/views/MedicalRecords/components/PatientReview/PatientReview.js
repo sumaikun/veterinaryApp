@@ -303,6 +303,14 @@ const PatientReview = props => {
                 Guardar
             </Button>
         </Grid>
+        <Typography variant="subtitle2">Dueños, encargados o responsables</Typography>
+        <Divider/>        
+        <Grid  container direction="row" justify="center" alignItems="center">        
+            <Button color="primary" variant="contained" style={{marginTop:"10px"}} >
+                Asociar dueño
+            </Button>
+        </Grid>
+
 
     </Grid>  
   );

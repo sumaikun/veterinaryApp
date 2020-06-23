@@ -1,0 +1,142 @@
+import React, { useState, useEffect } from 'react';
+import { makeStyles } from '@material-ui/styles';
+import { Modal, Backdrop, Fade,
+    Card,
+    CardHeader,
+    CardContent,
+    CardActions,
+    Divider,
+    Grid, TextField,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
+    Button,
+    Slide,
+    Typography  
+  } from '@material-ui/core'
+  
+
+import ContactsTable from 'views/ContactList/components/ContactsTable'
+
+import { SearchInput } from 'components';
+
+import  api  from 'middleware/api'
+
+import 'date-fns';
+
+import Swal from 'sweetalert2'
+
+const useStyles = makeStyles(theme => ({
+  root: {},
+  content: {
+    padding: 0
+  },
+  inner: {
+    minWidth: 1050
+  },
+  nameContainer: {
+    display: 'flex',
+    alignItems: 'center'
+  },
+  avatar: {
+    marginRight: theme.spacing(2)
+  },
+  actions: {
+    justifyContent: 'flex-end'
+  },
+  dialogPaper: {
+    width: '200%',
+  },
+}));
+
+const PetsOwner = props => {
+  
+  const {  open, contacts,selectContact, handleClose,  ...rest } = props;
+
+  console.log("pets medicine props",props)
+
+  const [selectedContact, setSelectedContact] = useState(null);
+   
+  const [filteredContacts, setFilteredContacts] = useState([]);
+
+  const [openMedicineConfirmation, setOpenMedicineConfirmation] = useState(false);
+
+  useEffect(() => {
+      console.log("contacts",contacts)
+    setFilteredContacts(contacts)
+  },[]); 
+  
+  const addFilterText = event => {
+    //console.log("filter text",event.target.value)
+
+    const data = event.target.value.toLowerCase()
+
+    if(data.length == 0)
+    {
+        setFilteredContacts(contacts)
+    }else
+    {
+
+      const filteredArray = contacts.filter( contact => 
+        (contact.name ? contact.name.toLowerCase().includes(data) : false) ||
+        (contact.identification ? contact.identification.includes(data) : false) ||
+        (contact.email ? contact.email.toLowerCase().includes(data) : false) ||
+        (contact.ocupation ? contact.ocupation.toLowerCase().includes(data) : false)
+      )
+
+      setFilteredContacts(filteredArray)      
+
+    }
+  }
+
+  const [ selectedContacts, setSelectedContacts ] = useState([])
+
+
+  const addContactsSelected = (contacts) => {
+    setSelectedContacts(contacts)
+  }
+  
+  const classes = useStyles();
+
+    return (
+        <div>
+            <Dialog
+                open={open}              
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-slide-title"
+                aria-describedby="alert-dialog-slide-description"
+                maxWidth="lg"
+            >
+            <DialogTitle id="alert-dialog-slide-title">{"Contactos"}</DialogTitle>
+            <DialogContent>
+                <DialogContentText id="alert-dialog-slide-description">
+                Seleccione el contacto
+                </DialogContentText>    
+                <SearchInput
+                    className={classes.searchInput}
+                    placeholder="Buscar"
+                    onChange={addFilterText}
+                />  
+                <ContactsTable addContactsSelected={addContactsSelected} selectMultiple={true} contacts={filteredContacts || []} />
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={handleClose} color="primary" onClick={()=>{
+                  console.log(selectedContacts)
+                }} >
+                  Guardar
+                </Button>
+                <Button onClick={handleClose} color="primary">
+                  Cerrar
+                </Button>       
+            </DialogActions>
+            </Dialog>
+      
+        </div>
+      
+    );
+};
+
+
+export default PetsOwner;

@@ -5,12 +5,14 @@ import {
     SELECT_PATIENT_REVIEW
   } from "../constants";
   
+  import { PatientReview } from "models/patientReview";
+
   let index
   
   export function patientReviews(
     state = {
       patientReviews:[],     
-      selectedPatientReview:{} 
+      selectedPatientReview: new PatientReview()
     },
     action
   ) {
@@ -23,7 +25,8 @@ import {
         });
   
       case SELECT_PATIENT_REVIEW:
-  
+        
+        //console.log("on select action",action)
         return Object.assign({}, state, {
           selectedPatientReview:action.patientReview,         
         });

@@ -5,9 +5,9 @@ import {
     SELECT_PATIENT_REVIEW
   } from "../constants";
   import api from "middleware/api";
-  import { PatientReview } from "models/PatientReview";
+  import { PatientReview } from "models/patientReview";
   
-  function setPatientReview(patientReviews) {
+  function setPatientReviews(patientReviews) {
     return {
       type: SET_PATIENT_REVIEWS,   
       patientReviews
@@ -34,18 +34,21 @@ import {
       patientReview
     }
   }
+
+  const modelPoint = "patientReviews"
   
   
-  export function getPatientReviews(cb=null,modelPoint) {
-    
+  export function getPatientReviewsByPatient(patient,cb=null) {
     
     return dispatch => {
-      return api.getData(modelPoint)
+      return api.getData(modelPoint+"/"+patient)
         .then(( response ) => {
 
-          dispatch(setPatientReview(response.data ? response.data : []));
+          const result = response.data ? response.data : []
+
+          dispatch(setPatientReviews(result));
           
-          if(cb) { cb(true,false) }
+          if(cb) { cb(result,false) }
           
         })
         .catch(err => { console.log("Error: ", err)
@@ -57,8 +60,8 @@ import {
   }
 
 
-  export function savePatientReview(patientReview,cb = null,modelPoint) {
-  
+  export function savePatientReview(patientReview,cb = null) {  
+
     return dispatch => {
       
       if(patientReview._id){
@@ -76,6 +79,8 @@ import {
       }else{
         return api.postData(modelPoint,patientReview)
         .then(( response ) => {
+          
+          //console.log("patient review creation")
 
           //dispatch(addPatientReview(patientReview));
 
@@ -93,8 +98,8 @@ import {
   }
   
 
-  export function deletePatientReview(patientReview,cb,modelPoint) {
-  
+  export function deletePatientReview(patientReview,cb) {
+
     return dispatch => {
       return api.deleteData(modelPoint+"/"+patientReview._id)
         .then(( response ) => {
@@ -109,7 +114,7 @@ import {
     }
   }
 
-  export function getPatientReview(id,cb = null,modelPoint) {
+  export function getPatientReview(id,cb = null) {
   
     return dispatch => {
 

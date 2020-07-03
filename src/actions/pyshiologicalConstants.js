@@ -5,7 +5,7 @@ import {
     SELECT_PHYSIOLOGICAL_CONSTANT
   } from "../constants";
   import api from "middleware/api";
-  import { PhysiologicalConstant } from "models/PhysiologicalConstant";
+  import { PhysiologicalConstant } from "models/physiologicalConstant";
   
   function setPhysiologicalConstant(physiologicalConstants) {
     return {
@@ -35,8 +35,9 @@ import {
     }
   }
   
+  const modelPoint = "/physiologicalConstants"
   
-  export function getPhysiologicalConstants(cb=null,modelPoint) {
+  export function getPhysiologicalConstants(cb=null) {
     
     
     return dispatch => {
@@ -56,8 +57,29 @@ import {
     }
   }
 
+  export function getPhysiologicalConstantsByPatient(patient,cb=null) {
+    
+    
+    return dispatch => {
+      return api.getData(modelPoint+"/"+patient)
+        .then(( response ) => {
 
-  export function savePhysiologicalConstant(physiologicalConstant,cb = null,modelPoint) {
+          dispatch(setPhysiologicalConstant(response.data ? response.data : []));
+          
+          if(cb) { cb(true,false) }
+          
+        })
+        .catch(err => { console.log("Error: ", err)
+          
+          if(cb) { cb(false,true) }
+        
+      });
+    }
+  }
+
+  
+
+  export function savePhysiologicalConstant(physiologicalConstant,cb = null) {
   
     return dispatch => {
       
@@ -93,7 +115,7 @@ import {
   }
   
 
-  export function deletePhysiologicalConstant(physiologicalConstant,cb,modelPoint) {
+  export function deletePhysiologicalConstant(physiologicalConstant,cb) {
   
     return dispatch => {
       return api.deleteData(modelPoint+"/"+physiologicalConstant._id)
@@ -109,7 +131,7 @@ import {
     }
   }
 
-  export function getPhysiologicalConstant(id,cb = null,modelPoint) {
+  export function getPhysiologicalConstant(id,cb = null) {
   
     return dispatch => {
 

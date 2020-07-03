@@ -70,7 +70,7 @@ const PhysiologicalConstants = props => {
     tlic:"",
     heartRate:"",
     respiratoryRate:"",
-    HeartBeat:"",
+    heartBeat:"",
     temperature:"",
     weight:"",
     attitude:null,
@@ -101,6 +101,164 @@ const PhysiologicalConstants = props => {
     
   }
 
+  const errors =  new Array(19)
+
+  const rules = (key,value) =>{
+    switch(key){
+        case "tlic":
+
+            errors[0] = value.length > 0 && value.length < 5 ?
+            "El T.LI.C debe tener mas de 5 carácteres" : false       
+
+        return  errors[0]
+
+        case "heartRate":
+
+            errors[1] = value.length > 0 && value.length < 5 ?
+                "La frecuencia cardiaca debe tener mas de 5 carácteres" : false       
+
+            return  errors[1]
+
+        case "respiratoryRate":
+
+            errors[2] = value.length > 0 && value.length < 5 ?
+                "La frecuencia respiratoria debe tener mas de 5 carácteres" : false       
+
+            return  errors[2]
+
+        case "heartBeat":
+
+            errors[3] = value.length > 0 && value.length < 5 ?
+                "La ritmo cardiaco debe tener mas de 5 carácteres" : false       
+
+            return  errors[3]
+
+        case "temperature":
+
+            errors[4] = value.length > 0 && value.length < 5 ?
+                "La temperatura debe tener mas de 5 carácteres" : false       
+
+            return  errors[4]
+
+        case "weight":
+
+            errors[5] = value.length > 0 && value.length < 5 ?
+                "El peso debe tener mas de 5 carácteres" : false       
+
+            return  errors[5]
+
+        case "conjuntivalMucosa":
+
+            errors[6] = value.length > 0 && value.length < 15 ?
+                "La mucosa conjuntival debe tener mas de 15 carácteres" : false       
+
+            return  errors[6]
+
+        case "oralMucosa":
+
+            errors[7] = value.length > 0 && value.length < 15 ?
+                "La mucosa oral debe tener mas de 15 carácteres" : false       
+
+            return  errors[7]
+
+        case "vulvallMucosa":
+
+            errors[8] = value.length > 0 && value.length < 15 ?
+                "La mucosa vulvar debe tener mas de 15 carácteres" : false       
+
+            return  errors[8]
+
+        case "rectalMucosa":
+
+            errors[9] = value.length > 0 && value.length < 15 ?
+                "La mucosa rectal debe tener mas de 15 carácteres" : false       
+
+            return  errors[9]
+
+        case "physicalsEye":
+
+            errors[10] = value.length > 0 && value.length < 15 ?
+                "El estado de los ojos debe tener mas de 15 carácteres" : false       
+
+            return  errors[10]
+
+        case "physicalsEars":
+
+            errors[11] = value.length > 0 && value.length < 15 ?
+                "El estado de los oidos debe tener mas de 15 carácteres" : false       
+
+            return  errors[11]
+
+        case "physicalsLinfaticmodules":
+
+            errors[12] = value.length > 0 && value.length < 15 ?
+                "El estado de los modulos linfaticos debe tener mas de 15 carácteres" : false       
+
+            return  errors[12]
+
+        case "physicalsSkinandanexes":
+
+            errors[13] = value.length > 0 && value.length < 15 ?
+                "El estado de la piel y anexos debe tener mas de 15 carácteres" : false       
+
+            return  errors[13]
+
+        case "physicalsLocomotion":
+
+            errors[14] = value.length > 0 && value.length < 15 ?
+                "El estado de la locomoción debe tener mas de 15 carácteres" : false       
+
+            return  errors[14]
+
+        case "physicalsMusclesqueletal":
+
+            errors[15] = value.length > 0 && value.length < 15 ?
+                "El estado de musculo esquelético debe tener mas de 15 carácteres" : false       
+
+            return  errors[15]
+        
+        case "physicalsNervoussystem":
+
+            errors[16] = value.length > 0 && value.length < 15 ?
+                "El estado del sistema nervioso debe tener mas de 15 carácteres" : false       
+
+            return  errors[16]
+
+        case "physicalsCardiovascularsystem":
+
+            errors[17] = value.length > 0 && value.length < 15 ?
+                "El estado del sistema cardiovascular debe tener mas de 15 carácteres" : false       
+
+            return  errors[17]
+
+        case "physicalsRespiratorysystem":
+
+            errors[18] = value.length > 0 && value.length < 15 ?
+                "El estado del sistema respiratorio debe tener mas de 15 carácteres" : false       
+
+            return  errors[18]
+
+        case "physicalsDigestivesystem":
+
+            errors[18] = value.length > 0 && value.length < 15 ?
+                "El estado del sistema digestivo debe tener mas de 15 carácteres" : false       
+
+            return  errors[18]
+
+        case "physicalsGenitourinarysystem":
+
+            errors[19] = value.length > 0 && value.length < 15 ?
+                "El estado del sistema genitourinario debe tener mas de 15 carácteres" : false       
+
+            return  errors[19]
+    
+        
+
+      default:
+        return true
+    } 
+  }
+
   return (
     <Grid lg={12} md={12} xs={12}>
          <Grid
@@ -121,6 +279,8 @@ const PhysiologicalConstants = props => {
                     }}
                     onChange={handleChange}
                     value={values.tlic}
+                    helperText={rules("tlic",values.tlic)}
+                    error = {rules("tlic",values.tlic)}
                 />
             </Grid>
             <Grid lg={4} md={4} xs={12} >
@@ -135,6 +295,8 @@ const PhysiologicalConstants = props => {
                     }}
                     onChange={handleChange}
                     value={values.heartRate}
+                    helperText={rules("heartRate",values.heartRate)}
+                    error = {rules("heartRate",values.heartRate)}
                 />
             </Grid>
             <Grid lg={4} md={4} xs={12} >
@@ -149,6 +311,8 @@ const PhysiologicalConstants = props => {
                     }}
                     onChange={handleChange}
                     value={values.respiratoryRate}
+                    helperText={rules("respiratoryRate",values.respiratoryRate)}
+                    error = {rules("respiratoryRate",values.respiratoryRate)}
                 />
             </Grid>
         </Grid>
@@ -163,13 +327,15 @@ const PhysiologicalConstants = props => {
                     fullWidth
                     label="PULSO"
                     margin="dense"
-                    name="HeartBeat"
+                    name="heartBeat"
                     variant="outlined"
                     InputLabelProps={{
                         className: classes.floatingLabelFocusStyle,
                     }}
                     onChange={handleChange}
-                    value={values.HeartBeat}
+                    value={values.heartBeat}
+                    helperText={rules("heartBeat",values.heartBeat)}
+                    error = {rules("heartBeat",values.heartBeat)}
                 />
             </Grid>
             <Grid lg={4} md={4} xs={12} >
@@ -184,6 +350,8 @@ const PhysiologicalConstants = props => {
                     }}
                     onChange={handleChange}
                     value={values.temperature}
+                    helperText={rules("temperature",values.temperature)}
+                    error = {rules("temperature",values.temperature)}
                 />
             </Grid>
             <Grid lg={4} md={4} xs={12} >
@@ -198,6 +366,8 @@ const PhysiologicalConstants = props => {
                     }}
                     onChange={handleChange}
                     value={values.weight}
+                    helperText={rules("weight",values.weight)}
+                    error = {rules("weight",values.weight)}
                 />
             </Grid>
         </Grid>
@@ -280,6 +450,8 @@ const PhysiologicalConstants = props => {
                 }}
                 onChange={handleChange}
                 value={values.conjuntivalMucosa}
+                helperText={rules("conjuntivalMucosa",values.conjuntivalMucosa)}
+                error = {rules("conjuntivalMucosa",values.conjuntivalMucosa)}
             />
         </Grid>
 
@@ -297,6 +469,8 @@ const PhysiologicalConstants = props => {
                 }}
                 onChange={handleChange}
                 value={values.oralMucosa}
+                helperText={rules("oralMucosa",values.oralMucosa)}
+                error = {rules("oralMucosa",values.oralMucosa)}
             />
         </Grid>
 
@@ -314,6 +488,8 @@ const PhysiologicalConstants = props => {
                 }}
                 onChange={handleChange}
                 value={values.vulvallMucosa}
+                helperText={rules("vulvallMucosa",values.vulvallMucosa)}
+                error = {rules("vulvallMucosa",values.vulvallMucosa)}
             />
         </Grid>
 
@@ -331,6 +507,8 @@ const PhysiologicalConstants = props => {
                 }}
                 onChange={handleChange}
                 value={values.rectalMucosa}
+                helperText={rules("rectalMucosa",values.rectalMucosa)}
+                error = {rules("rectalMucosa",values.rectalMucosa)}
             />
         </Grid>
 
@@ -350,6 +528,8 @@ const PhysiologicalConstants = props => {
                 }}
                 onChange={handleChange}
                 value={values.physicalsEye}
+                helperText={rules("physicalsEye",values.physicalsEye)}
+                error = {rules("physicalsEye",values.physicalsEye)}
         />
 
         <TextField
@@ -365,6 +545,8 @@ const PhysiologicalConstants = props => {
                 }}
                 onChange={handleChange}
                 value={values.physicalsEars}
+                helperText={rules("physicalsEars",values.physicalsEars)}
+                error = {rules("physicalsEars",values.physicalsEars)}
         />
 
         <TextField
@@ -380,6 +562,8 @@ const PhysiologicalConstants = props => {
                 }}
                 onChange={handleChange}
                 value={values.physicalsLinfaticmodules}
+                helperText={rules("physicalsLinfaticmodules",values.physicalsLinfaticmodules)}
+                error = {rules("physicalsLinfaticmodules",values.physicalsLinfaticmodules)}
         />
 
         <TextField
@@ -395,6 +579,8 @@ const PhysiologicalConstants = props => {
                 }}
                 onChange={handleChange}
                 value={values.physicalsSkinandanexes}
+                helperText={rules("physicalsSkinandanexes",values.physicalsSkinandanexes)}
+                error = {rules("physicalsSkinandanexes",values.physicalsSkinandanexes)}
         />
 
         <TextField
@@ -410,6 +596,8 @@ const PhysiologicalConstants = props => {
                 }}
                 onChange={handleChange}
                 value={values.physicalsLocomotion}
+                helperText={rules("physicalsLocomotion",values.physicalsLocomotion)}
+                error = {rules("physicalsLocomotion",values.physicalsLocomotion)}
         />
 
         <TextField
@@ -425,6 +613,8 @@ const PhysiologicalConstants = props => {
                 }}
                 onChange={handleChange}
                 value={values.physicalsMusclesqueletal}
+                helperText={rules("physicalsMusclesqueletal",values.physicalsMusclesqueletal)}
+                error = {rules("physicalsMusclesqueletal",values.physicalsMusclesqueletal)}
         />
 
         <TextField
@@ -440,6 +630,8 @@ const PhysiologicalConstants = props => {
                 }}
                 onChange={handleChange}
                 value={values.physicalsNervoussystem}
+                helperText={rules("physicalsNervoussystem",values.physicalsNervoussystem)}
+                error = {rules("physicalsNervoussystem",values.physicalsNervoussystem)}
         />
 
         <TextField
@@ -455,6 +647,8 @@ const PhysiologicalConstants = props => {
                 }}
                 onChange={handleChange}
                 value={values.physicalsCardiovascularsystem}
+                helperText={rules("physicalsCardiovascularsystem",values.physicalsCardiovascularsystem)}
+                error = {rules("physicalsCardiovascularsystem",values.physicalsCardiovascularsystem)}
         />
 
         <TextField
@@ -470,6 +664,8 @@ const PhysiologicalConstants = props => {
                 }}
                 onChange={handleChange}
                 value={values.physicalsRespiratorysystem}
+                helperText={rules("physicalsRespiratorysystem",values.physicalsRespiratorysystem)}
+                error = {rules("physicalsCardiovascularsystem",values.physicalsCardiovascularsystem)}
         />
 
         <TextField
@@ -485,6 +681,8 @@ const PhysiologicalConstants = props => {
                 }}
                 onChange={handleChange}
                 value={values.physicalsDigestivesystem}
+                helperText={rules("physicalsDigestivesystem",values.physicalsDigestivesystem)}
+                error = {rules("physicalsDigestivesystem",values.physicalsDigestivesystem)}
         />
 
         <TextField
@@ -500,12 +698,18 @@ const PhysiologicalConstants = props => {
                 }}
                 onChange={handleChange}
                 value={values.physicalsGenitourinarysystem}
+                helperText={rules("physicalsGenitourinarysystem",values.physicalsGenitourinarysystem)}
+                error = {rules("physicalsGenitourinarysystem",values.physicalsGenitourinarysystem)}
         />
             
         <Typography variant="subtitle2">Opciones</Typography>
         <Divider/>        
         <Grid  container direction="row" justify="space-evenly" alignItems="center">        
-            <Button color="primary" variant="contained" style={{marginTop:"10px"}}  >
+            <Button color="primary" variant="contained" style={{marginTop:"10px"}} 
+                onClick={()=>{
+                    console.info("values",values)
+                }}
+            >
                 Guardar
             </Button>
             <Button color="primary" variant="contained" style={{marginTop:"10px"}} >

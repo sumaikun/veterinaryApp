@@ -6,7 +6,8 @@ import { products } from "./products";
 import { contacts } from "./contacts";
 import { pets } from "./pets";
 import { parameters } from "./parameters";
-
+import { patientReviews } from "./patientReviews";
+import { physiologicalConstants } from "./physiologicalConstant"
 
 const reducers = combineReducers({
   auth,
@@ -15,7 +16,9 @@ const reducers = combineReducers({
   products,
   contacts,
   pets,
-  parameters
+  parameters,
+  patientReviews,
+  physiologicalConstants
 });
 
 export default reducers;

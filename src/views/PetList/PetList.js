@@ -17,6 +17,8 @@ import { getContacts } from 'actions/contacts';
 
 import Swal from 'sweetalert2' 
 
+import { setCurrentPatient } from 'actions/app';
+
 
 const useStyles = theme => ({
   root: {
@@ -112,10 +114,16 @@ class PetList extends Component{
 
   medicalRecordsButton(){
     console.log('medicalRecordsButton')
+
+    this.props.setCurrentPatient(this.state.selectedPet._id)
+    
     this.props.history.push({
       pathname: '/medicalRecords',
       state: { id: this.state.selectedPet._id }
     })
+
+    
+
   }
 
   medicalAppointmentButton(){
@@ -300,4 +308,8 @@ PetList.propTypes = {
 
 const componentDefinition =  withStyles(useStyles)(PetList);
 
-export default  connect(mapStateToProps, { getPets , getPet, getProducts, getContacts } )(componentDefinition);
+export default  connect(mapStateToProps, { getPets,
+   getPet,
+   getProducts,
+   setCurrentPatient,
+   getContacts } )(componentDefinition);

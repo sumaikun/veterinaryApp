@@ -38,7 +38,7 @@ function setSpecies(species) {
     };
 }
 
-function setCurrentPatient(patientId) {
+export function setCurrentPatient(patientId) {
   return {
     type: SET_CURRENT_PATIENT,   
     payload:patientId

@@ -1,20 +1,20 @@
 export class PatientReview {
     constructor () {
       this._id = null;
-      this.PvcVaccine = '';
-      this.PvcVaccineDate = '';
-      this.TripleVaccine = '';
-      this.TripleVaccineDate = '';     
-      this.RabiesVaccine = '';
-      this.RabiesVaccineDate = '';
-      this.DesparasitationProduct = '';
-      this.LastDesparasitation = '';
-      this.FeedingType = '';
-      this.ReproductiveState = '';
-      this.PreviousIllnesses = '';
-      this.Surgeris = '';
-      this.FamilyBackground = '';
-      this.Habitat = '';
+      this.pvcVaccine = '';
+      this.pvcVaccineDate = null;
+      this.tripleVaccine = '';
+      this.tripleVaccineDate = null;     
+      this.rabiesVaccine = '';
+      this.rabiesVaccineDate = null;
+      this.desparasitationProduct = '';
+      this.lastDesparasitation = null;
+      this.feedingType = '';
+      this.reproductiveState = '';
+      this.previousIllnesses = '';
+      this.surgeris = '';
+      this.familyBackground = '';
+      this.habitat = '';
 
    }
 }

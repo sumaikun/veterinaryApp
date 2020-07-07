@@ -35,7 +35,7 @@ import {
     }
   }
   
-  const modelPoint = "/physiologicalConstants"
+  const modelPoint = "physiologicalConstants"
   
   export function getPhysiologicalConstants(cb=null) {
     
@@ -64,9 +64,11 @@ import {
       return api.getData(modelPoint+"/"+patient)
         .then(( response ) => {
 
-          dispatch(setPhysiologicalConstant(response.data ? response.data : []));
+          const result = response.data ? response.data : []
+
+          dispatch(setPhysiologicalConstant(result));
           
-          if(cb) { cb(true,false) }
+          if(cb) { cb(result,false) }
           
         })
         .catch(err => { console.log("Error: ", err)

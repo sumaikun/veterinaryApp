@@ -8,6 +8,9 @@ import { pets } from "./pets";
 import { parameters } from "./parameters";
 import { patientReviews } from "./patientReviews";
 import { physiologicalConstants } from "./physiologicalConstant"
+import { diagnosticPlans } from "./diagnosticPlans"
+import { therapeuticPlans } from "./therapeuticPlans"
+
 
 const reducers = combineReducers({
   auth,
@@ -18,7 +21,9 @@ const reducers = combineReducers({
   pets,
   parameters,
   patientReviews,
-  physiologicalConstants
+  physiologicalConstants,
+  diagnosticPlans,
+  therapeuticPlans
 });
 
 export default reducers;

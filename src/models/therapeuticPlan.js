@@ -1,4 +1,4 @@
-export class TerapeuticPlan {
+export class TherapeuticPlan {
     constructor () {
       this._id = null;
       this.TypeOfPlan = '';

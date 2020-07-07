@@ -87,3 +87,25 @@ export const REMOVE_PHYSIOLOGICAL_CONSTANT = "REMOVE_PHYSIOLOGICAL_CONSTANT";
 export const SELECT_PHYSIOLOGICAL_CONSTANT = "SELECT_PHYSIOLOGICAL_CONSTANT";
 
 
+// ---------------- Diagnostic Plan types --------------------------------
+
+export const SET_DIAGNOSTIC_PLANS = "SET_DIAGNOSTIC_PLANS";
+
+export const ADD_DIAGNOSTIC_PLAN = "ADD_DIAGNOSTIC_PLAN";
+
+export const REMOVE_DIAGNOSTIC_PLAN = "REMOVE_DIAGNOSTIC_PLAN";
+
+export const SELECT_DIAGNOSTIC_PLAN = "SELECT_DIAGNOSTIC_PLAN";
+
+
+// ---------------- Therapeutic Plan types --------------------------------
+
+export const SET_THERAPEUTIC_PLANS = "SET_THERAPEUTIC_PLANS";
+
+export const ADD_THERAPEUTIC_PLAN = "ADD_THERAPEUTIC_PLAN";
+
+export const REMOVE_THERAPEUTIC_PLAN = "REMOVE_THERAPEUTIC_PLAN";
+
+export const SELECT_THERAPEUTIC_PLAN = "SELECT_THERAPEUTIC_PLAN";
+
+

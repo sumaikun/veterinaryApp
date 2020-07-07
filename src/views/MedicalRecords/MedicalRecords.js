@@ -14,8 +14,11 @@ import 'date-fns';
 import { getProducts  } from 'actions/products';
 import { setCurrentPatient } from 'actions/app';
 import { getPatientReviewsByPatient, savePatientReview } from 'actions/patientReviews';
-import { getPhysiologicalConstantsByPatient } from 'actions/pyshiologicalConstants';
+import { getPhysiologicalConstantsByPatient, savePhysiologicalConstant } from 'actions/pyshiologicalConstants';
+import { getDiagnosticPlansByPatient, saveDiagnosticPlan } from 'actions/diagnosticPlans'
 import { PatientReview as PatientReviewModel } from "models/patientReview";
+import { PhysiologicalConstant as PhysiologicalConstantModel } from "models/physiologicalConstant"
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -47,9 +50,17 @@ const MedicalRecords = props => {
 
   const [patientReview, setPatientReview] = useState(null)
 
-  const [currentConstants, setCurrentConstants] = useState({})
+  const [physiologicalConstant, setPhysiologicalConstant] = useState(null)
 
-  const [ idToSave, setIdToSave ] = useState(null)
+  const [physiologicalConstants, setPhysiologicalConstants] = useState([])
+
+  const [diagnosticPlans, setDiagnosticPlans] = useState([])
+
+  const [ idPRToSave, setIdPRToSave ] = useState(null)
+
+  const [ idPCToSave, setIdPCToSave ] = useState(null)
+
+  const [ idDPToSave, setIdDPToSave ] = useState(null)
 
   useEffect(() => {
 
@@ -92,7 +103,36 @@ const MedicalRecords = props => {
         
         if(success)
         {
-            console.info("physiological constants",props.constantsState)
+            //console.info("physiological constants",props.constantsState)
+
+            console.log("constants success",success)
+
+            if(success.length > 0)
+            {
+              setPhysiologicalConstant(success[success.length - 1]) 
+              setPhysiologicalConstants(success)
+
+            }else{
+              setPhysiologicalConstant(new PhysiologicalConstantModel())
+            }
+
+        }
+        if(error){
+          alert("Sucedio un error trayendo las constantes fisiológicas")
+        }
+
+      })
+
+      props.getDiagnosticPlansByPatient(currentPatientId,(success,error)=>{
+        
+        if(success)
+        {
+            console.log("diagnostic plans success",success)
+
+            if(success.length > 0)
+            {
+              setDiagnosticPlans(success)
+            }
         }
         if(error){
           alert("Sucedio un error trayendo las constantes fisiológicas")
@@ -124,28 +164,30 @@ const MedicalRecords = props => {
 
  
   const saveOrUpdatePatientReview = (values) =>{
+
     console.log("patientReview to save",values)
 
     values.patient = currentPatientId
     
-    if(idToSave)
+    if(idPRToSave)
     {
       if(!values._id)
       {
-        values._id = idToSave
+        values._id = idPRToSave
       }
       
     }
 
-    console.log("props.patienReviewState.selectedPatientReview",props.patienReviewState)
-
-   
+    
     props.savePatientReview(values,(res,err)=>{       
         
       if(res){
         console.log("res end point",res)
         
-        setIdToSave(res.data.id)
+        if(res.data && res.data.id)
+        {
+            setIdPRToSave(res.data.id)
+        }
         
         return Swal.fire({
           icon: 'success',
@@ -157,6 +199,110 @@ const MedicalRecords = props => {
     })
     
   }
+
+
+  const saveOrUpdatePhysiologicalConstant = (values) =>{
+
+    console.log("constant to save",values)
+
+    values.patient = currentPatientId
+    
+    if(idPCToSave)
+    {
+      if(!values._id)
+      {
+        values._id = idPCToSave
+      }
+      
+    }
+
+  
+    props.savePhysiologicalConstant(values,(res,err)=>{       
+        
+      if(res){
+        console.log("res end point",res)
+        
+        if(res.data && res.data.id)
+        {
+            setIdPCToSave(res.data.id)
+        }
+
+        props.getPhysiologicalConstantsByPatient(currentPatientId,(success,error)=>{
+          
+            if(success)
+            {
+                if(success.length > 0)
+                {                
+                  setPhysiologicalConstants(success)  
+                }
+    
+            }
+
+        })  
+        
+        return Swal.fire({
+          icon: 'success',
+          title: 'Bien',
+          text: "Datos registrados",          
+        })
+
+      }            
+      
+    })
+    
+  }
+
+
+  const saveOrUpdateDiagnosticPlan = (values,cb) =>{ 
+    
+    console.log("diagnostic plan to save",values)
+
+    values.patient = currentPatientId
+    
+    if(idDPToSave)
+    {
+      if(!values._id)
+      {
+        values._id = idDPToSave
+      }
+      
+    }
+  
+    props.saveDiagnosticPlan(values,(res,err)=>{       
+        
+      if(res){
+        console.log("res end point",res)
+        
+        if(res.data && res.data.id)
+        {
+            setIdDPToSave(res.data.id)
+        }
+
+        props.getDiagnosticPlansByPatient(currentPatientId,(success,error)=>{
+          
+            if(success)
+            {
+                if(success.length > 0)
+                {                
+                  setDiagnosticPlans(success)  
+                }    
+            }
+
+        })  
+        
+        return Swal.fire({
+          icon: 'success',
+          title: 'Bien',
+          text: "Datos registrados",          
+        }).then( any => {
+          if(cb){ cb() }
+        })
+
+      }            
+      
+    })
+  }
+
 
   return (
     <div className={classes.root} style={{marginTop:"25px"}}>
@@ -196,7 +342,15 @@ const MedicalRecords = props => {
             <Typography className={classes.heading}>Constantes fisiológicas</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
-                <PhysiologicalConstants/>
+                
+              {
+                physiologicalConstant ?  
+                <PhysiologicalConstants  physiologicalConstant={ physiologicalConstant }
+                saveOrUpdatePhysiologicalConstant={saveOrUpdatePhysiologicalConstant} 
+                physiologicalConstants={physiologicalConstants} />:
+                null
+              }    
+
             </ExpansionPanelDetails>            
         </ExpansionPanel>
 
@@ -209,7 +363,9 @@ const MedicalRecords = props => {
             <Typography className={classes.heading}>Planes de diagnostico</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
-                <DiagnosticPlan/>
+                <DiagnosticPlan saveOrUpdateDiagnosticPlan={saveOrUpdateDiagnosticPlan}
+                  diagnosticPlans={diagnosticPlans}
+                />
             </ExpansionPanelDetails>
             
         </ExpansionPanel>
@@ -297,4 +453,7 @@ export default  connect(mapStateToProps, {
   getPatientReviewsByPatient,
   getPhysiologicalConstantsByPatient,
   savePatientReview,
+  savePhysiologicalConstant,
+  getDiagnosticPlansByPatient,
+  saveDiagnosticPlan
 } )(MedicalRecords);

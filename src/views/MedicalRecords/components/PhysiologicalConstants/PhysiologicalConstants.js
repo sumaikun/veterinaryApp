@@ -13,15 +13,16 @@ import {
   RadioGroup,
   Radio,
   FormControl,
-  Button 
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow, 
 } from '@material-ui/core';
-import {
-    MuiPickersUtilsProvider,
-    KeyboardDatePicker,
-  } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
-
-
+import Swal from 'sweetalert2'
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import { PhysiologicalConstant as PhysiologicalConstantModel } from "models/physiologicalConstant";
 
 const useStyles = {
   root: {},
@@ -66,7 +67,7 @@ const PhysiologicalConstants = props => {
 
   };
 
-  const [values, setValues] = useState({
+  /*const [values, setValues] = useState({
     tlic:"",
     heartRate:"",
     respiratoryRate:"",
@@ -78,7 +79,7 @@ const PhysiologicalConstants = props => {
     hidrationStatus:null,
     conjuntivalMucosa:"",
     oralMucosa:"",
-    vulvallMucosa:"",
+    vulvalMucosa:"",
     rectalMucosa:"",
     physicalsEye:"",
     physicalsEars:"",
@@ -91,7 +92,11 @@ const PhysiologicalConstants = props => {
     physicalsRespiratorysystem:"",
     physicalsDigestivesystem:"",
     physicalsGenitourinarysystem:""
-  })
+  })*/
+
+  const [values, setValues] = useState(props.physiologicalConstant)
+
+  //console.log("values",values)
 
   const setData = (key , value) => {
     setValues({
@@ -161,7 +166,7 @@ const PhysiologicalConstants = props => {
 
             return  errors[7]
 
-        case "vulvallMucosa":
+        case "vulvalMucosa":
 
             errors[8] = value.length > 0 && value.length < 15 ?
                 "La mucosa vulvar debe tener mas de 15 carácteres" : false       
@@ -376,7 +381,7 @@ const PhysiologicalConstants = props => {
         <Grid  container direction="row" justify="center" alignItems="center">
             <FormControl component="fieldset">
                 <RadioGroup style={useStyles.horizontalGroup} 
-                name="attitude" onChange={handleChange}
+                name="attitude" onChange={handleChange} value={ values.attitude }
                 aria-label="attitude">
                     
                     <FormControlLabel value="Astenico" control={<Radio/>} 
@@ -395,6 +400,7 @@ const PhysiologicalConstants = props => {
             <FormControl component="fieldset">
                 <RadioGroup style={useStyles.horizontalGroup} 
                      name="bodyCondition" onChange={handleChange}
+                     value={ values.bodyCondition }
                     aria-label="bodyCondition">
                     
                     <FormControlLabel value="Caquetico" control={<Radio/>} 
@@ -417,6 +423,7 @@ const PhysiologicalConstants = props => {
             <FormControl component="fieldset">
                 <RadioGroup style={useStyles.horizontalGroup}
                     name="hidrationStatus" onChange={handleChange}
+                    value={ values.hidrationStatus }
                     aria-label="customerBenefit">
                     
                     <FormControlLabel value="Normal" control={<Radio/>} 
@@ -479,7 +486,7 @@ const PhysiologicalConstants = props => {
                 fullWidth
                 label="Mucosa Vulvar/prepucial"
                 margin="dense"
-                name="vulvallMucosa"
+                name="vulvalMucosa"
                 variant="outlined"
                 multiline
                 rows={3}
@@ -487,9 +494,9 @@ const PhysiologicalConstants = props => {
                     className: classes.floatingLabelFocusStyle,
                 }}
                 onChange={handleChange}
-                value={values.vulvallMucosa}
-                helperText={rules("vulvallMucosa",values.vulvallMucosa)}
-                error = {rules("vulvallMucosa",values.vulvallMucosa)}
+                value={values.vulvalMucosa}
+                helperText={rules("vulvalMucosa",values.vulvalMucosa)}
+                error = {rules("vulvalMucosa",values.vulvalMucosa)}
             />
         </Grid>
 
@@ -701,18 +708,131 @@ const PhysiologicalConstants = props => {
                 helperText={rules("physicalsGenitourinarysystem",values.physicalsGenitourinarysystem)}
                 error = {rules("physicalsGenitourinarysystem",values.physicalsGenitourinarysystem)}
         />
-            
+        <Typography variant="subtitle2">Lista de constantes registradas</Typography>
+        <Divider/> 
+
+        <Grid  lg={12} md={12} xs={12}>
+            <PerfectScrollbar>
+            <div className={classes.inner}>
+                <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Fecha</TableCell>                  
+                        <TableCell>Actitud</TableCell>
+                        <TableCell>Condición corporal</TableCell>
+                        <TableCell>Hidratación</TableCell>
+                        <TableCell>Pulso</TableCell>
+                        <TableCell>Temperatura</TableCell>
+                        <TableCell>Peso</TableCell>                        
+                        <TableCell>Opciones</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>                  
+                        
+                    {
+                        props.physiologicalConstants ? 
+                        props.physiologicalConstants.slice(0).reverse().map( constant => (
+                        <TableRow>
+                            <TableCell>{constant.date.split(" ")[0]}</TableCell>
+                            <TableCell>{constant.attitude}</TableCell>
+                            <TableCell>{constant.bodyCondition}</TableCell>
+                            <TableCell>{constant.hidrationStatus}</TableCell>
+                            <TableCell>{constant.heartBeat}</TableCell>
+                            <TableCell>{constant.temperature}</TableCell>
+                            <TableCell>{constant.weight}</TableCell>
+                            <TableCell><Button color="secondary"onClick={()=>{
+                                
+                                Swal.fire({
+                                    title: '¿ Esta seguro ?',
+                                    text: "Esto modificara los datos del formulario, si esta creando una constante y no ha guardado cambios, guardelos",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Ok'
+                                  }).then((result) => {
+                                    if (result.value) {
+                                        setValues(constant)
+                                    }
+                                })
+
+                            }} >Ver info completa</Button></TableCell>
+                        </TableRow>
+                        )) : null
+                    }
+                        
+                    
+                </TableBody>
+                </Table>
+            </div>
+            </PerfectScrollbar>
+        </Grid>  
+
+
+
         <Typography variant="subtitle2">Opciones</Typography>
         <Divider/>        
         <Grid  container direction="row" justify="space-evenly" alignItems="center">        
             <Button color="primary" variant="contained" style={{marginTop:"10px"}} 
                 onClick={()=>{
                     console.info("values",values)
+
+                    let errorValidation = false
+
+                    errors.forEach(data => {
+                        if(data != false){  errorValidation = true  }
+                    })
+
+                    if(errorValidation)
+                    {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Espera',
+                            text: "Tienes error en los datos suministrados, revisalos",          
+                        })
+
+                    }else{
+                        if(values.tlic === null || values.heartRate === null
+                            || values.respiratoryRate === null
+                            || values.heartBeat === ""
+                            || values.temperature === ""
+                            || values.weight === ""
+                            || values.attitude === ""
+                            || values.bodyCondition === ""
+                            || values.hidrationStatus === ""){
+
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Espera',
+                                text: "No has puesto los datos obligatorios (T.LI.C, Frecuencia cardiaca, Frecuencia respiratoria, Pulso, Temperatura, Peso, Actitud, Condición corporal, Estado de hidratación)",          
+                            })
+
+                        }
+                        else{
+                            props.saveOrUpdatePhysiologicalConstant(values)
+                        }
+                    }
+
+
                 }}
             >
                 Guardar
             </Button>
-            <Button color="primary" variant="contained" style={{marginTop:"10px"}} >
+            <Button color="primary" variant="contained" style={{marginTop:"10px"}}
+                onClick={()=>{
+                    if(props.physiologicalConstants.length === 0)
+                    {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Espera',
+                            text: "Tienen que haber constantes fisiológicas previas para crear una nueva",          
+                        })
+                    }
+                    else{
+                        setValues( new PhysiologicalConstantModel() )
+                    }
+                }}
+            >
                 Crear nuevas constantes fisiológicas
             </Button>
         </Grid>

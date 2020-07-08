@@ -1,10 +1,11 @@
 export class TherapeuticPlan {
     constructor () {
       this._id = null;
-      this.TypeOfPlan = '';
-      this.ActiveSubstanceToAdminister = '';
-      this.Posology = '';
-      this.TotalDose = '';     
-      this.FrecuencyAndDuration = '';
+      this.patient = ''
+      this.typeOfPlan = '';
+      this.activeSubstanceToAdminister = '';
+      this.posology = '';
+      this.totalDose = '';     
+      this.frecuencyAndDuration = '';
    }
 }

@@ -104,8 +104,7 @@ const DiagnosticPlan = props => {
     setValues({
         ...values,
         [key]:value
-    })
-    
+    })    
   }
 
   const handleChange = event => {
@@ -165,7 +164,24 @@ const DiagnosticPlan = props => {
 
 
   const handleSave = (cb=null) => {
-    console.info("values",values)                           
+
+    let errorValidation = false
+
+    errors.forEach(data => {
+        if(data != false){  errorValidation = true  }
+    })
+
+    if(errorValidation)
+    {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Espera',
+            text: "Tienes error en los datos suministrados, revisalos",          
+        })
+
+    }
+    
+    //console.info("values",values)                           
 
       if( !values.typeOfExam  ||  !values.description  || !values.examDate
       || !values.laboratory || !values.laboratoryAddress )

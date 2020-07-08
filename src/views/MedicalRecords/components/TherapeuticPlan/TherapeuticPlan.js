@@ -27,8 +27,9 @@ import {
     DialogActions,  
 } from '@material-ui/core';
 import  api  from 'middleware/api'
-
+import Swal from 'sweetalert2'
 import PetsMedicine from 'views/PetList/components/PetsMedicine'
+import { TherapeuticPlan as TherapeuticPlanModel } from "models/therapeuticPlan";
 
 const doStyles = makeStyles(theme => ({
     root: {},
@@ -88,6 +89,8 @@ const TherapeuticPlan = props => {
 
   const [open2, setOpen2] = useState(false);
 
+  const [selectedProduct, setSelectedProduct ] = useState(null)
+
   const closeDialog = () =>{
     setOpen(false)
   }
@@ -97,15 +100,66 @@ const TherapeuticPlan = props => {
   }
 
   const selectProduct = (data) => {
-
+    //console.log("product selected",data)
+    setSelectedProduct(data)
   }
 
   const handleClose2 = () => {
     setOpen2(false)
   }
 
+  const [values, setValues] = useState(new TherapeuticPlanModel())
 
+  const handleChange = event => {
+    
+    //console.log(event,event.target)
+    //console.log(event.target.name,event.target.value,event.target.checked,event.target.type)
+    if( event.target.type === "checkbox" )
+    {
+        setData(event.target.name,event.target.checked)
+    }
+    else{
+        setData(event.target.name,event.target.value)
+    }
 
+  };
+
+  const errors =  new Array(3)
+
+  const rules = (key,value) =>{
+    switch(key){
+        case "posology":
+
+          errors[0] = value.length > 0 && value.length < 5 ?
+          "La posologia debe tener mas de 5 carácteres" : false    
+          
+          return  errors[0]
+
+        case "totalDose":
+
+          errors[2] = value.length > 0 && value.length < 5 ?
+          "La dosis total debe tener mas de 5 carácteres" : false    
+            
+          return  errors[2]
+        
+        case "frecuencyAndDuration":
+
+          errors[3] = value.length > 0 && value.length < 5 ?
+          "La frecuencia y duración debe tener mas de 5 carácteres" : false    
+            
+          return  errors[3]
+
+        default:
+          return true
+    }
+  }
+
+  const setData = (key , value) => {
+    setValues({
+        ...values,
+        [key]:value
+    })    
+  }
 
   return (
     <Grid lg={12} md={12} xs={12}>   
@@ -122,19 +176,62 @@ const TherapeuticPlan = props => {
                         <TableCell>Posologia</TableCell>
                         <TableCell>Dosis total</TableCell>
                         <TableCell>Via</TableCell>
-                        <TableCell>Frecuencia y duración</TableCell>
+                        <TableCell>Frecuencia/duración</TableCell>
+                        <TableCell>Opciones</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    <TableRow>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                    </TableRow>
+                    {
+                      props.therapeuticPlans.slice(0).reverse().map( plan => ( 
+
+                        <TableRow>
+                          <TableCell>{ 
+                            planTypes.length > 0 ?
+                              planTypes.filter( type => plan.typeOfPlan === type.value)[0].label:
+                              null
+                           }</TableCell>
+                          <TableCell>{
+                            
+                            products ? 
+                              products.filter( product => plan.activeSubstanceToAdminister === product._id )[0].name
+                              : false
+                           
+                           }</TableCell>
+                          <TableCell>{
+                            
+                            products ? 
+                              products.filter( product => plan.activeSubstanceToAdminister === product._id )[0].presentation
+                              : false
+                           
+                           }</TableCell>
+                          <TableCell>{ plan.posology }</TableCell>
+                          <TableCell>{ plan.totalDose }</TableCell>
+                          <TableCell>{
+                            
+                            products ? 
+                              products.filter( product => plan.activeSubstanceToAdminister === product._id )[0].administrationWay
+                              : false
+                           
+                           }</TableCell>
+                          <TableCell>{ plan.frecuencyAndDuration }</TableCell>
+                          <TableCell>
+                          <Button color="secondary"
+                              onClick={()=>{
+
+                                const filteredProduct = products.filter( product => plan.activeSubstanceToAdminister === product._id )[0]
+
+                                setSelectedProduct(filteredProduct)
+
+                                setValues(plan)
+                                setOpen(true)
+
+                              }}
+                            >Ver info completa</Button>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    }
+                    
                 </TableBody>
                 </Table>
             </div>
@@ -144,6 +241,8 @@ const TherapeuticPlan = props => {
         <Divider/>    
         <Grid  container direction="row" justify="center" alignItems="center">        
             <Button color="primary" variant="contained" style={{marginTop:"10px"}}  onClick={()=>{
+              setSelectedProduct(null)
+              setValues( new TherapeuticPlanModel() )
               setOpen(true)
             }} >
                 Crear nuevo plan terapeutico
@@ -167,12 +266,16 @@ const TherapeuticPlan = props => {
                   <Grid  container>
                     <Grid item md={12} xs={12}>
                         <TextField
-                            fullWidth label="Tipo de plan"
-                            margin="dense" name="typeOfExam"
+                            fullWidth
+                            label="Tipo de plan"
+                            margin="dense"
+                            name="typeOfPlan"
                             required
                             select                                   
                             variant="outlined"
                             SelectProps={{ native: true }}
+                            onChange={handleChange}
+                            value={values.typeOfPlan}
                         >
                             {planTypes.map(option => (
                             <option
@@ -194,31 +297,91 @@ const TherapeuticPlan = props => {
                             Seleccionar medicamento
                         </Button> 
                         <Typography style={{ textAlign:"center" }} variant="button" >
-                            { props.selectedProduct ? "Producto seleccionado : "+props.selectedProduct.name : null }
+                            { selectedProduct ? "Producto seleccionado : "+selectedProduct.name : null }
                         </Typography>                                   
                     </Grid>
 
                     <Grid item md={12} xs={12}>
-                        <TextField  fullWidth  label="Posología" margin="dense"
-                        name="laboratory"  variant="outlined"
+                        <TextField  fullWidth 
+                          label="Posología"
+                          margin="dense"
+                          name="posology"
+                          variant="outlined"
+                          onChange={handleChange}
+                          value={values.posology}
+                          helperText={rules("posology",values.posology)}
+                          error = {rules("posology",values.posology)}
                     />
                     </Grid>
 
                     <Grid item md={12} xs={12}>
                         <TextField  fullWidth  label="Dosis total" margin="dense"
-                        name="laboratory"  variant="outlined"
+                        name="totalDose"  variant="outlined"
+                        onChange={handleChange}
+                        value={values.totalDose}
+                        helperText={rules("totalDose",values.totalDose)}
+                        error = {rules("totalDose",values.totalDose)}
                     />
                     </Grid>
 
                     <Grid item md={12} xs={12}>
                         <TextField  fullWidth  label="Frecuencia y duración" margin="dense"
-                        name="laboratory"  variant="outlined"
+                        name="frecuencyAndDuration"  variant="outlined"
+                        onChange={handleChange}
+                        value={values.frecuencyAndDuration}
+                        helperText={rules("frecuencyAndDuration",values.frecuencyAndDuration)}
+                        error = {rules("frecuencyAndDuration",values.frecuencyAndDuration)}
                     />
                     </Grid>
 
                     <Divider></Divider>
                     <Grid container direction="row" justify="center" alignItems="center">
-                        <Button color="primary" variant="contained" style={{marginTop:"10px"}} >
+                        <Button color="primary" variant="contained" style={{marginTop:"10px"}}
+                          onClick={()=>{
+                            
+                            console.info("values",values)
+
+                            if(selectedProduct && selectedProduct._id)
+                            {
+                              values.activeSubstanceToAdminister = selectedProduct._id
+                            }
+
+                            let errorValidation = false
+
+                            errors.forEach(data => {
+                                if(data != false){  errorValidation = true  }
+                            })
+
+                            if(errorValidation)
+                            {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Espera',
+                                    text: "Tienes error en los datos suministrados, revisalos",          
+                                })
+                        
+                            }
+
+                            if( !values.typeOfPlan || !values.activeSubstanceToAdminister ||
+                              !values.posology || !values.totalDose || !values.frecuencyAndDuration )
+                            {
+                              setOpen(false)
+                              Swal.fire({
+                                  icon: 'warning',
+                                  title: 'Espera',
+                                  text: "Todos los datos son obligatorios para continuar",          
+                              }).then( data => {
+                                setOpen(true)
+                              })
+                            }
+                            else{
+                              setOpen(false)
+                              props.saveOrUpdateTherapeuticPlan(values,()=>{
+                                setOpen(true)
+                              })
+                            }
+                          }} 
+                        >
                             Guardar
                         </Button>
                     </Grid> 

@@ -55,7 +55,7 @@ const PetsMedicine = props => {
   
   const {  open, products,selectProduct, handleClose,  ...rest } = props;
 
-  console.log("pets medicine props",props)
+  //console.log("pets medicine props",props)
 
   const [selectedProduct, setSelectedProduct] = useState(null);
    
@@ -103,7 +103,7 @@ const PetsMedicine = props => {
     setOpenMedicineConfirmation(false)
     
     selectProduct(selectedProduct)
-    window.setTimeout(function(){ handleClose() }, 1000);
+    window.setTimeout(function(){ handleClose() }, 500);
     //
   }
 

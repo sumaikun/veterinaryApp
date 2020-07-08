@@ -11,11 +11,14 @@ import Swal from 'sweetalert2'
 import { PatientReview, PhysiologicalConstants, DiagnosticPlan,
   TherapeuticPlan, Appointments, Diseases, PatientFiles  } from './components'
 import 'date-fns';
+
 import { getProducts  } from 'actions/products';
 import { setCurrentPatient } from 'actions/app';
 import { getPatientReviewsByPatient, savePatientReview } from 'actions/patientReviews';
 import { getPhysiologicalConstantsByPatient, savePhysiologicalConstant } from 'actions/pyshiologicalConstants';
 import { getDiagnosticPlansByPatient, saveDiagnosticPlan } from 'actions/diagnosticPlans'
+import { getTherapeuticPlansByPatient, saveTherapeuticPlan } from 'actions/therapeuticPlans'
+
 import { PatientReview as PatientReviewModel } from "models/patientReview";
 import { PhysiologicalConstant as PhysiologicalConstantModel } from "models/physiologicalConstant"
 
@@ -56,11 +59,15 @@ const MedicalRecords = props => {
 
   const [diagnosticPlans, setDiagnosticPlans] = useState([])
 
+  const [therapeuticPlans, setTherapeuticPlans] = useState([])
+
   const [ idPRToSave, setIdPRToSave ] = useState(null)
 
   const [ idPCToSave, setIdPCToSave ] = useState(null)
 
   const [ idDPToSave, setIdDPToSave ] = useState(null)
+
+  const [ idTPToSave, setIdTPToSave ] = useState(null)
 
   useEffect(() => {
 
@@ -135,7 +142,24 @@ const MedicalRecords = props => {
             }
         }
         if(error){
-          alert("Sucedio un error trayendo las constantes fisiológicas")
+          alert("Sucedio un error trayendo los planes de diagnostico")
+        }
+
+      })
+
+      props.getTherapeuticPlansByPatient(currentPatientId,(success,error)=>{
+        
+        if(success)
+        {
+            console.log("therapeutic plans success",success)
+
+            if(success.length > 0)
+            {
+              setTherapeuticPlans(success)
+            }
+        }
+        if(error){
+          alert("Sucedio un error trayendo los planes terapeuticos")
         }
 
       })
@@ -303,6 +327,57 @@ const MedicalRecords = props => {
     })
   }
 
+  const saveOrUpdateTherapeuticPlan = (values,cb) =>{ 
+    
+    console.log("therapeutic plan to save",values)
+
+    values.patient = currentPatientId
+    
+    if(idTPToSave)
+    {
+      if(!values._id)
+      {
+        values._id = idTPToSave
+      }
+
+    }
+  
+    props.saveTherapeuticPlan(values,(res,err)=>{       
+        
+      if(res){
+        console.log("res end point",res)
+        
+        if(res.data && res.data.id)
+        {
+            setIdTPToSave(res.data.id)
+        }
+
+        props.getTherapeuticPlansByPatient(currentPatientId,(success,error)=>{
+          
+            if(success)
+            {
+                if(success.length > 0)
+                {                
+                  setTherapeuticPlans(success)  
+                }    
+            }
+
+        })  
+        
+        return Swal.fire({
+          icon: 'success',
+          title: 'Bien',
+          text: "Datos registrados",          
+        }).then( any => {
+          if(cb){ cb() }
+        })
+
+      }            
+      
+    })
+  }
+
+
 
   return (
     <div className={classes.root} style={{marginTop:"25px"}}>
@@ -380,7 +455,9 @@ const MedicalRecords = props => {
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               {
-                products ? <TherapeuticPlan products={products} /> : false
+                products ? <TherapeuticPlan products={products}  
+                therapeuticPlans={therapeuticPlans}
+                saveOrUpdateTherapeuticPlan={saveOrUpdateTherapeuticPlan} /> : false
               }
             </ExpansionPanelDetails>
             
@@ -455,5 +532,7 @@ export default  connect(mapStateToProps, {
   savePatientReview,
   savePhysiologicalConstant,
   getDiagnosticPlansByPatient,
-  saveDiagnosticPlan
+  saveDiagnosticPlan,
+  getTherapeuticPlansByPatient,
+  saveTherapeuticPlan
 } )(MedicalRecords);

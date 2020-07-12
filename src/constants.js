@@ -108,4 +108,14 @@ export const REMOVE_THERAPEUTIC_PLAN = "REMOVE_THERAPEUTIC_PLAN";
 
 export const SELECT_THERAPEUTIC_PLAN = "SELECT_THERAPEUTIC_PLAN";
 
+// ---------------- Therapeutic Plan types --------------------------------
+
+export const SET_APPOINTMENTS = "SET_APPOINTMENTS";
+
+export const ADD_APPOINTMENT = "ADD_APPOINTMENT";
+
+export const REMOVE_APPOINTMENT = "REMOVE_APPOINTMENT";
+
+export const SELECT_APPOINTMENT = "SELECT_APPOINTMENT";
+
 

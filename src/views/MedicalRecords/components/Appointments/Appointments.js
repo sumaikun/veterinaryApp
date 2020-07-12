@@ -26,6 +26,8 @@ import {
     DialogContentText,
     DialogActions,  
 } from '@material-ui/core';
+import Swal from 'sweetalert2'
+import { Appointment as AppointmentModel } from "models/Appointment";
 
 const doStyles = makeStyles(theme => ({
     root: {},
@@ -66,6 +68,52 @@ const Appointments = props => {
     setOpen(false)
   }
 
+  const errors =  new Array(1)
+
+  const rules = (key,value) =>{
+    switch(key){
+        case "reasonForConsultation":
+
+          errors[0] = value.length > 0 && value.length < 80 ?
+          "La razón de consulta debe tener mas de 80 carácteres" : false    
+          
+          return  errors[0]
+
+        case "resultsForConsultation":
+
+          errors[1] = value.length > 0 && value.length < 80 ?
+          "Los resultados de consulta debe tener mas de 80 carácteres" : false    
+            
+          return  errors[1]
+
+        default:
+          return true
+    }
+  }
+
+  const handleChange = event => {
+    
+    //console.log(event,event.target)
+    //console.log(event.target.name,event.target.value,event.target.checked,event.target.type)
+    if( event.target.type === "checkbox" )
+    {
+        setData(event.target.name,event.target.checked)
+    }
+    else{
+        setData(event.target.name,event.target.value)
+    }
+
+  };
+
+  const [values, setValues] = useState(new AppointmentModel())
+
+  const setData = (key , value) => {
+    setValues({
+        ...values,
+        [key]:value
+    })    
+  }
+
   return (
     <Grid lg={12} md={12} xs={12}>    
 
@@ -75,23 +123,33 @@ const Appointments = props => {
                 <Table>
                 <TableHead>
                     <TableRow>                  
-                    <TableCell>Veterinario/a</TableCell>
-                    <TableCell>Motivo de la consulta</TableCell>
-                    <TableCell>Resultados de la consulta</TableCell>
-                    <TableCell>Procesos relacionados</TableCell>
-                    <TableCell>Medicamentos</TableCell>
-                    <TableCell>Opciones</TableCell>
+                      <TableCell>Veterinario/a</TableCell>
+                      <TableCell>Motivo de la consulta</TableCell>
+                      <TableCell>Resultados de la consulta</TableCell>
+                      <TableCell>Opciones</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
+                {
+                    props.appointments.slice(0).reverse().map( appointment => ( 
                     <TableRow>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
+                        <TableCell>{ appointment.userDetails[0].name }</TableCell>
+                        <TableCell>{ appointment.reasonForConsultation }</TableCell>
+                        <TableCell>{ appointment.resultsForConsultation }</TableCell>
+                        <TableCell>
+
+                        <Button color="secondary"
+                              onClick={()=>{
+                                setValues(appointment)
+                                setOpen(true)
+                              }}
+                        >Ver info completa</Button>
+
+                        </TableCell>
                     </TableRow>
+                    ))
+                }
+                    
                 </TableBody>
                 </Table>
             </div>
@@ -103,6 +161,7 @@ const Appointments = props => {
         <Grid  container direction="row" justify="center" alignItems="center">        
             <Button color="primary" variant="contained" style={{marginTop:"10px"}} onClick={()=>{
               setOpen(true)
+              setValues( new AppointmentModel() )
             }}>
                 Gestionar nueva cita
             </Button>
@@ -125,21 +184,68 @@ const Appointments = props => {
 
                     <Grid item md={12} xs={12}>
                         <TextField  fullWidth  label="Motivo de la consulta" margin="dense"
-                        
-                        name="ReasonForConsultation"  variant="outlined"
+                        value={values.reasonForConsultation} onChange={handleChange}
+                        name="reasonForConsultation"  variant="outlined"
+                        helperText={rules("reasonForConsultation",values.reasonForConsultation)}
+                        error = {rules("reasonForConsultation",values.reasonForConsultation)}
                         multiline rows={3} />
                     </Grid>
 
                     <Grid item md={12} xs={12}>
                         <TextField  fullWidth  label="Resultados y o conclusiones de la consulta" margin="dense"
-                            name="ResultsForConsultation"  variant="outlined"
+                            name="resultsForConsultation"  variant="outlined"
+                            value={values.resultsForConsultation} onChange={handleChange}
+                            helperText={rules("resultsForConsultation",values.resultsForConsultation)}
+                            error = {rules("resultsForConsultation",values.resultsForConsultation)}
                             multiline rows={3} />          
                     </Grid>
                     
 
                     <Divider></Divider>
                     <Grid container direction="row" justify="center" alignItems="center">
-                        <Button color="primary" variant="contained" style={{marginTop:"10px"}} >
+                        <Button color="primary" variant="contained" style={{marginTop:"10px"}} 
+                          onClick={()=>{
+
+                            let errorValidation = false
+
+                            errors.forEach(data => {
+                                if(data != false){  errorValidation = true  }
+                            })
+
+                            if(errorValidation)
+                            {
+                              setOpen(false)
+                                return Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Espera',
+                                    text: "Tienes error en los datos suministrados, revisalos",          
+                                }).then( data => {
+                                  setOpen(true)
+                                })                        
+                            }
+
+                            if( !values.reasonForConsultation )
+                            {
+                                setOpen(false)
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Espera',
+                                    text: "La razón de consulta es un dato obligatorio",          
+                                }).then( data => {
+                                  setOpen(true)
+                                })
+                            }
+                            else{
+                                setOpen(false)
+                                props.saveOrUpdateAppointment(values,()=>{
+                                  setOpen(true)
+                                })
+                            }
+
+
+
+                          }}
+                        >
                             Guardar
                         </Button>
                     </Grid> 

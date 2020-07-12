@@ -10,6 +10,7 @@ import { patientReviews } from "./patientReviews";
 import { physiologicalConstants } from "./physiologicalConstant"
 import { diagnosticPlans } from "./diagnosticPlans"
 import { therapeuticPlans } from "./therapeuticPlans"
+import { appointments } from "./appointments"
 
 
 const reducers = combineReducers({
@@ -23,7 +24,8 @@ const reducers = combineReducers({
   patientReviews,
   physiologicalConstants,
   diagnosticPlans,
-  therapeuticPlans
+  therapeuticPlans,
+  appointments
 });
 
 export default reducers;

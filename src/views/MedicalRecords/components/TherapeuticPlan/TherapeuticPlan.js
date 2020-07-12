@@ -124,7 +124,7 @@ const TherapeuticPlan = props => {
 
   };
 
-  const errors =  new Array(3)
+  const errors =  new Array(2)
 
   const rules = (key,value) =>{
     switch(key){
@@ -137,17 +137,17 @@ const TherapeuticPlan = props => {
 
         case "totalDose":
 
-          errors[2] = value.length > 0 && value.length < 5 ?
+          errors[1] = value.length > 0 && value.length < 5 ?
           "La dosis total debe tener mas de 5 carácteres" : false    
             
-          return  errors[2]
+          return  errors[1]
         
         case "frecuencyAndDuration":
 
-          errors[3] = value.length > 0 && value.length < 5 ?
+          errors[2] = value.length > 0 && value.length < 5 ?
           "La frecuencia y duración debe tener mas de 5 carácteres" : false    
             
-          return  errors[3]
+          return  errors[2]
 
         default:
           return true
@@ -354,10 +354,13 @@ const TherapeuticPlan = props => {
 
                             if(errorValidation)
                             {
-                                Swal.fire({
+                              setOpen(false)
+                                return Swal.fire({
                                     icon: 'warning',
                                     title: 'Espera',
                                     text: "Tienes error en los datos suministrados, revisalos",          
+                                }).then( data => {
+                                  setOpen(true)
                                 })
                         
                             }

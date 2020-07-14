@@ -177,6 +177,7 @@ const TherapeuticPlan = props => {
                         <TableCell>Dosis total</TableCell>
                         <TableCell>Via</TableCell>
                         <TableCell>Frecuencia/duración</TableCell>
+                        <TableCell>Fecha</TableCell>
                         <TableCell>Opciones</TableCell>
                     </TableRow>
                 </TableHead>
@@ -214,6 +215,7 @@ const TherapeuticPlan = props => {
                            
                            }</TableCell>
                           <TableCell>{ plan.frecuencyAndDuration }</TableCell>
+                          <TableCell>{ plan.date.split(" ")[0] }</TableCell>
                           <TableCell>
                           <Button color="secondary"
                               onClick={()=>{

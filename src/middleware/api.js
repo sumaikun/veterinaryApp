@@ -60,9 +60,8 @@ instance.interceptors.response.use((response) => {
     if( ( error.message.includes("401") ||  error.message.includes("403") ) 
         && error.config.url.includes("auth") === false )
     {
-      Window.Store.dispatch({type:LOGOUT_SUCCESS})
-      alert("Credenciales expiradas ,Debe volver a logearse");      
-      window.setTimeout(function(){ window.location.reload(); }, 3000);
+      Window.Store.dispatch({type:LOGOUT_SUCCESS})         
+      window.setTimeout(function(){ window.location.reload(); alert("Credenciales expiradas ,Debe volver a logearse");  }, 3000);
       
     }
     else{

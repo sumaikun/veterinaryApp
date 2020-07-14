@@ -28,7 +28,8 @@ import {
 } from '@material-ui/core';
 
 import  api  from 'middleware/api'
-
+import Swal from 'sweetalert2'
+import { DetectedDisease as DetectedDiseaseModel } from "models/DetectedDisease";
 
 const doStyles = makeStyles(theme => ({
     root: {},
@@ -78,8 +79,55 @@ const Diseases = props => {
     getDiseases()
   },[]);  
 
+  const [values, setValues] = useState(new DetectedDiseaseModel())
+
   const closeDialog = () =>{
     setOpen(false)
+  }
+
+
+  const handleChange = event => {
+    
+    //console.log(event,event.target)
+    //console.log(event.target.name,event.target.value,event.target.checked,event.target.type)
+    if( event.target.type === "checkbox" )
+    {
+        setData(event.target.name,event.target.checked)
+    }
+    else{
+        setData(event.target.name,event.target.value)
+    }
+
+  };
+
+  const setData = (key , value) => {
+    setValues({
+        ...values,
+        [key]:value
+    })    
+  }
+
+  const errors =  new Array(1)
+
+  const rules = (key,value) =>{
+    switch(key){
+        case "criteria":
+
+          errors[0] = value.length > 0 && value.length < 80 ?
+          "El criterio debe tener mas de 80 carácteres" : false    
+          
+          return  errors[0]
+
+        case "observations":
+
+          errors[1] = value.length > 0 && value.length < 80 ?
+          "Las observaciones debe tener mas de 80 carácteres" : false    
+            
+          return  errors[1]
+
+        default:
+          return true
+    }
   }
 
   return (
@@ -99,13 +147,27 @@ const Diseases = props => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    <TableRow>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
+                  {
+                    props.detectedDiseases.slice(0).reverse().map( disease => ( 
+                      <TableRow>
+                        <TableCell>{ disease.userDetails[0].name }</TableCell>
+                        <TableCell>{  diseases ? 
+                              diseases.filter( dis => disease.disease === dis.value )[0].label
+                              : false  }</TableCell>
+                        <TableCell>{ disease.criteria }</TableCell>
+                        <TableCell>{ disease.observations }</TableCell>
+                        <TableCell>
+                          <Button color="secondary"
+                                onClick={()=>{
+                                  setValues(disease)
+                                  setOpen(true)
+                                }}
+                          >Info completa</Button>
+                        </TableCell>
                     </TableRow>
+                    ))
+                  }
+                    
                 </TableBody>
                 </Table>
             </div>
@@ -117,8 +179,9 @@ const Diseases = props => {
         <Grid  container direction="row" justify="center" alignItems="center">        
             <Button color="primary" variant="contained" style={{marginTop:"10px"}} onClick={()=>{
               setOpen(true)
+              setValues( new DetectedDiseaseModel() )
             }}>
-                Asociar nueva cita
+                Asociar nueva enfermedad
             </Button>
         </Grid>
 
@@ -129,11 +192,11 @@ const Diseases = props => {
                 aria-labelledby="draggable-dialog-title"
             >
                 <DialogTitle>
-                Plan terapeutico
+                Enfermedad detectada
                 </DialogTitle>
                 <DialogContent>
                 <DialogContentText>
-                   Información de plan terapeutico
+                   Información de la enfermedad detectada
                 </DialogContentText>               
                   
                   <Grid  container>
@@ -141,11 +204,14 @@ const Diseases = props => {
                     <Grid item md={12} xs={12}>
                         <TextField
                             fullWidth label="Enfemedad"
-                            margin="dense" name="typeOfExam"
+                            margin="dense" name="disease"
+                            value={values.disease}
+                            onChange={handleChange}
                             required
                             select                                   
                             variant="outlined"
                             SelectProps={{ native: true }}
+
                         >
                             { diseases.map(option => (
                             <option
@@ -160,20 +226,67 @@ const Diseases = props => {
 
                     <Grid item md={12} xs={12}>
                         <TextField  fullWidth  label="Criterio de diagnostico" margin="dense"
-                            name="ResultsForConsultation"  variant="outlined"
+                            name="criteria"  variant="outlined"
+                            helperText={rules("criteria",values.criteria)}
+                            error = {rules("criteria",values.criteria)}
+                            value={values.criteria} onChange={handleChange}
                             multiline rows={3} />          
                     </Grid>
 
                     <Grid item md={12} xs={12}>
                         <TextField  fullWidth  label="Observaciones" margin="dense"
-                            name="ResultsForConsultation"  variant="outlined"
+                            name="observations"  variant="outlined"
+                            helperText={rules("observations",values.observations)}
+                            error = {rules("observations",values.observations)}
+                            value={values.observations} onChange={handleChange}
                             multiline rows={3} />          
                     </Grid>
                     
 
                     <Divider></Divider>
                     <Grid container direction="row" justify="center" alignItems="center">
-                        <Button color="primary" variant="contained" style={{marginTop:"10px"}} >
+                        <Button color="primary" variant="contained" style={{marginTop:"10px"}}
+                          onClick={()=>{
+
+                            let errorValidation = false
+
+                            errors.forEach(data => {
+                                if(data != false){  errorValidation = true  }
+                            })
+
+                            if(errorValidation)
+                            {
+                              setOpen(false)
+                                return Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Espera',
+                                    text: "Tienes error en los datos suministrados, revisalos",          
+                                }).then( data => {
+                                  setOpen(true)
+                                })                        
+                            }
+
+                            console.log(values)
+
+                            if( !values.disease || !values.criteria || !values.observations )
+                            {
+                                setOpen(false)
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Espera',
+                                    text: "Todos los datos son obligatorios",          
+                                }).then( data => {
+                                  setOpen(true)
+                                })
+                            }
+                            else{
+                                setOpen(false)
+                                props.saveOrUpdateDetectedDisease(values,()=>{
+                                  setOpen(true)
+                                })
+                            }
+
+                          }} >
                             Guardar
                         </Button>
                     </Grid> 

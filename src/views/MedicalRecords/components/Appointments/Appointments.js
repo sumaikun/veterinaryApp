@@ -126,6 +126,7 @@ const Appointments = props => {
                       <TableCell>Veterinario/a</TableCell>
                       <TableCell>Motivo de la consulta</TableCell>
                       <TableCell>Resultados de la consulta</TableCell>
+                      <TableCell>Fecha</TableCell>
                       <TableCell>Opciones</TableCell>
                     </TableRow>
                 </TableHead>
@@ -136,6 +137,7 @@ const Appointments = props => {
                         <TableCell>{ appointment.userDetails[0].name }</TableCell>
                         <TableCell>{ appointment.reasonForConsultation }</TableCell>
                         <TableCell>{ appointment.resultsForConsultation }</TableCell>
+                        <TableCell>{ appointment.date.split(" ")[0] }</TableCell>
                         <TableCell>
 
                         <Button color="secondary"

@@ -108,7 +108,7 @@ export const REMOVE_THERAPEUTIC_PLAN = "REMOVE_THERAPEUTIC_PLAN";
 
 export const SELECT_THERAPEUTIC_PLAN = "SELECT_THERAPEUTIC_PLAN";
 
-// ---------------- Therapeutic Plan types --------------------------------
+// ---------------- Appointments types --------------------------------
 
 export const SET_APPOINTMENTS = "SET_APPOINTMENTS";
 
@@ -118,4 +118,12 @@ export const REMOVE_APPOINTMENT = "REMOVE_APPOINTMENT";
 
 export const SELECT_APPOINTMENT = "SELECT_APPOINTMENT";
 
+// ---------------- DetectedDeseases types --------------------------------
 
+export const SET_DETECTED_DISEASES = "SET_DETECTED_DISEASES";
+
+export const ADD_DETECTED_DISEASE = "ADD_DETECTED_DISEASE";
+
+export const REMOVE_DETECTED_DISEASE = "REMOVE_DETECTED_DISEASE";
+
+export const SELECT_DETECTED_DISEASE = "SELECT_DETECTED_DISEASE";

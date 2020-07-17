@@ -120,7 +120,7 @@ class Parameters extends Component{
 
         this.props.getParameters((success,error) =>{
           success ?
-          this.setState({  ...this.state , headers:["Tipo de examen","descripción","Opciones"],
+          this.setState({  ...this.state , headers:["Tipo de examen","descripción","Fecha","Opciones"],
             columns:["name","meta","date","options"],
             newButtonText:"Crear nuevo tipo de examen",
             mode:"examTypes",
@@ -134,7 +134,7 @@ class Parameters extends Component{
 
         this.props.getParameters((success,error) =>{
           success ?
-          this.setState({  ...this.state , headers:["Tipo de plan","descripción","Opciones"],
+          this.setState({  ...this.state , headers:["Tipo de plan","descripción","Fecha","Opciones"],
             columns:["name","meta","date","options"],
             newButtonText:"Crear nuevo tipo de plan",
             mode:"planTypes",
@@ -148,7 +148,7 @@ class Parameters extends Component{
 
         this.props.getParameters((success,error) =>{
           success ?
-          this.setState({  ...this.state , headers:["Nombre de enfermedad","Info adicional","Opciones"],
+          this.setState({  ...this.state , headers:["Nombre de enfermedad","Info adicional","Fecha","Opciones"],
             columns:["name","meta","date","options"],
             newButtonText:"Agregar enfermedad",
             mode:"diseases",

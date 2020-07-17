@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 
 import { saveContact } from 'actions/contacts';
 
-import { uploadFileToServer } from 'actions/app'
+import { uploadFileToServer, deleteFile } from 'actions/app'
 
 import Swal from 'sweetalert2' 
 
@@ -89,6 +89,12 @@ const ContactForm = props => {
       console.log("send file")
       uploadFileToServer(values.file,(response,err)=>{
         if(response){
+
+          if(values.picture)
+          {
+            deleteFile(values.picture)
+          }
+
           values.picture = response.data.filename
           props.saveContact(values,(res,err)=>{
            

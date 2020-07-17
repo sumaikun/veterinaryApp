@@ -127,3 +127,13 @@ export const ADD_DETECTED_DISEASE = "ADD_DETECTED_DISEASE";
 export const REMOVE_DETECTED_DISEASE = "REMOVE_DETECTED_DISEASE";
 
 export const SELECT_DETECTED_DISEASE = "SELECT_DETECTED_DISEASE";
+
+// ---------------- PatientFiles types --------------------------------
+
+export const SET_PATIENT_FILES = "SET_PATIENT_FILES";
+
+export const ADD_PATIENT_FILE = "ADD_PATIENT_FILE";
+
+export const REMOVE_PATIENT_FILE = "REMOVE_PATIENT_FILE";
+
+export const SELECT_PATIENT_FILE = "SELECT_PATIENT_FILE";

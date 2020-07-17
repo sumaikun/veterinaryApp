@@ -143,6 +143,7 @@ const Diseases = props => {
                         <TableCell>Enfermedad</TableCell>
                         <TableCell>Criterio de diagnostico</TableCell>
                         <TableCell>Observaciones</TableCell>
+                        <TableCell>Fecha</TableCell>
                         <TableCell>Opciones</TableCell>
                     </TableRow>
                 </TableHead>
@@ -151,11 +152,13 @@ const Diseases = props => {
                     props.detectedDiseases.slice(0).reverse().map( disease => ( 
                       <TableRow>
                         <TableCell>{ disease.userDetails[0].name }</TableCell>
-                        <TableCell>{  diseases ? 
-                              diseases.filter( dis => disease.disease === dis.value )[0].label
+                        <TableCell>{  
+                              diseases ? 
+                              diseases.filter( dis => disease.disease === dis.value )[0]?.label
                               : false  }</TableCell>
                         <TableCell>{ disease.criteria }</TableCell>
                         <TableCell>{ disease.observations }</TableCell>
+                        <TableCell>{ disease.date.split(" ")[0] }</TableCell>
                         <TableCell>
                           <Button color="secondary"
                                 onClick={()=>{

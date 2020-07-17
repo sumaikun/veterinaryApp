@@ -20,6 +20,7 @@ import { getDiagnosticPlansByPatient, saveDiagnosticPlan } from 'actions/diagnos
 import { getTherapeuticPlansByPatient, saveTherapeuticPlan } from 'actions/therapeuticPlans'
 import { getAppointmentsByPatient, saveAppointment} from 'actions/appointments'
 import { getDetectedDiseasesByPatient, saveDetectedDisease } from 'actions/detectedDiseases'
+import { getPatientFilesByPatient, savePatientFile } from 'actions/patientFiles'
 
 import { PatientReview as PatientReviewModel } from "models/patientReview";
 import { PhysiologicalConstant as PhysiologicalConstantModel } from "models/physiologicalConstant"
@@ -67,6 +68,8 @@ const MedicalRecords = props => {
 
   const [detectedDiseases, setDetectedDiseases] = useState([])
 
+  const [patientFiles, setPatientFiles] = useState([])
+
   const [ idPRToSave, setIdPRToSave ] = useState(null)
 
   const [ idPCToSave, setIdPCToSave ] = useState(null)
@@ -78,6 +81,8 @@ const MedicalRecords = props => {
   const [ idAToSave, setIdAToSave ] = useState(null)
 
   const [ idDDToSave, setIdDDToSave ] = useState(null)
+
+  const [ idPFToSave, setIdPFToSave ] = useState(null)
 
   useEffect(() => {
 
@@ -200,6 +205,23 @@ const MedicalRecords = props => {
             if(success.length > 0)
             {
               setDetectedDiseases(success)
+            }
+        }
+        if(error){
+          alert("Sucedio un error trayendo las citas")
+        }
+
+      })
+
+      props.getPatientFilesByPatient(currentPatientId,(success,error)=>{
+        
+        if(success)
+        {
+            console.log(" success",success)
+
+            if(success.length > 0)
+            {
+              setPatientFiles(success)
             }
         }
         if(error){
@@ -523,6 +545,57 @@ const MedicalRecords = props => {
   }
 
 
+  const saveOrUpdatePatientFile = (values,cb) =>{ 
+    
+    console.log("patientFile to save",values)
+
+    values.patient = currentPatientId
+    
+    if(idPFToSave)
+    {
+      if(!values._id)
+      {
+        values._id = idPFToSave
+      }
+
+    }
+  
+    props.savePatientFile(values,(res,err)=>{       
+        
+      if(res){
+        console.log("res end point",res)
+        
+        if(res.data && res.data.id)
+        {
+            setIdPFToSave(res.data.id)
+        }
+
+        props.getPatientFilesByPatient(currentPatientId,(success,error)=>{
+          
+            if(success)
+            {
+                if(success.length > 0)
+                {                
+                  setPatientFiles(success)  
+                }    
+            }
+
+        })  
+        
+        return Swal.fire({
+          icon: 'success',
+          title: 'Bien',
+          text: "Datos registrados",          
+        }).then( any => {
+          if(cb){ cb() }
+        })
+
+      }            
+      
+    })
+  }
+
+
   return (
     <div className={classes.root} style={{marginTop:"25px"}}>
         <Typography variant={"h3"} style={{textAlign:"center"}}>Historial Medico { " "+currentPatientId }</Typography>
@@ -647,7 +720,8 @@ const MedicalRecords = props => {
             <Typography className={classes.heading}>Archivos</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
-              <PatientFiles/>
+              <PatientFiles patientFiles={patientFiles}
+                saveOrUpdatePatientFile={saveOrUpdatePatientFile} />
             </ExpansionPanelDetails>
             
         </ExpansionPanel>
@@ -684,5 +758,7 @@ export default  connect(mapStateToProps, {
   getAppointmentsByPatient,
   saveAppointment,
   getDetectedDiseasesByPatient,
-  saveDetectedDisease 
+  saveDetectedDisease,
+  getPatientFilesByPatient,
+  savePatientFile 
 } )(MedicalRecords);

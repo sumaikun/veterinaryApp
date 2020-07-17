@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 
 import { savePet } from 'actions/pets';
 
-import { uploadFileToServer } from 'actions/app'
+import { uploadFileToServer, deleteFile  } from 'actions/app'
 
 import Swal from 'sweetalert2' 
 
@@ -96,6 +96,12 @@ const PetForm = props => {
       console.log("send file")
       uploadFileToServer(values.file,(response,err)=>{
         if(response){
+
+          if(values.picture)
+          {
+            deleteFile(values.picture)
+          }
+
           values.picture = response.data.filename
           props.savePet(values,(res,err)=>{
            

@@ -11,7 +11,8 @@ import { physiologicalConstants } from "./physiologicalConstant"
 import { diagnosticPlans } from "./diagnosticPlans"
 import { therapeuticPlans } from "./therapeuticPlans"
 import { appointments } from "./appointments"
-
+import { detectedDiseases } from "./detectedDiseases"
+import { patientFiles } from "./patientFiles"
 
 const reducers = combineReducers({
   auth,
@@ -25,7 +26,9 @@ const reducers = combineReducers({
   physiologicalConstants,
   diagnosticPlans,
   therapeuticPlans,
-  appointments
+  appointments,
+  detectedDiseases,
+  patientFiles
 });
 
 export default reducers;

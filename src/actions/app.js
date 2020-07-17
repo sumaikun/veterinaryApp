@@ -23,6 +23,19 @@ export function uploadFileToServer(file,cb){
 
 }
 
+export function deleteFile(file,cb){
+    return api.deleteData("deleteFile/"+file)
+    .then(response => {
+
+        if(cb) { cb(response,false) }
+    
+    }).catch(err => { console.log("Error: ", err)
+        
+        if(cb) { cb(false,err) }
+    
+    });
+}
+
 
 function setBreeds(breeds) {
     return {

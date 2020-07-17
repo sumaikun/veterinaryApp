@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 
 import { saveUser } from 'actions/users';
 
-import { uploadFileToServer } from 'actions/app'
+import { uploadFileToServer, deleteFile } from 'actions/app'
 
 import Swal from 'sweetalert2' 
 
@@ -53,7 +53,7 @@ const UserForm = props => {
 
   const submitData = (errors) => {
     
-    const user = values;
+    const user = values; 
 
     if(props.usersState.selectedUser.id)
     {
@@ -85,7 +85,16 @@ const UserForm = props => {
       console.log("send file")
       uploadFileToServer(values.file,(response,err)=>{
         if(response){
+          
+          if(values.picture)
+          {
+            deleteFile(values.picture)
+          }
+          
           values.picture = response.data.filename
+
+
+
           props.saveUser(values,(res,err)=>{
            
             if(res){

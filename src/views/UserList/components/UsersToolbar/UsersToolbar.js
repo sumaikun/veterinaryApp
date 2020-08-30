@@ -57,6 +57,9 @@ const UsersToolbar = props => {
     >
       <div className={classes.row}>
         <span className={classes.spacer} />
+
+        <Button className={classes.importButton}  disabled={ props.selectedUser === null } 
+          onClick={props.watchButton}>Ver</Button>
         
         <Button className={classes.importButton}  disabled={ props.selectedUser === null } 
           onClick={props.editButton}>Editar</Button>

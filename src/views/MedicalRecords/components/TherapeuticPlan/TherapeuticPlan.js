@@ -28,7 +28,7 @@ import {
 } from '@material-ui/core';
 import  api  from 'middleware/api'
 import Swal from 'sweetalert2'
-import PetsMedicine from 'views/PetList/components/PetsMedicine'
+import PatientsMedicine from 'views/PatientList/components/PatientsMedicine'
 import { TherapeuticPlan as TherapeuticPlanModel } from "models/therapeuticPlan";
 
 const doStyles = makeStyles(theme => ({
@@ -405,7 +405,7 @@ const TherapeuticPlan = props => {
             </DialogActions>
         </Dialog> 
 
-        <PetsMedicine selectProduct={selectProduct}  products={products} open={open2} handleClose={handleClose2} />
+        <PatientsMedicine selectProduct={selectProduct}  products={products} open={open2} handleClose={handleClose2} />
 
     </Grid>  
   );

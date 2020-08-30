@@ -14,6 +14,8 @@ import { connect } from "react-redux"
 
 import { logoutUser } from "actions/auth"
 
+import clicalPicture from 'assets/branding/Clicalmedic/logoclic-03.png'
+
 const useStyles = makeStyles(theme => ({
   root: {
     boxShadow: 'none'
@@ -63,10 +65,7 @@ const Topbar = props => {
     >
       <Toolbar>
         <RouterLink to="/">
-          <IconButton color="white">
-            <PetsIcon style={{color:"white"}} />
-            <span style={{color:"white"}}>&nbsp;&nbsp;{"Sistema de gestión veterinaría"}</span>
-          </IconButton>
+          <img style={{width:"150px"}} src={clicalPicture} alt="Clickal Icon"></img>
         </RouterLink>
         <div className={classes.flexGrow} />
         <Hidden mdDown>

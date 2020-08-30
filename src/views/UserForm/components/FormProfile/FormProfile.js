@@ -14,7 +14,9 @@ import {
   LinearProgress
 } from '@material-ui/core';
 import { getInitials } from 'helpers';
-import Swal from 'sweetalert2' 
+import Swal from 'sweetalert2'
+import PictureModal  from 'components/PictureModal'
+
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -38,7 +40,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const FormProfile = props => {
-  const { className, ...rest } = props;
+  const { className, mode, ...rest } = props;
 
   const classes = useStyles();
 
@@ -46,6 +48,20 @@ const FormProfile = props => {
     picture: props.userDetails.picture
   });
 
+
+  const [openPm, setOpenPm] = useState(false);
+
+  const [picturePm, setPicturePm] = useState(null);
+
+
+  const openPictureModal = (picture) => {
+    setPicturePm(picture)
+    setOpenPm(true)
+  }
+
+  const closePictureModal = () => {
+    setOpenPm(false)
+  }
   
 
   const fileSubmit = e => {
@@ -79,64 +95,70 @@ const FormProfile = props => {
   }
 
   return (
-    <Card
-      {...rest}
-      className={clsx(classes.root, className)}
-    >
-      <CardContent>
-        <div className={classes.details}>
-          <div>
-            <Typography
-              gutterBottom
-              variant="h2"
+    <div>
+      <PictureModal open={openPm}  picture={picturePm} handleClose={closePictureModal} ></PictureModal>
+      <Card
+        {...rest}
+        className={clsx(classes.root, className)}
+      >
+        <CardContent>
+          <div className={classes.details}>
+            <div>
+              <Typography
+                gutterBottom
+                variant="h2"
+              >
+                { props.userDetails.name }
+              </Typography>
+              <Typography
+                className={classes.locationText}
+                color="textSecondary"
+                variant="body1"
+              >
+                { props.userDetails.email }
+              </Typography>
+              <Typography
+                className={classes.dateText}
+                color="textSecondary"
+                variant="body1"
+              >
+                { props.userDetails.phone }
+              </Typography>
+            </div>
+            <Avatar
+              onClick={()=>{ openPictureModal( !values.picture || values.picture.includes('base64') ? values.picture:process.env.REACT_APP_SERVE_IMAGE+values.picture )}}
+              className={classes.avatar}
+              src={ !values.picture || values.picture.includes('base64') ? values.picture:process.env.REACT_APP_SERVE_IMAGE+values.picture }
             >
-              { props.userDetails.name }
-            </Typography>
-            <Typography
-              className={classes.locationText}
-              color="textSecondary"
-              variant="body1"
-            >
-              { props.userDetails.email }
-            </Typography>
-            <Typography
-              className={classes.dateText}
-              color="textSecondary"
-              variant="body1"
-            >
-              { props.userDetails.phone }
-            </Typography>
+              {getInitials(props.userDetails.name)}
+            </Avatar>
           </div>
-          <Avatar
-            className={classes.avatar}
-            src={ !values.picture || values.picture.includes('base64') ? values.picture:process.env.REACT_APP_SERVE_IMAGE+values.picture }
-          >
-            {getInitials(props.userDetails.name)}
-          </Avatar>
-        </div>
-      
-      </CardContent>
-      <Divider />
-      <CardActions className={classes.uploadButton}>
+        
+        </CardContent>
+        <Divider />
+        <CardActions className={classes.uploadButton}>
 
-          <Button          
-            color="primary"
-            variant="text"
-            component="label"
-            type="submit"
-          >
-            Cambiar foto
-            <input
-              type="file"
-              style={{ display: "none" }}
-              onChange={fileSubmit}
-            />
-            
-          </Button>
-       
-       
-      </CardActions>
-    </Card>
+            <Button          
+              color="primary"
+              variant="text"
+              component="label"
+              type="submit"
+              disabled={ mode === "watch"  }
+            >
+              Cambiar foto
+              <input
+                type="file"
+                style={{ display: "none" }}
+                onChange={fileSubmit}
+                
+              />
+              
+            </Button>
+        
+        
+        </CardActions>
+      </Card>
+    </div>    
   );
 };
 

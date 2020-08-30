@@ -62,17 +62,8 @@ const LatestOrders = props => {
       {...rest}
       className={clsx(classes.root, className)}
     >
-      <CardHeader
-        action={
-          <Button
-            color="primary"
-            size="small"
-            variant="outlined"
-          >
-            New entry
-          </Button>
-        }
-        title="Latest Orders"
+      <CardHeader        
+        title="Ultimas citas"
       />
       <Divider />
       <CardContent className={classes.content}>
@@ -134,7 +125,7 @@ const LatestOrders = props => {
           size="small"
           variant="text"
         >
-          View all <ArrowRightIcon />
+          Ver todos <ArrowRightIcon />
         </Button>
       </CardActions>
     </Card>

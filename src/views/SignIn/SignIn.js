@@ -9,19 +9,20 @@ import {
   Button,
   IconButton,
   TextField,
-  Typography
+  Typography,
+  Avatar,
+  Container,
+  CssBaseline,
+  Link
 } from '@material-ui/core';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-
-import { Facebook as FacebookIcon, Google as GoogleIcon } from 'icons';
-
 import { connect } from "react-redux";
-
 import { loginUser } from "actions/auth";
-
-import { getBreeds, getSpecies } from "actions/app"
-
 import Swal from 'sweetalert2'
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+
+import clicalPicture from 'assets/branding/Clicalmedic/svgClical2.svg'
+
+console.log("clicalPicture",clicalPicture)
 
 const schema = {
   Username: {
@@ -39,99 +40,27 @@ const schema = {
   }
 };
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    backgroundColor: theme.palette.background.default,
-    height: '100%'
-  },
-  grid: {
-    height: '100%'
-  },
-  quoteContainer: {
-    [theme.breakpoints.down('md')]: {
-      display: 'none'
-    }
-  },
-  quote: {
-    backgroundColor: theme.palette.neutral,
-    height: '100%',
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(8),
     display: 'flex',
-    justifyContent: 'center',
+    flexDirection: 'column',
     alignItems: 'center',
-    backgroundImage: 'url(/images/auth.jpg)',
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center'
   },
-  quoteInner: {
-    textAlign: 'center',
-    flexBasis: '600px'
-  },
-  quoteText: {
-    color: theme.palette.white,
-    fontWeight: 300
-  },
-  name: {
-    marginTop: theme.spacing(3),
-    color: theme.palette.white
-  },
-  bio: {
-    color: theme.palette.white
-  },
-  contentContainer: {},
-  content: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  contentHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    paddingTop: theme.spacing(5),
-    paddingBototm: theme.spacing(2),
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2)
-  },
-  logoImage: {
-    marginLeft: theme.spacing(4)
-  },
-  contentBody: {
-    flexGrow: 1,
-    display: 'flex',
-    alignItems: 'center',
-    [theme.breakpoints.down('md')]: {
-      justifyContent: 'center'
-    }
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    paddingLeft: 100,
-    paddingRight: 100,
-    paddingBottom: 125,
-    flexBasis: 700,
-    [theme.breakpoints.down('sm')]: {
-      paddingLeft: theme.spacing(2),
-      paddingRight: theme.spacing(2)
-    }
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
   },
-  title: {
-    marginTop: theme.spacing(3)
+  submit: {
+    margin: theme.spacing(3, 0, 2),
   },
-  socialButtons: {
-    marginTop: theme.spacing(3)
-  },
-  socialIcon: {
-    marginRight: theme.spacing(1)
-  },
-  sugestion: {
-    marginTop: theme.spacing(2)
-  },
-  textField: {
-    marginTop: theme.spacing(2)
-  },
-  signInButton: {
-    margin: theme.spacing(2, 0)
-  }
 }));
+
 
 const SignIn = props => {
 
@@ -187,9 +116,11 @@ const SignIn = props => {
     console.log("it is time to login")
     console.log(formState.values)
     props.loginUser(formState.values, ( success , error ) =>{
+      
+      console.log("done")
+      
       if(success){
-        props.getBreeds()
-        props.getSpecies()
+
         history.push('/');
       }
       if(error){
@@ -218,170 +149,75 @@ const SignIn = props => {
     formState.touched[field] && formState.errors[field] ? true : false;
 
   return (
-    <div className={classes.root}>
-      <Grid
-        className={classes.grid}
-        container
-      >
-        <Grid
-          className={classes.quoteContainer}
-          item
-          lg={5}
-        >
-          <div className={classes.quote}>
-            <div className={classes.quoteInner}>
-              <Typography
-                className={classes.quoteText}
-                variant="h1"
-              >
-                El mejor médico del mundo es el veterinario: 
-              </Typography>
-              <div className={classes.person}>
-                <Typography
-                  className={classes.name}
-                  variant="body1"
-                >
-                  El no puede preguntarles a sus 
-                pacientes que les pasa, simplemente lo tienen que saber
-                </Typography>
-                <Typography
-                  className={classes.bio}
-                  variant="body2"
-                >
-                  Will Rogers
-                </Typography>
-              </div>
-            </div>
-          </div>
-        </Grid>
-        <Grid
-          className={classes.content}
-          item
-          lg={7}
-          xs={12}
-        >
-          <div className={classes.content}>
-            <div className={classes.contentHeader}>
-              <IconButton onClick={handleBack}>
-                <ArrowBackIcon />
-              </IconButton>
-            </div>
-            <div className={classes.contentBody}>
-              <form
-                className={classes.form}
-                onSubmit={handleSignIn}
-              >
-                <Typography
-                  className={classes.title}
-                  variant="h2"
-                >
-                  Bienvenidos a su sistema de gestión
-                </Typography>
-                
-                <Typography
-                  color="textSecondary"
-                  gutterBottom
-                >
-                  Veterinaria
-                </Typography>
-                <Grid
-                  className={classes.socialButtons}
-                  container
-                  spacing={2}
-                >
-                  <Grid item>
-                    <Button
-                      color="primary"
-                      onClick={handleSignIn}
-                      size="large"
-                      variant="contained"
-                    >
-                      <FacebookIcon className={classes.socialIcon} />
-                      Login with Facebook
-                    </Button>
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      onClick={handleSignIn}
-                      size="large"
-                      variant="contained"
-                    >
-                      <GoogleIcon className={classes.socialIcon} />
-                      Login with Google
-                    </Button>
-                  </Grid>
-                </Grid> 
-                
-                
-                
-                <Typography
-                  align="center"
-                  className={classes.sugestion}
-                  color="textSecondary"
-                  variant="body1"
-                >
-                  Ingresa con tus credenciales
-                </Typography>
-                <TextField
-                  className={classes.textField}
-                  error={hasError('Username')}
-                  fullWidth
-                  helperText={
-                    hasError('Username') ? formState.errors.Username[0] : null
-                  }
-                  label="Correo electrónico"
-                  name="Username"
-                  onChange={handleChange}
-                  type="text"
-                  value={formState.values.Username || ''}
-                  variant="outlined"
-                />
-                <TextField
-                  className={classes.textField}
-                  error={hasError('Password')}
-                  fullWidth
-                  helperText={
-                    hasError('Password') ? formState.errors.Password[0] : null
-                  }
-                  label="Contraseña"
-                  name="Password"
-                  onChange={handleChange}
-                  type="password"
-                  value={formState.values.Password || ''}
-                  variant="outlined"
-                />
-                <Button
-                  className={classes.signInButton}
-                  color="primary"
-                  disabled={!formState.isValid}
-                  fullWidth
-                  size="large"
-                  type="submit"
-                  variant="contained"                  
-                >
-                  INGRESAR
-                </Button>
-                
-                {/*  <Typography
-                  color="textSecondary"
-                  variant="body1"
-                >
-                  Don't have an account?{' '}
-                  <Link
-                    component={RouterLink}
-                    to="/sign-up"
-                    variant="h6"
-                  >
-                    Sign up
-                  </Link>
-                </Typography> */}
-                <br/><br/>
-              </form>
-            </div>
-          </div>
-        </Grid>
-      </Grid>
-    </div>
+    <Container component="main" maxWidth="xs" style={{marginTop: "4%", marginBottom: "4%"}} >
+      <CssBaseline />
+      <img src={clicalPicture} alt="Clickal Icon"></img>
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Ingresar al sistema
+        </Typography>
+        <form className={classes.form}   onSubmit={handleSignIn}>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Correo electrónico"
+            name="username"
+            autoComplete="email"
+            type="email"
+            autoFocus
+            onChange={handleChange}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Contraseña"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            onChange={handleChange}
+          />
+          { /*
+          <FormControlLabel
+            control={<Checkbox value="remember" color="primary" />}
+            label="Recuerdame"
+          />*/}
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}           
+          >
+            Ingresar
+          </Button>
+          <Grid container>
+            <Grid item xs>
+              { /*<Link href="#" variant="body2">
+                ¿ Olvidaste la contraseña ?
+               </Link>*/ } 
+            </Grid>
+            <Grid item>
+              <Link  variant="body2" onClick={ (e) => {
+                e.preventDefault()  
+                props.history.push("/sign-up")
+              }}>
+                {"¿ No tienes una cuenta ? Registrarse"}
+              </Link>
+            </Grid>
+          </Grid>
+        </form>
+      </div>
+     
+    </Container>
   );
 };
 
@@ -390,9 +226,7 @@ SignIn.propTypes = {
 };
 
 const mapDispatchToProps = {
-  loginUser,
-  getBreeds,
-  getSpecies
+  loginUser
  };
  
 export default connect(null, mapDispatchToProps)(withRouter(SignIn));

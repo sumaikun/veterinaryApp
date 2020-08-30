@@ -1,7 +1,5 @@
 import api from "../middleware/api";
 import {
-    SET_BREEDS,
-    SET_SPECIES,
     SET_CURRENT_PATIENT
   } from "../constants";
 
@@ -36,20 +34,15 @@ export function deleteFile(file,cb){
     });
 }
 
-
+/*
 function setBreeds(breeds) {
     return {
       type: SET_BREEDS,   
       payload:breeds
     };
-}
+}*/
 
-function setSpecies(species) {
-    return {
-      type: SET_SPECIES,   
-      payload:species
-    };
-}
+
 
 export function setCurrentPatient(patientId) {
   return {
@@ -58,27 +51,8 @@ export function setCurrentPatient(patientId) {
   };
 }
 
-export function getBreeds(cb=null) {
-    
-    
-    return dispatch => {
-      return api.getData("breeds")
-        .then(( response ) => {
 
-          dispatch(setBreeds(response.data ? response.data : []));
-          
-          if(cb) { cb(true,false) }
-          
-        })
-        .catch(err => { console.log("Error: ", err)
-          
-          if(cb) { cb(false,true) }
-        
-      });
-    }
-}
-
-export function getSpecies(cb=null) {
+/*export function getSpecies(cb=null) {
     
     
     return dispatch => {
@@ -96,4 +70,4 @@ export function getSpecies(cb=null) {
         
       });
     }
-  }
+  }*/

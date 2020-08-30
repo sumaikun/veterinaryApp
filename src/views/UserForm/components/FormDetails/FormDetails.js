@@ -1,3 +1,4 @@
+import 'date-fns';
 import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -16,25 +17,44 @@ import {
 import  api  from '../../../../middleware/api'
 
 
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
+
+import DateFnsUtils from '@date-io/date-fns';
+
+
 
 const useStyles = makeStyles(() => ({
   root: {}
 }));
 
 const FormDetails = props => {
-  const { className, ...rest } = props;
+  const { className, mode, ...rest } = props;
 
   const classes = useStyles();
 
+  const handleDateChange = (key,date) => {
+    
+    props.changeDetails(key,date)
+    
+  };
  
 
   const handleChange = event => {
-  
+    console.log(event.target.name,event.target.value)
     props.changeDetails(event.target.name,event.target.value)
 
   };
 
   const [userRoles, setUserRoles ] = useState([]);
+
+  const [typesId, setTypesId ] = useState([]);
+
+  const [cities, setCities ] = useState([]);
+
+  const [userStates, setUserStates ] = useState([]);
 
   useEffect(() => {
 
@@ -48,6 +68,36 @@ const FormDetails = props => {
     }
 
     getRoles()
+
+    const getDocumentsTypes = async () => {
+      const response = await api.getData("contactDocumentType") 
+
+      let arrayData = [{label:"",value:""}]
+      console.log(response.data)
+      response.data.forEach( data => arrayData.push({label:data,value:data}) )
+      setTypesId(arrayData)
+    }
+
+    getDocumentsTypes() 
+    
+    const getCityTypes = async () => {
+      const response = await api.getData("cityTypes") 
+      setCities(response.data)
+    }
+
+    getCityTypes() 
+
+    const getUserStates = async () => {
+      const response = await api.getData("userStates") 
+      let arrayData = [{label:"",value:""}]
+      console.log(response.data)
+      response.data.forEach( data => arrayData.push({label:data,value:data}) )
+      setUserStates(arrayData)
+    }
+
+    getUserStates() 
+
+    
 
   },[]); 
   
@@ -100,7 +150,7 @@ const FormDetails = props => {
 
 
       default:
-        return true
+        return false
     } 
   }
 
@@ -130,14 +180,57 @@ const FormDetails = props => {
                 fullWidth
                 helperText={rules("name",props.userDetails.name)}
                 error = {rules("name",props.userDetails.name)}            
-                label="Nombre"
+                label="Nombres"
                 margin="dense"
                 name="name"
                 onChange={handleChange}
                 required
                 value={props.userDetails.name}
                 variant="outlined"
+                disabled={ mode === "watch" }
               />
+            </Grid>
+            <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                helperText={rules("lastName",props.userDetails.lastName)}
+                error = {rules("lastName",props.userDetails.lastName)}            
+                label="Apellidos"
+                margin="dense"
+                name="lastName"
+                onChange={handleChange}
+                required
+                value={props.userDetails.lastName}
+                variant="outlined"
+                disabled={ mode === "watch" }
+              />
+            </Grid>
+            <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                label="Ciudad"
+                margin="dense"
+                name="city"
+                onChange={handleChange}
+                required
+                select
+                // eslint-disable-next-line react/jsx-sort-props
+                SelectProps={{ native: true }}
+                InputLabelProps={{ shrink: !!props.userDetails.city }}
+                value={props.userDetails.city}  
+                variant="outlined"
+                disabled={ mode === "watch" }
+              >
+                <option></option>
+                {cities.map(option => (
+                  <option
+                    key={option._id}
+                    value={option._id}
+                  >
+                    {option.name}
+                  </option>
+                ))}
+              </TextField>
             </Grid>
             <Grid item md={6} xs={12}>
               <TextField
@@ -151,6 +244,7 @@ const FormDetails = props => {
                 required
                 value={props.userDetails.address}
                 variant="outlined"
+                disabled={ mode === "watch" }
               />
             </Grid>
             <Grid item md={6} xs={12}>
@@ -165,6 +259,7 @@ const FormDetails = props => {
                 required
                 value={props.userDetails.email}
                 variant="outlined"
+                disabled={ mode === "watch" }
               />
             </Grid>
             <Grid item md={6} xs={12}>
@@ -180,6 +275,7 @@ const FormDetails = props => {
                 value={props.userDetails.phone}
                 required
                 variant="outlined"
+                disabled={ mode === "watch" }
               />
             </Grid>
             <Grid item md={6} xs={12}>
@@ -194,6 +290,7 @@ const FormDetails = props => {
                 type="password"
                 value={props.userDetails.password}               
                 variant="outlined"
+                disabled={ mode === "watch" }
               />
             </Grid>
             <Grid item md={6} xs={12}>
@@ -208,6 +305,7 @@ const FormDetails = props => {
                 type="password"
                 value={props.userDetails.confirmPassword}                                
                 variant="outlined"
+                disabled={ mode === "watch" }
               />
             </Grid>
            <Grid item md={6} xs={12}>
@@ -224,6 +322,7 @@ const FormDetails = props => {
                 InputLabelProps={{ shrink: !!props.userDetails.role }}
                 value={props.userDetails.role}  
                 variant="outlined"
+                disabled={ mode === "watch" }
               >
                 {userRoles.map(option => (
                   <option
@@ -235,6 +334,98 @@ const FormDetails = props => {
                 ))}
               </TextField>
             </Grid>
+
+            <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                label="Estado"
+                margin="dense"
+                name="state"
+                onChange={handleChange}
+                required
+                select
+                // eslint-disable-next-line react/jsx-sort-props
+                SelectProps={{ native: true }}
+                InputLabelProps={{ shrink: !!props.userDetails.state }}
+                value={props.userDetails.state}  
+                variant="outlined"
+                disabled={ mode === "watch" }
+              >
+                {userStates.map(option => (
+                  <option
+                    key={option.value}
+                    value={option.value}
+                  >
+                    {option.label}
+                  </option>
+                ))}
+              </TextField>
+            </Grid>
+
+            <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                label="Tipo de identificación"
+                margin="dense"
+                name="typeId"
+                onChange={handleChange}
+                required
+                select
+                // eslint-disable-next-line react/jsx-sort-props
+                SelectProps={{ native: true }}
+                InputLabelProps={{ shrink: !!props.userDetails.typeId }}
+                value={props.userDetails.typeId}  
+                variant="outlined"
+                disabled={ mode === "watch" }
+              >
+                {typesId.map(option => (
+                  <option
+                    key={option.value}
+                    value={option.value}
+                  >
+                    {option.label}
+                  </option>
+                ))}
+              </TextField>
+            </Grid>         
+
+            <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                helperText={rules("identification",props.userDetails.identification)}
+                error = {rules("identification",props.userDetails.identification)}
+                label="Número de identificación"
+                margin="dense"
+                name="identification"
+                onChange={handleChange}
+                type="number"
+                value={props.userDetails.identification}
+                required
+                variant="outlined"
+                disabled={ mode === "watch" }
+              />
+          
+             </Grid>
+
+             <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <Grid item md={6} xs={12} container justify="space-around">        
+
+                  <KeyboardDatePicker
+                    margin="normal"
+                    id="date-picker-dialog"
+                    label="Fecha de nacimiento"
+                    format="MM/dd/yyyy"
+                    value={props.userDetails.birthDate ?  props.userDetails.birthDate : null }
+                    onChange={(date)=>handleDateChange("birthDate",date)}
+                    KeyboardButtonProps={{
+                      'aria-label': 'change date',
+                    }}
+                    disabled={ mode === "watch" }
+                />
+
+              </Grid>
+            </MuiPickersUtilsProvider>
+            
           
           </Grid>
         </CardContent>
@@ -244,6 +435,7 @@ const FormDetails = props => {
             color="primary"
             variant="contained"
             onClick={saveUser}
+            disabled={ mode === "watch" }
           >
             Guardar
           </Button>

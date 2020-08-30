@@ -10,10 +10,13 @@ export { default as Typography } from './Typography';
 export { default as UserList } from './UserList';
 export { default as UserForm } from './UserForm';
 export { default as ProductForm } from './ProductForm';
-export { default as ContactList } from './ContactList';
-export { default as ContactForm } from './ContactForm';
-export { default as PetList } from './PetList';
-export { default as PetForm } from './PetForm';
+export { default as PetList } from './PatientList';
+export { default as PetForm } from './PatientForm';
 export { default as Parameters } from './Parameters';
 export { default as MedicalRecords } from './MedicalRecords';
 export { default as Agenda } from './Agenda';
+export { default as DoctorList } from './DoctorList'
+export { default as DoctorForm } from './DoctorForm'
+export { default as PatientList } from './PatientList'
+export { default as PatientForm } from './PatientForm'
+export { default as RecoverPassword } from './RecoverPassword'

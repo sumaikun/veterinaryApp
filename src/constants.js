@@ -9,12 +9,6 @@ export const SET_FETCHING = "SET_FETCHING";
 
 export const SET_CURRENT_PATIENT = "SET_CURRENT_PATIENT";
 
-// ---------------- Apps Extended types --------------------------
-
-export const SET_BREEDS = "SET_BREEDS";
-
-export const SET_SPECIES = "SET_SPECIES";
-
 // ---------------- Users types --------------------------
 
 export const SET_USERS = "SET_USERS";
@@ -38,23 +32,23 @@ export const SELECT_PRODUCT = "SELECT_PRODUCT";
 
 // --------------- Contacts types ----------------------------
 
-export const SET_CONTACTS = "SET_CONTACTS";
+export const SET_DOCTORS = "SET_DOCTORS";
 
-export const ADD_CONTACT = "ADD_CONTACT";
+export const ADD_DOCTOR = "ADD_DOCTOR";
 
-export const REMOVE_CONTACT = "REMOVE_CONTACT";
+export const REMOVE_DOCTOR = "REMOVE_DOCTOR";
 
-export const SELECT_CONTACT = "SELECT_CONTACT";
+export const SELECT_DOCTOR = "SELECT_DOCTOR";
 
 // ---------------- Pets types --------------------------------
 
-export const SET_PETS = "SET_PETS";
+export const SET_PATIENTS = "SET_PATIENTS";
 
-export const ADD_PET = "ADD_PET";
+export const ADD_PATIENT = "ADD_PATIENT";
 
-export const REMOVE_PET = "REMOVE_PET";
+export const REMOVE_PATIENT = "REMOVE_PATIENT";
 
-export const SELECT_PET = "SELECT_PET";
+export const SELECT_PATIENT = "SELECT_PATIENT";
 
 // ---------------- Parameters types --------------------------------
 
@@ -137,3 +131,13 @@ export const ADD_PATIENT_FILE = "ADD_PATIENT_FILE";
 export const REMOVE_PATIENT_FILE = "REMOVE_PATIENT_FILE";
 
 export const SELECT_PATIENT_FILE = "SELECT_PATIENT_FILE";
+
+// ---------------- AgendaAnnotations types --------------------------------
+
+export const SET_AGENDA_ANNOTATIONS = "SET_AGENDA_ANNOTATIONS";
+
+export const ADD_AGENDA_ANNOTATION = "ADD_AGENDA_ANNOTATION";
+
+export const REMOVE_AGENDA_ANNOTATION = "REMOVE_AGENDA_ANNOTATION";
+
+export const SELECT_AGENDA_ANNOTATION = "SELECT_AGENDA_ANNOTATION";

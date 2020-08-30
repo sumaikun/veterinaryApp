@@ -8,6 +8,7 @@ import {
   Dashboard as DashboardView,
   ProductList as ProductListView,
   UserList as UserListView,
+  DoctorList as DoctorListView,  
   Typography as TypographyView,
   Icons as IconsView,
   Account as AccountView,
@@ -16,14 +17,14 @@ import {
   SignIn as SignInView,
   NotFound as NotFoundView,
   UserForm as UserFormView,
+  DoctorForm as DoctorFormView,
   ProductForm as ProductFormView,
-  ContactList as ContactListView,
-  ContactForm as ContactFormView,
-  PetList as PetListView,
-  PetForm as PetFormView,
+  PatientList as PatientListView,
+  PatientForm as PatientFormView,
   Parameters as ParametersView,
   MedicalRecords as MedicalRecordsView,
-  Agenda as  AgendaView
+  Agenda as  AgendaView,
+  RecoverPassword as RecoverPasswordView
 } from './views';
 
 const Routes = () => {
@@ -49,11 +50,25 @@ const Routes = () => {
         path="/users"
       />
       <RouteWithLayout
+        component={DoctorListView}
+        exact
+        layout={MainLayout}
+        authenticated={true}
+        path="/doctors"
+      />
+      <RouteWithLayout
         component={UserFormView}
         exact
         layout={MainLayout}
         authenticated={true}
         path="/users/form"
+      />
+      <RouteWithLayout
+        component={DoctorFormView}
+        exact
+        layout={MainLayout}
+        authenticated={true}
+        path="/doctors/form"
       />
       <RouteWithLayout
         component={ProductListView}
@@ -70,32 +85,18 @@ const Routes = () => {
         path="/products/form"
       />
       <RouteWithLayout
-        component={ContactListView}
+        component={PatientListView}
         exact
         layout={MainLayout}
         authenticated={true}
-        path="/contacts"
+        path="/patients"
       />
       <RouteWithLayout
-        component={ContactFormView}
+        component={PatientFormView}
         exact
         layout={MainLayout}
         authenticated={true}
-        path="/contacts/form"
-      />
-      <RouteWithLayout
-        component={PetListView}
-        exact
-        layout={MainLayout}
-        authenticated={true}
-        path="/pets"
-      />
-      <RouteWithLayout
-        component={PetFormView}
-        exact
-        layout={MainLayout}
-        authenticated={true}
-        path="/pets/form"
+        path="/patients/form"
       />
       <RouteWithLayout
         component={AgendaView}
@@ -156,6 +157,12 @@ const Routes = () => {
         exact
         layout={MinimalLayout}     
         path="/sign-in"
+      />
+       <RouteWithLayout
+        component={RecoverPasswordView}
+        exact
+        layout={MinimalLayout}     
+        path="/recover-password"
       />
       <RouteWithLayout
         component={NotFoundView}

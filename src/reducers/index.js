@@ -3,8 +3,8 @@ import { auth } from "./auth";
 import { app } from "./app";
 import { users } from "./users";
 import { products } from "./products";
-import { contacts } from "./contacts";
-import { pets } from "./pets";
+import { doctors } from "./doctors";
+import { patients } from "./patients";
 import { parameters } from "./parameters";
 import { patientReviews } from "./patientReviews";
 import { physiologicalConstants } from "./physiologicalConstant"
@@ -13,14 +13,15 @@ import { therapeuticPlans } from "./therapeuticPlans"
 import { appointments } from "./appointments"
 import { detectedDiseases } from "./detectedDiseases"
 import { patientFiles } from "./patientFiles"
+import { agendaAnnotations } from "./agendaAnnotations"
 
 const reducers = combineReducers({
   auth,
   app,
   users,
   products,
-  contacts,
-  pets,
+  doctors,
+  patients,
   parameters,
   patientReviews,
   physiologicalConstants,
@@ -28,7 +29,8 @@ const reducers = combineReducers({
   therapeuticPlans,
   appointments,
   detectedDiseases,
-  patientFiles
+  patientFiles,
+  agendaAnnotations
 });
 
 export default reducers;

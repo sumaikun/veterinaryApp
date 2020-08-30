@@ -4,32 +4,32 @@ import moment from 'moment';
 export default [
   {
     id: uuid(),
-    name: 'Dropbox',
-    imageUrl: '/images/products/product_1.png',
+    name: '$150.000.oo',
+    imageUrl: 'https://simpleicon.com/wp-content/uploads/coin-money-2.png',
     updatedAt: moment().subtract(2, 'hours')
   },
   {
     id: uuid(),
-    name: 'Medium Corporation',
-    imageUrl: '/images/products/product_2.png',
+    name: '$250.000.oo',
+    imageUrl: 'https://simpleicon.com/wp-content/uploads/coin-money-2.png',
     updatedAt: moment().subtract(2, 'hours')
   },
   {
     id: uuid(),
-    name: 'Slack',
-    imageUrl: '/images/products/product_3.png',
+    name: '$150.000.oo',
+    imageUrl: 'https://simpleicon.com/wp-content/uploads/coin-money-2.png',
     updatedAt: moment().subtract(3, 'hours')
   },
   {
     id: uuid(),
-    name: 'Lyft',
-    imageUrl: '/images/products/product_4.png',
+    name: '$300.000.oo',
+    imageUrl: 'https://simpleicon.com/wp-content/uploads/coin-money-2.png',
     updatedAt: moment().subtract(5, 'hours')
   },
   {
     id: uuid(),
-    name: 'GitHub',
-    imageUrl: '/images/products/product_5.png',
+    name: '$85.000.oo',
+    imageUrl: 'https://simpleicon.com/wp-content/uploads/coin-money-2.png',
     updatedAt: moment().subtract(9, 'hours')
   }
 ];

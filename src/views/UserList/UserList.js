@@ -44,6 +44,7 @@ class UserList extends Component{
     this.createButton = this.createButton.bind(this)
     this.editButton = this.editButton.bind(this)
     this.deleteButton = this.deleteButton.bind(this)
+    this.watchButton = this.watchButton.bind(this)
     this.filteredUsers = this.filteredUsers.bind(this)
     this.addSelectedUser = this.addSelectedUser.bind(this)
   
@@ -63,7 +64,7 @@ class UserList extends Component{
   createButton(){
     console.log("create Button");
     this.props.getUser(null)
-    this.props.history.push('/users/form')
+    this.props.history.push({pathname: '/users/form',state: { mode: "form" }})
   }
 
   editButton(){
@@ -72,7 +73,18 @@ class UserList extends Component{
     this.props.getUser(this.state.selectedUser._id,(success, error)=>{
       if(success)
       {
-        self.props.history.push('/users/form')
+        self.props.history.push({pathname: '/users/form',state: { mode: "form" }})
+      }
+    })
+  }
+
+  watchButton(){
+    console.log("watch Button");
+    let self = this
+    this.props.getUser(this.state.selectedUser._id,(success, error)=>{
+      if(success)
+      {
+        self.props.history.push({pathname: '/users/form',state: { mode: "watch" }})
       }
     })
   }
@@ -125,7 +137,8 @@ class UserList extends Component{
     return (
       <div className={classes.root}>
         <UsersToolbar
-          selectedUser={this.state.selectedUser}  
+          selectedUser={this.state.selectedUser}
+          watchButton={this.watchButton}  
           createButton={this.createButton} 
           editButton={this.editButton}
           deleteButton={this.deleteButton}

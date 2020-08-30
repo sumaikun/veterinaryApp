@@ -5,12 +5,14 @@ import { makeStyles } from '@material-ui/styles';
 import { Divider, Drawer } from '@material-ui/core';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/People';
+import AccessibilityIcon from '@material-ui/icons/Accessibility';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import TextFieldsIcon from '@material-ui/icons/TextFields';
 import ImageIcon from '@material-ui/icons/Image';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import SettingsIcon from '@material-ui/icons/Settings';
-import PetsIcon from '@material-ui/icons/Pets';
+import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
+import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import Lock from '@material-ui/icons/Lock';
 import Build from '@material-ui/icons/Build';
 import Book from '@material-ui/icons/Book';
@@ -18,11 +20,8 @@ import Swal from 'sweetalert2'
 //import { Profile, SidebarNav, UpgradePlan } from './components';
 
 import { Profile, SidebarNav } from './components';
-
 import { connect } from "react-redux"
-
 import { logoutUser } from "actions/auth"
-
 //import { getUsers } from "actions/users"
 
 const useStyles = makeStyles(theme => ({
@@ -89,19 +88,24 @@ const Sidebar = props => {
       icon: <PeopleIcon />
     },
     {
+      title: 'Médicos',
+      href: '/doctors',
+      icon: <LocalHospitalIcon />
+    },
+    {
+      title: 'Pacientes',
+      href: '/patients',
+      icon: <AccessibilityIcon />
+    },
+    {
       title: 'Productos',
       href: '/products',
       icon: <ShoppingBasketIcon />
     },
     {
-      title: 'Contactos',
-      href: '/contacts',
-      icon: <AccountBoxIcon />
-    },
-    {
-      title: 'Pacientes',
-      href: '/pets',
-      icon: <PetsIcon />
+      title: 'Centros Médicos',
+      href: '/medicalCenters',
+      icon: <BusinessCenterIcon />
     },
     {
       title: 'Parametrización',

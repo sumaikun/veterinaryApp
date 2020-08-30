@@ -19,6 +19,7 @@ import {
   Typography,
   TablePagination
 } from '@material-ui/core';
+import  PictureModal  from 'components/PictureModal'
 
 import { getInitials } from 'helpers';
 
@@ -51,7 +52,18 @@ const UsersTable = props => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
 
+  const [openPm, setOpenPm] = useState(false);
 
+  const [picturePm, setPicturePm] = useState(null);
+
+  const openPictureModal = (picture) => {
+    setPicturePm(process.env.REACT_APP_SERVE_IMAGE+picture)
+    setOpenPm(true)
+  }
+
+  const closePictureModal = () => {
+    setOpenPm(false)
+  }
 
   const handleSelectOne = (event) => {    
     setSelectedUser(event.target.value)
@@ -70,82 +82,88 @@ const UsersTable = props => {
   };
 
   return (
-    <Card
-      {...rest}
-      className={clsx(classes.root, className)}
-    >
-      <CardContent className={classes.content}>
-        <PerfectScrollbar>
-          <div className={classes.inner}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell padding="checkbox">
-                  
-                  </TableCell>
-                  <TableCell>Nombre</TableCell>
-                  <TableCell>Correo</TableCell>
-                  <TableCell>Dirección</TableCell>
-                  <TableCell>Telefóno</TableCell>
-                  <TableCell>fecha de registro</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(user => (
-                  <TableRow
-                    className={classes.tableRow}
-                    hover
-                    key={user.id}
-                    
-                  >
+    <div>
+      <PictureModal open={openPm}  picture={picturePm} handleClose={closePictureModal} ></PictureModal>
+      <Card
+        {...rest}
+        className={clsx(classes.root, className)}
+      >
+        <CardContent className={classes.content}>
+          <PerfectScrollbar>
+            <div className={classes.inner}>
+              <Table>
+                <TableHead>
+                  <TableRow>
                     <TableCell padding="checkbox">
-                      <Radio
-                        checked={selectedUser === user._id}
-                        color="primary"
-                        name="selectedUser"
-                        onChange={handleSelectOne}
-                        value={user._id}
-                      />
+                    
                     </TableCell>
-                    <TableCell>
-                      <div className={classes.nameContainer}>
-                        <Avatar
-                          className={classes.avatar}
-                          src={  process.env.REACT_APP_SERVE_IMAGE + user.picture}
-                        >
-                          {getInitials(user.name)}
-                        </Avatar>
-                        <Typography variant="body1">{user.name}</Typography>
-                      </div>
-                    </TableCell>
-                    <TableCell>{user.email}</TableCell>
-                    <TableCell>
-                      {user.address}
-                    </TableCell>
-                    <TableCell>{user.phone}</TableCell>
-                    <TableCell>
-                      {/* moment(user.date).format('DD/MM/YYYY') */}
-                      { user.date.split(" ")[0] }
-                    </TableCell>
+                    <TableCell>Nombres</TableCell>
+                    <TableCell>Apellidos</TableCell>
+                    <TableCell>Rol</TableCell>
+                    <TableCell>Correo</TableCell>                  
+                    <TableCell>Telefóno</TableCell>
+                    <TableCell>Estado</TableCell>
+                    <TableCell>fecha de registro</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </PerfectScrollbar>
-      </CardContent>
-      <CardActions className={classes.actions}>
-        <TablePagination
-          component="div"
-          count={users.length}
-          onChangePage={handlePageChange}
-          onChangeRowsPerPage={handleRowsPerPageChange}
-          page={page}
-          rowsPerPage={rowsPerPage}
-          rowsPerPageOptions={[5, 10, 25]}
-        />
-      </CardActions>
-    </Card>
+                </TableHead>
+                <TableBody>
+                  {users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(user => (
+                    <TableRow
+                      className={classes.tableRow}
+                      hover
+                      key={user.id}
+                      
+                    >
+                      <TableCell padding="checkbox">
+                        <Radio
+                          checked={selectedUser === user._id}
+                          color="primary"
+                          name="selectedUser"
+                          onChange={handleSelectOne}
+                          value={user._id}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <div className={classes.nameContainer}>
+                          <Avatar
+                            onClick={()=>{ openPictureModal(user.picture)  }}
+                            className={classes.avatar}
+                            src={  process.env.REACT_APP_SERVE_IMAGE + user.picture}
+                          >
+                            {getInitials(user.name)}
+                          </Avatar>
+                          <Typography variant="body1">{user.name}</Typography>
+                        </div>
+                      </TableCell>
+                      <TableCell>{ user.lastName }</TableCell>
+                      <TableCell>{ user.role }</TableCell>
+                      <TableCell>{user.email}</TableCell>
+                      <TableCell>{user.phone}</TableCell>
+                      <TableCell>{user.state}</TableCell>
+                      <TableCell>
+                        {/* moment(user.date).format('DD/MM/YYYY') */}
+                        { user.date.split(" ")[0] }
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </PerfectScrollbar>
+        </CardContent>
+        <CardActions className={classes.actions}>
+          <TablePagination
+            component="div"
+            count={users.length}
+            onChangePage={handlePageChange}
+            onChangeRowsPerPage={handleRowsPerPageChange}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            rowsPerPageOptions={[5, 10, 25]}
+          />
+        </CardActions>
+      </Card>
+    </div>    
   );
 };
 

@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import SignIn  from  'views/SignIn';
 import { connect } from 'react-redux';
+import * as jwtDecode from 'jwt-decode'
 
 
 class RouteWithLayout extends Component{
@@ -10,6 +11,8 @@ class RouteWithLayout extends Component{
   constructor(props)
   {
     super(props)
+    
+    //console.log(jwtDecode(this.props.authState.token).exp < Date.now() / 1000)
      
   }
 
@@ -23,7 +26,7 @@ class RouteWithLayout extends Component{
   
     if(authenticated)
     {
-      if(this.props.authState.token != null)
+      if(this.props.authState.token &&  jwtDecode(this.props.authState.token).exp > Date.now() / 1000 )
       {
         view =  matchProps => (
           <Layout>

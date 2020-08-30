@@ -23,16 +23,25 @@ const useStyles = makeStyles(theme => ({
 const UserForm = props => {
   const classes = useStyles();
 
+  const mode = props.location.state.mode
+
+  console.log("mode",mode)
 
   console.log("props user form",props.usersState.selectedUser)
 
   const [values, setValues] = useState({
     _id:  props.usersState.selectedUser._id || props.usersState.selectedUser.id,
     name: props.usersState.selectedUser.name,
+    lastName: props.usersState.selectedUser.lastName,
+    city: props.usersState.selectedUser.city,
     email: props.usersState.selectedUser.email,
     phone: props.usersState.selectedUser.phone,
     address: props.usersState.selectedUser.address,
     role: props.usersState.selectedUser.role,
+    state: props.usersState.selectedUser.state,
+    birthDate: props.usersState.selectedUser.birthDate,
+    typeId: props.usersState.selectedUser.typeId,
+    identification: props.usersState.selectedUser.identification,
     picture: props.usersState.selectedUser.picture ? props.usersState.selectedUser.picture : null,
     password: '',
     confirmPassword: '',
@@ -145,21 +154,21 @@ const UserForm = props => {
       >
         <Grid
           item
-          lg={4}
+          lg={12}
           md={6}
           xl={4}
           xs={12}
         >        
-          <FormProfile  userDetails={values} changeDetails={changeValues} />
+          <FormProfile mode={mode} userDetails={values} changeDetails={changeValues} />
         </Grid>
         <Grid
           item
-          lg={8}
+          lg={12}
           md={6}
           xl={8}
           xs={12}
         >      
-          <FormDetails changeDetails={changeValues} userDetails={values} submitData={submitData}  />
+          <FormDetails mode={mode} changeDetails={changeValues} userDetails={values} submitData={submitData}  />
         </Grid>
       </Grid>
     </div>

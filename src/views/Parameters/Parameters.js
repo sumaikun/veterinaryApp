@@ -86,77 +86,38 @@ class Parameters extends Component{
     console.log("event",event.target.value)
     
     switch (event.target.value) {
-      case "Especie":
+      case "Tipo de especialización":
        
 
         this.props.getParameters(
           (success,error) =>{
           success ?
-          this.setState({  ...this.state , headers:["Nombre especie","Info Extra","Fecha","Opciones"],
+          this.setState({  ...this.state , headers:["Nombre especialización","Descripción","Fecha","Opciones"],
             columns:["name","meta","date","options"],
-            newButtonText:"Crear nueva especie",
-            mode:"species",
+            newButtonText:"Agregar nuevo tipo de especialización",
+            mode:"specialistTypes",
             data:this.props.parametersState.parameters
           }) : console.log(error)
-        },"species")
- 
-        break;
-      case "Raza":
-        
-
-        this.props.getParameters((success,error) =>{
-          success ?
-          this.setState({  ...this.state , headers:["Nombre raza","Especie","Info Extra","Fecha","Opciones"],
-            columns:["name","species","meta","date","options"],
-            newButtonText:"Crear nueva raza",
-            mode:"breeds",
-            data:this.props.parametersState.parameters
-          }):console.log(error)
-        },"breeds")
+        },"specialistTypes")
  
         break;
 
-      case "Tipo de examen":
+      case "Ciudades de atención":
+      
 
-        this.props.getParameters((success,error) =>{
+        this.props.getParameters(
+          (success,error) =>{
           success ?
-          this.setState({  ...this.state , headers:["Tipo de examen","descripción","Fecha","Opciones"],
+          this.setState({  ...this.state , headers:["Nombre de ciudad","Info Extra","Fecha","Opciones"],
             columns:["name","meta","date","options"],
-            newButtonText:"Crear nuevo tipo de examen",
-            mode:"examTypes",
+            newButtonText:"Agregar nueva ciudad de atención",
+            mode:"cityTypes",
             data:this.props.parametersState.parameters
-          }):console.log(error)
-        },"examTypes")
-
-      break
-
-      case "Tipo de plan":
-
-        this.props.getParameters((success,error) =>{
-          success ?
-          this.setState({  ...this.state , headers:["Tipo de plan","descripción","Fecha","Opciones"],
-            columns:["name","meta","date","options"],
-            newButtonText:"Crear nuevo tipo de plan",
-            mode:"planTypes",
-            data:this.props.parametersState.parameters
-          }):console.log(error)
-        },"planTypes")
-
-      break
-
-      case "Enfermedades":
-
-        this.props.getParameters((success,error) =>{
-          success ?
-          this.setState({  ...this.state , headers:["Nombre de enfermedad","Info adicional","Fecha","Opciones"],
-            columns:["name","meta","date","options"],
-            newButtonText:"Agregar enfermedad",
-            mode:"diseases",
-            data:this.props.parametersState.parameters
-          }):console.log(error)
-        },"diseases")
-
-      break
+          }) : console.log(error)
+        },"cityTypes")
+  
+        break;
+     
 
       default:
         break;    
@@ -185,13 +146,11 @@ class Parameters extends Component{
   }
 
   createButton(){
-    console.log("formData",this.state.formData)
-
-
-
+    //console.log("formData",this.state.formData,this.state.mode)
+    
     switch(this.state.mode)
     {
-      case "species":
+      case "cityTypes":
         if(!this.state.formData.name)
         {
           return Swal.fire({
@@ -199,69 +158,24 @@ class Parameters extends Component{
             title: 'Espera',
             text: "Debe llenar todos los datos obligatorios para continuar (nombre)",          
           })
-        }
-      case "breeds":
-        if(!this.state.formData.name || !this.state.formData.species)
-        {
-          return Swal.fire({
-            icon: 'warning',
-            title: 'Espera',
-            text: "Debe llenar todos los datos obligatorios para continuar (nombre y especie)",          
-          })
-        }
-      case "examTypes":
-        if(!this.state.formData.name)
-        {
-          return Swal.fire({
-            icon: 'warning',
-            title: 'Espera',
-            text: "Debe llenar todos los datos obligatorios para continuar (nombre)",          
-          })
-        }
-        if(!this.state.formData.meta)
-        {
-          return Swal.fire({
-            icon: 'warning',
-            title: 'Espera',
-            text: "Debe llenar todos los datos obligatorios para continuar (descripción)",          
-          })
-        }
-      case  "planTypes":
-        if(!this.state.formData.name)
-        {
-          return Swal.fire({
-            icon: 'warning',
-            title: 'Espera',
-            text: "Debe llenar todos los datos obligatorios para continuar (nombre)",          
-          })
-        }
-        if(!this.state.formData.meta)
-        {
-          return Swal.fire({
-            icon: 'warning',
-            title: 'Espera',
-            text: "Debe llenar todos los datos obligatorios para continuar (descripción)",          
-          })
-        }
 
-      case  "diseases":
-        if(!this.state.formData.name)
+        } 
+        break;
+
+      case "specialistTypes":
+        if(!this.state.formData.name || !this.state.formData.meta )
         {
           return Swal.fire({
             icon: 'warning',
             title: 'Espera',
-            text: "Debe llenar todos los datos obligatorios para continuar (nombre)",          
+            text: "Debe llenar todos los datos obligatorios para continuar (nombre,descripción)",          
           })
+          
         }
-        if(!this.state.formData.meta)
-        {
-          return Swal.fire({
-            icon: 'warning',
-            title: 'Espera',
-            text: "Debe llenar todos los datos obligatorios para continuar (descripción)",          
-          })
-        }
- 
+        break; 
+
+      default:
+        break;
 
     }
 

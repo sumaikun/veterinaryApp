@@ -5,7 +5,7 @@ import 'date-fns';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 
-import { PatientsToolbar, PatientsTable, PatientsModal, PatientsMedicine } from './components';
+import { PatientsToolbar, PatientsTable,  PatientsMedicine } from './components';
 
 import { connect } from 'react-redux';
 
@@ -63,13 +63,13 @@ class PatientList extends Component{
       })
     })
 
-    this.props.getProducts((success,error)=>{
+    /*this.props.getProducts((success,error)=>{
       this.setState({
         ...this.state,
         products:this.props.productsState.products,
         selectedProduct:null,
       })
-    })
+    })*/
     
     this.createButton = this.createButton.bind(this)
     this.editButton = this.editButton.bind(this)
@@ -259,7 +259,6 @@ class PatientList extends Component{
           addSelectedPatient={this.addSelectedPatient} 
           patients={this.state.patients} />
         </div>
-        <PatientsModal selectedProduct={this.state.selectedProduct}  openMedicinesModal={this.handleOpen2} open={this.state.open} handleClose={this.handleClose} />
         
         {
           this.state.products ?  
@@ -267,7 +266,7 @@ class PatientList extends Component{
           null
         }
 
-       11º
+       
         
 
 

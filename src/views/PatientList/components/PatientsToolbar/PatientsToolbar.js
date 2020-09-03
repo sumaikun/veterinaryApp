@@ -60,8 +60,6 @@ const PetsToolbar = props => {
         <span className={classes.spacer} />
 
         <Grid container>
-          <Button className={classes.importButton}  disabled={ props.selectedPet === null } 
-            onClick={props.ownersButton}>Dueños</Button>
           
           <Button className={classes.importButton}  disabled={ props.selectedPet === null } 
             onClick={props.medicalRecordsButton}>Historial medico</Button>
@@ -70,27 +68,24 @@ const PetsToolbar = props => {
             onClick={props.medicalAppointmentButton}>Cita</Button>
 
           <Button className={classes.importButton}  disabled={ props.selectedPet === null } 
+            onClick={props.editButton}>Ver</Button>  
+
+          <Button className={classes.importButton}  disabled={ props.selectedPet === null } 
             onClick={props.editButton}>Editar</Button>
           
           <Button className={classes.exportButton} disabled={ props.selectedPet === null  } 
-            onClick={props.deleteButton}>Eliminar</Button>
+            onClick={props.deleteButton}>Inactivar</Button>
           
-          {/*<Button
-            color="primary"
-            variant="contained"
-            component={CustomRouterLink}
-            to="/pets/form"
-          >
-            Agregar Usuario
-          </Button>*/}
+ 
 
-          <Button
+          {/*<Button
             color="primary"
             variant="contained"
             onClick={props.createButton}
           >
-            Agregar Mascota
-          </Button>
+            Agregar Paciente
+          </Button>*/}
+          
         </Grid>
       </div>
       <div className={classes.row}>

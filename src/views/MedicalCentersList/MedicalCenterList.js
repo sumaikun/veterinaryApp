@@ -43,7 +43,7 @@ class MedicalCenterList extends Component{
         selectedMedicalCenter:null,
         page:0,
         rowsPerPage:6
-      })
+      },()=>console.log("current state",this.state))
     })
 
 

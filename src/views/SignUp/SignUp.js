@@ -41,12 +41,23 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp(props) {
 
-  const [values, setValues] = useState({ name:"", lastName:"", email:"", password:"", confirmPassword:"", laboratory:"" })
+  const [values, setValues] = useState(
+    { 
+     name:"",
+     lastName:"",
+     email:"",
+     password:"",
+     confirmPassword:"",
+     phone:""
+    })
 
 
   const errors =  new Array(5)
 
   const rules = (key,value) =>{
+
+    //console.log("values",values)
+
     switch(key){
       case "name":
 
@@ -67,29 +78,49 @@ export default function SignUp(props) {
         errors[2] = value.length > 0 && ( !value.match(/\S+@\S+\.\S+/) ) ?
           "No es un correo valido":false
         
-          return  errors[2]
-    
+          return  errors[2]    
 
-        case "password":
+      case "password":
 
-          errors[3] = value.length > 0 && (  !value.match(/^(?=.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/) )  ?
-          "La contraseña debe tener una mayuscula, una minuscula y tener al menos 8 dígitos":false
-        
-          return  errors[3]
+        errors[3] = value.length > 0 && (  !value.match(/^(?=.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/) )  ?
+        "La contraseña debe tener una mayuscula, una minuscula y tener al menos 8 dígitos":false
+      
+        return  errors[3]
 
-        case "confirmPassword":      
+      case "confirmPassword":
 
+        errors[4] = value.confirmPassword.length > 0 && value.password != value.confirmPassword ?
+          "Las contraseñas deben coincidir":false         
           
-          errors[4] = value.confirmPassword.length > 0 && value.password != value.confirmPassword ?
-            "Las contraseñas deben coincidir":false         
+        return  errors[4]
+
+      case "phone":
+              
+        errors[5] = value.length > 0 && (value.length > 10 || value.length < 7) ?
+          "El telefono debe tener entre 7 a 10 carácteres":false         
           
-          return  errors[4]
+        return  errors[5]
 
 
       default:
         return true
     } 
   }
+
+
+  const [cities, setCities ] = useState([]);
+
+  useEffect(() => {
+    
+    const getCityTypes = async () => {
+      const response = await api.getData("cityTypes") 
+      setCities(response.data)
+    }
+
+    getCityTypes()   
+    
+
+  },[]); 
 
 
   const handleChange = event => {
@@ -143,18 +174,73 @@ export default function SignUp(props) {
         }
     }
 
-    if(values.laboratory === "")
-    {
+    if(  !values.name || !values.lastName || !values.email || !values.password || !values.confirmPassword || !values.phone || !values.city || !values.type ){
       return Swal.fire({
-        icon: 'error',
+        icon: 'warning',
         title: 'Espera',
-        text: "Debes poner un laboratorio valido",          
+        text: "Debes llenar todos los campos",          
+      })
+    }   
+
+    if( !values.confirmed ){
+      return Swal.fire({
+        icon: 'warning',
+        title: 'Espera',
+        text: "Si quieres registrarte debes aceptar los terminos y condiciones",          
       })
     }
 
-    const user = { ...values }
+   const { name, lastName, email, password, phone, city, confirmed  } = values
 
-    delete user.confirmPassword
+    const user = { name, lastName, email, password, phone, city, confirmed }
+
+    console.log(user)
+
+    if(values.type === "Patient")
+    {
+      api.postData("registerPatient",user).then(( response ) => {
+
+        return Swal.fire({
+          icon: 'success',
+          title: 'Bien',
+          text: "Busca en tu correo te mandamos un mensaje de confirmación",          
+        })
+       
+      })
+      .catch(err => { console.log("Error: ", err)
+       
+        return Swal.fire({
+          icon: 'error',
+          title: 'Espera',
+          text: "Intentalo de nuevo, puede estar sucediendo un problema con el servidor",          
+        })
+  
+      })
+    } 
+
+    if(user.type === "Doctor")
+    {
+      api.postData("registerDoctor",user).then(( response ) => {
+
+        return Swal.fire({
+          icon: 'success',
+          title: 'Bien',
+          text: "espera que el administrador habilite tu usario y podras ingresar",          
+        })
+       
+      })
+      .catch(err => { console.log("Error: ", err)
+       
+        return Swal.fire({
+          icon: 'error',
+          title: 'Espera',
+          text: "Intentalo de nuevo, puede estar sucediendo un problema con el servidor",          
+        })
+  
+      })
+    }
+
+    /*delete user.confirmPassword
 
     api.postData("signUp",user).then(( response ) => {
 
@@ -173,45 +259,11 @@ export default function SignUp(props) {
         text: "Intentalo nueva, puede estar sucediendo un problema con el servidor",          
       })
 
-    });
+    });*/
 
   }
 
   const classes = useStyles();
-
-  const [laboratories, setLaboratories ] = useState([]); 
-
-
-  useEffect(() => {  
-
-    let mounted = true;
-
-    console.log(mounted)
-
-
-    const getData = async () => {
-
-      console.log("getting data")
-      
-      let response = await api.getData("getPrestaShopDistributors") 
-      let arrayData = []
-      console.log(response.data)
-      response.data.forEach( data => arrayData.push({label:data.name,value:data.id}) )
-      if(mounted){
-          setLaboratories(arrayData)
-      }     
-      
-    }
-
-    if(mounted){    
-      console.log("lets get data")  
-      getData()
-    } 
-
-    return () => mounted = false;
-
-  },[]);
-
 
   return (
     <Container component="main" maxWidth="xs" style={{marginTop: "4%", marginBottom: "4%"}} >
@@ -275,17 +327,16 @@ export default function SignUp(props) {
 
             <Grid item xs={12}>
               <TextField
-                helperText={rules("email",values.email)}
-                error = {rules("email",values.email)} 
+                helperText={rules("phone",values.phone)}
+                error = {rules("phone",values.phone)} 
                 variant="outlined"
                 required
                 fullWidth
                 id="email"
                 label="Teléfono o celular"
-                name="email"
-                
+                name="phone"                
                 onChange={handleChange}
-                value={values.email}
+                value={values.phone}
               />
             </Grid>
 
@@ -294,7 +345,7 @@ export default function SignUp(props) {
                 fullWidth
                 label="Ciudad"
                 margin="dense"
-                name="sex"
+                name="city"
                 onChange={handleChange}
                 required
                 select
@@ -302,20 +353,15 @@ export default function SignUp(props) {
                 SelectProps={{ native: true }}
                 variant="outlined"
               >
-                <option></option>
-                <option
-                    key={"Masculino"}
-                    value={"M"}
+                 <option></option>
+                 {cities.map(option => (
+                  <option
+                    key={option._id}
+                    value={option._id}
                   >
-                    {"Masculino"}
-                </option>
-                <option
-                    key={"Femenino"}
-                    value={"F"}
-                  >
-                    {"Femenino"}
-                </option>
-                
+                    {option.name}
+                  </option>
+                ))}               
               </TextField>
             </Grid>
 
@@ -358,7 +404,7 @@ export default function SignUp(props) {
                 fullWidth
                 label="Paciente o Médico"
                 margin="dense"
-                name="sex"
+                name="type"
                 onChange={handleChange}
                 required
                 select
@@ -368,16 +414,16 @@ export default function SignUp(props) {
               >
                 <option></option>
                 <option
-                    key={"Masculino"}
-                    value={"M"}
+                    key={"Patient"}
+                    value={"Patient"}
                   >
-                    {"Masculino"}
+                    {"Paciente"}
                 </option>
                 <option
-                    key={"Femenino"}
-                    value={"F"}
+                    key={"Doctor"}
+                    value={"Doctor"}
                   >
-                    {"Femenino"}
+                    {"Médico"}
                 </option>
                 
               </TextField>
@@ -388,7 +434,7 @@ export default function SignUp(props) {
             <Grid item xs={12}>
 
               <FormControlLabel
-                control={<Checkbox name="conditions"  onChange={handleCheck} />}
+                control={<Checkbox name="confirmed"  onChange={handleCheck} />}
                 label="¿Acepta terminos y condiciones?" 
               />
 

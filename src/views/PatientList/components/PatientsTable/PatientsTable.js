@@ -42,20 +42,20 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const PetsTable = props => {
-  const { className, pets, species, breeds, ...rest } = props;
+const PatientsTable = props => {
+  const { className, patients, species, breeds, ...rest } = props;
 
   const classes = useStyles();
 
-  const [selectedPet, setSelectedPet ] = useState({});
+  const [selectedPatient, setSelectedPatient ] = useState({});
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
 
 
 
   const handleSelectOne = (event) => {    
-    setSelectedPet(event.target.value)
-    props.addSelectedPet(event.target.value)
+    setSelectedPatient(event.target.value)
+    props.addSelectedPatient(event.target.value)
   };
 
   const handlePageChange = (event, page) => {
@@ -84,52 +84,54 @@ const PetsTable = props => {
                   
                   </TableCell>
                   <TableCell>Nombre</TableCell>
-                  <TableCell>Especie</TableCell>
-                  <TableCell>Raza</TableCell>
-                  <TableCell>Color</TableCell>
-                  <TableCell>Sexo</TableCell>
-                  <TableCell>Edad</TableCell>
-                  <TableCell>fecha de registro</TableCell>
+                  <TableCell>Apellido</TableCell>
+                  <TableCell>Dirección</TableCell>
+                  <TableCell>Estrato</TableCell>
+                  <TableCell>Ciudad</TableCell>
+                  <TableCell>Teléfono</TableCell>
+                  <TableCell>Ocupación</TableCell>
+                  <TableCell>Fecha de nacimiento</TableCell>
+                  <TableCell>Fecha de registro</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {pets.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(pet => (
+                {patients.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(patient => (
                   <TableRow
                     className={classes.tableRow}
                     hover
-                    key={pet.id}
+                    key={patient.id}
                     
                   >
                     <TableCell padding="checkbox">
                       <Radio
-                        checked={selectedPet === pet._id}
+                        checked={selectedPatient === patient._id}
                         color="primary"
-                        name="selectedPet"
+                        name="selectedPatient"
                         onChange={handleSelectOne}
-                        value={pet._id}
+                        value={patient._id}
                       />
                     </TableCell>
                     <TableCell>
                       <div className={classes.nameContainer}>
                         <Avatar
                           className={classes.avatar}
-                          src={  process.env.REACT_APP_SERVE_IMAGE + pet.picture}
+                          src={  process.env.REACT_APP_SERVE_IMAGE + patient.picture}
                         >
-                          {getInitials(pet.name)}
+                          {getInitials(patient.name)}
                         </Avatar>
-                        <Typography variant="body1">{pet.name}</Typography>
+                        <Typography variant="body1">{patient.name}</Typography>
                       </div>
                     </TableCell>
-                    <TableCell>{  species.length > 0 ? species.filter( specie => specie._id === pet.species )[0].name : null  }</TableCell>
-                    <TableCell>{  breeds.length > 0 ? breeds.filter( breed => breed._id === pet.breed )[0].name : null  }</TableCell>
+                    <TableCell>{ patient.lastName }</TableCell>
+                    <TableCell>{ patient.address }</TableCell>
+                    <TableCell>{ patient.stratus }</TableCell>
+                    <TableCell>{ patient.city }</TableCell>
+                    <TableCell>{ patient.phone }</TableCell>
+                    <TableCell>{ patient.ocupation }</TableCell>
+                    <TableCell>{ patient.birthDate }</TableCell>
                     <TableCell>
-                      {pet.color}
-                    </TableCell>
-                    <TableCell>{pet.sex}</TableCell>
-                    <TableCell>{pet.age}</TableCell>
-                    <TableCell>
-                      {/* moment(pet.date).format('DD/MM/YYYY') */}
-                      { pet.date.split(" ")[0] }
+                      {/* moment(patient.date).format('DD/MM/YYYY') */}
+                      { patient.date.split(" ")[0] }
                     </TableCell>
                   </TableRow>
                 ))}
@@ -141,7 +143,7 @@ const PetsTable = props => {
       <CardActions className={classes.actions}>
         <TablePagination
           component="div"
-          count={pets.length}
+          count={patients.length}
           onChangePage={handlePageChange}
           onChangeRowsPerPage={handleRowsPerPageChange}
           page={page}
@@ -153,9 +155,9 @@ const PetsTable = props => {
   );
 };
 
-PetsTable.propTypes = {
+PatientsTable.propTypes = {
   className: PropTypes.string,
-  pets: PropTypes.array.isRequired
+  patients: PropTypes.array.isRequired
 };
 
-export default PetsTable;
+export default PatientsTable;

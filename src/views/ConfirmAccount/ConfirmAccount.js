@@ -66,11 +66,13 @@ const tokenParam = urlParams.get('tokenizer');
 
 console.log("tokenParam",tokenParam)
 
-const RecoverPassword = props => {
+const ConfirmAccount = props => {
 
   //console.log("props",props);
 
   const { history } = props;
+
+  //console.log("history",history)
 
   const classes = useStyles();
 
@@ -102,44 +104,25 @@ const RecoverPassword = props => {
   const handleSubmit = event => {
     
     event.preventDefault()
-    console.log(formState.values)
+    console.log(formState.values)    
 
-    
-
-    if(/[a-z]+/.test(formState.values.password) && /[A-Z]+/.test(formState.values.password) && /\d+/.test(formState.values.password) && formState.values.password.length >= 8)
-    {
-      if(formState.values.password != formState.values.confirmPassword){
-        return Swal.fire({
-          icon: 'warning',
-          title: 'Espera',
-          text: 'las contraseñas no coinciden',          
-        })
-      }else{
-        api.postData("resetPassword?token="+tokenParam,{ password: formState.values.password , token:tokenParam  })
+        api.postData("confirmAccount?token="+tokenParam,{ token:tokenParam  })
         .then( data => {
           Swal.fire({
             icon: 'success',
             title: '',
-            text: 'Contraseña registrada, ahora ingresa al sistema',          
-          })
-          history.push('sign-in');
+            text: 'Cuenta habilitada, ahora ingresa al sistema',          
+          }).then( any => window.location.assign('sign-in') )
+          
         })
         .catch( error => {
+          console.log("error",error)
           return Swal.fire({
             icon: 'error',
             title: 'Ooops',
             text: 'Sucedio un error en el servidor',          
           })
         })
-      }
-    }else{
-      return Swal.fire({
-        icon: 'warning',
-        title: 'Espera',
-        text: 'la contraseña deben incluir una mayuscula, una minuscula y un número por lo menos',          
-      })
-    }
-
   
   };
 
@@ -149,44 +132,17 @@ const RecoverPassword = props => {
   return (
     <Container component="main" maxWidth="xs" style={{marginTop: "4%", marginBottom: "4%"}} >
       <CssBaseline />
-      <img src={clicalPicture} alt="Clickal Icon"></img>
+      <img style={{ marginTop:"20%" }} src={clicalPicture} alt="Clickal Icon"></img>
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOpen />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Modifica tu contraseña
+          Confirma tu cuenta
         </Typography>
         <form className={classes.form}   onSubmit={handleSubmit}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Contraseña"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange={handleChange}
-          />
-           <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="confirmPassword"
-            label="Confirmar Contraseña"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange={handleChange}
-          />
-          { /*
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Recuerdame"
-          />*/}
+        
+   
           <Button
             type="submit"
             fullWidth
@@ -194,16 +150,8 @@ const RecoverPassword = props => {
             color="primary"
             className={classes.submit}           
           >
-            Cambiar contraseña e Ingresar
+            Confirmar cuenta e ingresar
           </Button>
-          <Grid container>
-            <Grid item xs>
-              { /*<Link href="#" variant="body2">
-                ¿ Olvidaste la contraseña ?
-               </Link>*/ } 
-            </Grid>
-          
-          </Grid>
         </form>
       </div>
      
@@ -211,5 +159,5 @@ const RecoverPassword = props => {
   );
 };
  
-export default RecoverPassword;
+export default ConfirmAccount;
 

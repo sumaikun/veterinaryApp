@@ -24,7 +24,8 @@ import {
   Parameters as ParametersView,
   MedicalRecords as MedicalRecordsView,
   Agenda as  AgendaView,
-  RecoverPassword as RecoverPasswordView
+  RecoverPassword as RecoverPasswordView,
+  ConfirmAccount as ConfirmAccountView
 } from './views';
 
 const Routes = () => {
@@ -158,11 +159,17 @@ const Routes = () => {
         layout={MinimalLayout}     
         path="/sign-in"
       />
-       <RouteWithLayout
+      <RouteWithLayout
         component={RecoverPasswordView}
         exact
         layout={MinimalLayout}     
         path="/recover-password"
+      />
+      <RouteWithLayout
+        component={RecoverPasswordView}
+        exact
+        layout={ConfirmAccountView}     
+        path="/confirm-account"
       />
       <RouteWithLayout
         component={NotFoundView}

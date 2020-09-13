@@ -185,6 +185,11 @@ const SignIn = props => {
             autoComplete="current-password"
             onChange={handleChange}
           />
+            <Link  variant="body2" onClick={ (e) => {
+               
+              }}>
+                {"¿ Olvidaste la contraseña ? Haz click aqui"}
+              </Link>
           { /*
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -205,7 +210,7 @@ const SignIn = props => {
                 ¿ Olvidaste la contraseña ?
                </Link>*/ } 
             </Grid>
-            <Grid item>
+            <Grid item>          
               <Link  variant="body2" onClick={ (e) => {
                 e.preventDefault()  
                 props.history.push("/sign-up")

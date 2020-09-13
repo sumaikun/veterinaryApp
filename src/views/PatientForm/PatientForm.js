@@ -24,23 +24,27 @@ const useStyles = makeStyles(theme => ({
 const PatientForm = props => {
   const classes = useStyles();
 
-
-
-  //
+  const mode = props.location.state?.mode ? props.location.state.mode : "form" 
 
   console.log("props patient form",props.patientsState.selectedPatient)
 
   const [values, setValues] = useState({
     _id:  props.patientsState.selectedPatient._id || props.patientsState.selectedPatient.id,
-    name: props.patientsState.selectedPatient.name,
-    species: props.patientsState.selectedPatient.species,
-    breed: props.patientsState.selectedPatient.breed,
-    color: props.patientsState.selectedPatient.color,
-    sex: props.patientsState.selectedPatient.sex,
-    age: props.patientsState.selectedPatient.age,
-    birthDate: props.patientsState.selectedPatient.birthDate,
-    origin: props.patientsState.selectedPatient.origin,
-    description: props.patientsState.selectedPatient.description,
+    name: props.patientsState.selectedPatient.name || "" ,
+    lastName: props.patientsState.selectedPatient.lastName || "" ,
+    typeId: props.patientsState.selectedPatient.typeId || "" ,
+    identification: props.patientsState.selectedPatient.identification || "" ,
+    city:props.patientsState.selectedPatient.city || null ,
+    birthDate: props.patientsState.selectedPatient.birthDate || null ,
+    ocupation: props.patientsState.selectedPatient.ocupation || null ,
+    address: props.patientsState.selectedPatient.address || "" ,
+    email: props.patientsState.selectedPatient.email || "" ,
+    state: props.patientsState.selectedPatient.state || "" ,
+    phone: props.patientsState.selectedPatient.phone || "" ,
+    phone2: props.patientsState.selectedPatient.phone2 || "" ,    
+    confirmed:props.patientsState.selectedPatient.confirmed || false ,
+    stratus:props.patientsState.selectedPatient.stratus || "" , 
+    doctors:props.patientsState.selectedPatient.doctors || [], 
     picture: props.patientsState.selectedPatient.picture ? props.patientsState.selectedPatient.picture : null,
     file: null
   });
@@ -154,7 +158,7 @@ const PatientForm = props => {
           xl={12}
           xs={12}
         >        
-          <FormFile  patientDetails={values} changeDetails={changeValues} />
+          <FormFile mode={mode}  patientDetails={values} changeDetails={changeValues} />
         </Grid>
         <Grid
           item
@@ -163,7 +167,7 @@ const PatientForm = props => {
           xl={12}
           xs={12}
         >       
-          <FormDetails  breeds={ props.appState.breeds } species={ props.appState.species }  changeDetails={changeValues} patientDetails={values} submitData={submitData}  />
+          <FormDetails mode={mode}  breeds={ props.appState.breeds } species={ props.appState.species }  changeDetails={changeValues} patientDetails={values} submitData={submitData}  />
         </Grid>
       </Grid>
     </div>

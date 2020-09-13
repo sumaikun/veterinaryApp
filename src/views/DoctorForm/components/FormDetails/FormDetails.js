@@ -119,20 +119,20 @@ const FormDetails = props => {
       
         return  errors[3]
 
-        case "password":
+      case "lastName":
 
-          errors[4] = value.length > 0 && (  !value.match(/^(?=.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/) )  ?
-          "La contraseña debe tener una mayuscula, una minuscula y tener al menos 8 dígitos":false
-        
-          return  errors[4]
+        errors[4] = value.length > 0 && value.length < 3 ?
+          "El nombre debe tener mas de tres digitos" : false       
 
-        case "confirmPassword":      
+        return  errors[4]
 
-          
-          errors[5] = value.confirmPassword.length > 0 && value.password != value.confirmPassword ?
-            "Las contraseñas deben coincidir":false         
-          
-          return  errors[5]
+      case "phone2":
+
+        errors[5] = value.length > 0 && (value.length > 10 || value.length < 7)   ?
+        "El número telefónico debe tener entre 7 a 10 dígitos":false
+      
+        return  errors[5]
+
 
 
       default:
@@ -268,8 +268,8 @@ const FormDetails = props => {
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                helperText={rules("phone",props.doctorDetails.phone2)}
-                error = {rules("phone",props.doctorDetails.phone2)}
+                helperText={rules("phone2",props.doctorDetails.phone2)}
+                error = {rules("phone2",props.doctorDetails.phone2)}
                 label="Número de teléfono 2"
                 margin="dense"
                 name="phone2"

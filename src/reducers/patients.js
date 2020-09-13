@@ -10,7 +10,7 @@ import {
   export function patients(
     state = {
       patients:[],     
-      selectedPet:{} 
+      selectedPatient:{} 
     },
     action
   ) {
@@ -25,7 +25,7 @@ import {
       case SELECT_PATIENT:
   
         return Object.assign({}, state, {
-          selectedPet:action.patient,         
+          selectedPatient:action.patient,         
         });
   
       case ADD_PATIENT:

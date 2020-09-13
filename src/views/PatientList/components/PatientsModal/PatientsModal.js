@@ -22,15 +22,16 @@ import { Modal, Backdrop, Fade,
   
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
+import CancelIcon from '@material-ui/icons/Cancel';
+
 import  api  from 'middleware/api'
 
 import 'date-fns';
 
-import {
-    MuiPickersUtilsProvider,
-    KeyboardDatePicker,
-  } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
+import Swal from 'sweetalert2'
+
+import { useConfirm } from 'material-ui-confirm';
+
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -49,32 +50,78 @@ const useStyles = makeStyles(theme => ({
   },
   actions: {
     justifyContent: 'flex-end'
+  },
+  boldOption: {
+      fontWeight: 'bold'
   }
 }));
 
-const PetsModal = props => {
-  const {  open, handleClose,openMedicinesModal, ...rest } = props;
+const PatientsModal = props => {
+
+  const confirm = useConfirm();
+
+  const {  open, handleClose, handleOpen, ...rest } = props;
 
   const classes = useStyles();
 
-  const [ examTypes, setExamTypes ] = useState([]);
+  const [ medicines , setMedicines ] = useState([
+      {
+        product:null,
+        presentation:null,
+        posology:null,
+        totalDose:null,
+        administrationWay:null,
+        duration:null
+      }
+  ]) 
 
-  const [ planTypes, setPlanTypes ] = useState([]);
+  const addNewMedicament = () => {
 
-  useEffect(() => {
+    setMedicines([...medicines , {
+        product:null,
+        presentation:null,
+        posology:null,
+        totalDose:null,
+        administrationWay:null,
+        duration:null
+    }])
 
-    const getExamTypes = async () => {
-      const response = await api.getData("examTypes") 
+  }
 
-      let arrayData = [{label:"",value:""}]
-      console.log(response.data)
-      response.data.forEach( data => arrayData.push({label:data.name,value:data._id}) )
-      setExamTypes(arrayData) 
+  const deleteMedicine = (index) => {
+    confirm({  title:'¿Estas seguro?'  ,description: 'No podras recuperar la información y tendrias que reescribirla' })
+      .then(() => {  
 
-    }
+        console.log("index",index)
 
-    getExamTypes()
+        const copyArray = JSON.parse( JSON.stringify( medicines ) );
 
+        console.log("medicines.splice(index, 1)",copyArray.splice(index, 1),copyArray)
+
+        setMedicines([ ...copyArray ])
+
+
+      })
+      .catch(() => { /* ... */ });
+  };
+
+
+
+  //console.log("medicines",medicines)
+
+  const presentationTypes = [ "Jarabes", "Gotas", "Capsulas", "Polvo", "Granulado", "Emulsión", "Bebible" ]
+
+  const administrationWaysTypes = [ "Jarabes", "Gotas", "Capsulas", "Polvo", "Granulado", "Emulsión", "Bebible" ]
+
+  const handleChange = ( event , key ) => {
+
+  }
+
+
+  //useEffect(() => {
+
+ 
+    /*
     const getPlanTypes = async () => {
         const response = await api.getData("planTypes") 
   
@@ -85,14 +132,14 @@ const PetsModal = props => {
   
       }
   
-    getPlanTypes()
+    getPlanTypes()*/
 
-  },[]); 
+  //},[]); 
 
   const [appointment, setAppointment] = useState({
     ReasonForConsultation:"",
     ResultsForConsultation:"",
-    products:[]
+    medicines:[]
   })
 
 
@@ -108,7 +155,7 @@ const PetsModal = props => {
             <DialogTitle id="alert-dialog-slide-title">{"Cita rapida"}</DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-slide-description">
-                A continuación podra agendar citas, crear citas o verificar información de citas anteriores.
+                A continuación podra agendar citas o crear citas nuevas.
                 </DialogContentText>
                 <Divider></Divider>
 
@@ -118,7 +165,7 @@ const PetsModal = props => {
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                     >
-                    <Typography className={classes.heading}>Gestionar cita rapida</Typography>
+                    <Typography className={classes.heading}>Gestionar cita</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                     <Divider></Divider>
@@ -126,12 +173,7 @@ const PetsModal = props => {
 
                             <Grid item md={12} xs={12}>
                                 <TextField  fullWidth  label="Motivo de la consulta" margin="dense"
-                                onChange={(event)=>{
-                                    setAppointment({
-                                        ...appointment,
-                                        "ReasonForConsultation":event.target.value   
-                                    })
-                                }}    
+                                onChange={(event)=>{ handleChange(event , null)  }}    
                                 name="ReasonForConsultation"  variant="outlined"
                                 multiline rows={3} />
                             </Grid>
@@ -143,69 +185,79 @@ const PetsModal = props => {
                                 aria-controls="panel1a-content"
                                 id="panel1a-header"
                                 >
-                                <Typography className={classes.heading}>Incluir plan de diagnostico</Typography>
+                                <Typography className={classes.heading}>Incluir Medicamentos</Typography>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                 
                                 <Grid  container>
 
-                                    <Grid item md={12} xs={12}>
-                                        <TextField
-                                            fullWidth label="Tipo de examen"
-                                            margin="dense" name="typeOfExam"
-                                            required
-                                            select                                   
-                                            variant="outlined"
-                                            SelectProps={{ native: true }}
-                                        >
-                                            {examTypes.map(option => (
-                                            <option
-                                                key={option.value}
-                                                value={option.value}
-                                            >
-                                                {option.label}
-                                            </option>
-                                            ))}
-                                        </TextField>
-                                    </Grid>
+                                    {
 
-                                    <Grid item md={12} xs={12}>
-                                        <TextField  fullWidth  label="Descripción del examen" margin="dense"
-                                        name="description"  variant="outlined"
-                                        multiline rows={3} />
-                                    </Grid>
+                                    medicines.map( (currElement, index)  => (
+                                    <Grid  container>
+                                        <h4>Medicamento: { (index + 1 ) }</h4> <CancelIcon onClick={ () => { deleteMedicine(index)  } } ></CancelIcon>
+                                        <Grid item md={12} xs={12}>
+                                            <TextField  fullWidth name="product"
+                                            label="Principio activo a administrar" variant="outlined"  margin="dense"  />
+                                        </Grid>
+
+                                        <Grid item md={6} xs={6}>
+                                            <TextField  style={{width:"99%"}}
+                                            variant="outlined" name="presentation"  label="Presentación" select  
+                                            margin="dense" SelectProps={{ native: true }} >
+                                                <option className={classes.boldOption} >Selecciona</option>
+                                                {presentationTypes.map(option => (
+                                                    <option
+                                                        key={option}
+                                                        value={option}
+                                                    >
+                                                        {option}
+                                                    </option>
+                                                ))}
+                                            </TextField>
+                                        </Grid>
+
+                                        <Grid  item md={6} xs={6}>
+                                            <TextField style={{width:"99%"}} name="posology"  variant="outlined"  label="Posología"  margin="dense"  />
+                                        </Grid>
+
+                                        <Grid item md={6} xs={6}>
+                                            <TextField  style={{width:"99%"}} name="totalDose"  label="Dosis total" variant="outlined"  margin="dense"  />
+                                        </Grid>
+
+                                        <Grid item md={6} xs={6}>
+                                            <TextField  style={{width:"99%"}} name="administrationWay" label="Via" variant="outlined"  margin="dense" select  SelectProps={{ native: true }} >
+                                                <option className={classes.boldOption} >Selecciona</option>
+                                                {administrationWaysTypes.map(option => (
+                                                    <option
+                                                        key={option}
+                                                        value={option}
+                                                    >
+                                                        {option}
+                                                    </option>
+                                                ))}
+                                            </TextField>
+                                        </Grid>
+
+                                        <Grid item md={6} xs={6}>
+                                            <TextField  fullWidth name="duration" label="Frecuencia y duración" variant="outlined"  margin="dense"  />
+                                        </Grid> 
+
+                                        <Divider></Divider>            
                                     
-                                    <Grid container direction="row" justify="center" alignItems="center">
-                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                            <KeyboardDatePicker
-                                                name ="examDate"
-                                                margin="normal"
-                                                id="date-picker-dialog"
-                                                label="Fecha"
-                                                format="MM/dd/yyyy"                   
-                                                KeyboardButtonProps={{
-                                                    'aria-label': 'change date',
-                                                }}
-                                                
-                                            />              
-                                        </MuiPickersUtilsProvider>
-                                    </Grid>
+                                    </Grid>                                    
+                                    ))
+                                    
+                                    }
 
-                                    <Grid item md={12} xs={12}>
-                                        <TextField  fullWidth  label="Laboratorio" margin="dense"
-                                        name="laboratory"  variant="outlined"
-                                    />
-                                    </Grid>
 
-                                    <Grid item md={12} xs={12}>
-                                        <TextField  fullWidth  label="Dirección del laboratorio" margin="dense"
-                                        name="laboratoryAddress"  variant="outlined"
-                                    />
-                                    </Grid>
+                                   
                                     <Divider></Divider>
                                     <Grid container direction="row" justify="center" alignItems="center">
-                                        <Button color="primary" variant="contained" style={{marginTop:"10px"}} >
-                                            Guardar
+                                        <Button color="default" variant="contained" style={{marginTop:"10px",marginLeft:"5px"}} 
+                                            onClick={()=> addNewMedicament() }
+                                        > 
+                                            Añadir 
                                         </Button>
                                     </Grid>                                
 
@@ -214,90 +266,11 @@ const PetsModal = props => {
                         </ExpansionPanel>
                         </Grid>
                         
-                        <Grid item md={12} xs={12}>
-                        <ExpansionPanel>  
-                            <ExpansionPanelSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel1a-content"
-                            id="panel1a-header"
-                            >
-                            <Typography className={classes.heading}>Incluir plan terapeutico</Typography>
-                            </ExpansionPanelSummary>
-                            <ExpansionPanelDetails>
-
-                                <Grid  container>
-                                    <Grid item md={12} xs={12}>
-                                        <TextField
-                                            fullWidth label="Tipo de plan"
-                                            margin="dense" name="typeOfExam"
-                                            required
-                                            select                                   
-                                            variant="outlined"
-                                            SelectProps={{ native: true }}
-                                        >
-                                            {planTypes.map(option => (
-                                            <option
-                                                key={option.value}
-                                                value={option.value}
-                                            >
-                                                {option.label}
-                                            </option>
-                                            ))}
-                                        </TextField>
-                                    </Grid>
-
-                                    <Grid item md={12} xs={12}>
-                                        <Button color="success" fullWidth variant="contained" style={{marginTop:"10px"}}
-                                            onClick={ () => {
-                                                openMedicinesModal()
-                                            }}
-                                        >
-                                            Seleccionar medicamento
-                                        </Button> 
-                                        <Typography style={{ textAlign:"center" }} variant="button" >
-                                            { props.selectedProduct ? "Producto seleccionado : "+props.selectedProduct.name : null }
-                                        </Typography>                                   
-                                    </Grid>
-
-                                    <Grid item md={12} xs={12}>
-                                        <TextField  fullWidth  label="Posología" margin="dense"
-                                        name="laboratory"  variant="outlined"
-                                    />
-                                    </Grid>
-
-                                    <Grid item md={12} xs={12}>
-                                        <TextField  fullWidth  label="Dosis total" margin="dense"
-                                        name="laboratory"  variant="outlined"
-                                    />
-                                    </Grid>
-
-                                    <Grid item md={12} xs={12}>
-                                        <TextField  fullWidth  label="Frecuencia y duración" margin="dense"
-                                        name="laboratory"  variant="outlined"
-                                    />
-                                    </Grid>
-
-                                    <Divider></Divider>
-                                    <Grid container direction="row" justify="center" alignItems="center">
-                                        <Button color="primary" variant="contained" style={{marginTop:"10px"}} >
-                                            Guardar
-                                        </Button>
-                                    </Grid> 
-
-                                </Grid>
-                                              
-                            </ExpansionPanelDetails>
-                        </ExpansionPanel>
-                        </Grid>
+                     
 
                         <Grid item md={12} xs={12}>
                             <TextField  fullWidth  label="Resultados y o conclusiones de la consulta" margin="dense"
-                                onChange={(event)=>{
-                                    setAppointment({
-                                        ...appointment,
-                                        "ResultsForConsultation":event.target.value   
-                                    })
-                                }}
+                                onChange={(event)=>{ handleChange(event , null)  }}  
                                 name="ResultsForConsultation"  variant="outlined"
                                 multiline rows={3} />          
                         </Grid>
@@ -372,4 +345,4 @@ const PetsModal = props => {
 };
 
 
-export default PetsModal;
+export default PatientsModal;

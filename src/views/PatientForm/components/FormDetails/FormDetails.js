@@ -48,19 +48,29 @@ const FormDetails = props => {
 
   };
 
+  const [cities, setCities ] = useState([]);
+
+  const [typesId, setTypesId ] = useState([]);
+
   useEffect(() => {
     
-    /*const getStratus = async () => {
-      const response = await api.getData("patientStratus") 
+    const getCityTypes = async () => {
+      const response = await api.getData("cityTypes") 
+      setCities(response.data)
+    }
+
+    getCityTypes() 
+
+    const getDocumentsTypes = async () => {
+      const response = await api.getData("contactDocumentType") 
 
       let arrayData = [{label:"",value:""}]
       console.log(response.data)
       response.data.forEach( data => arrayData.push({label:data,value:data}) )
-      setPatientStratus(arrayData) 
+      setTypesId(arrayData)
     }
 
-    getStratus()*/
-
+    getDocumentsTypes() 
   
 
   },[]);
@@ -77,30 +87,37 @@ const FormDetails = props => {
 
         return  errors[0]
         
-      case "color":
+      case "lastName":
 
         errors[1] = value.length > 0 && value.length < 3 ?
           "El color debe tener mas de tres digitos" : false       
 
         return  errors[1]
       
-      case "age":
+      case "address":
 
-        errors[2] = value.length > 0 && value.length < 1 ?
-          "La edad debe tener información" : false       
+        errors[2] = value.length > 0 && ( value.length < 7 || !value.match(/\w*[a-zA-Z]\w*/) ) ?
+          "La dirección debe tener al menos un número y una letra y por lo menos 7 digitos" : false
 
         return  errors[2]
 
-      case "description":
+      case "phone":
 
-        errors[3] = value.length > 0 && value.length < 10 ?
-          "La descripción debe tener mas de 10 dígitos":false
-        
-          return  errors[3]
+        errors[3] = value.length > 0 && (value.length > 10 || value.length < 7)   ?
+        "El número telefónico debe tener entre 7 a 10 dígitos":false
+      
+        return  errors[3]
+
+      case "phone2":
+
+        errors[4] = value.length > 0 && (value.length > 10 || value.length < 7)   ?
+        "El número telefónico debe tener entre 7 a 10 dígitos":false
+      
+        return  errors[4]
 
 
       default:
-        return true
+        return false
     } 
   }
 
@@ -119,7 +136,7 @@ const FormDetails = props => {
         noValidate
       >
         <CardHeader
-          subheader="Ingresar la información de la  mascota"
+          subheader="Ingresar la información del paciente"
           title="Paciente"
         />
         <Divider />
@@ -138,28 +155,46 @@ const FormDetails = props => {
                 required
                 value={props.patientDetails.name}
                 variant="outlined"
+                disabled={ mode === "watch" } 
               />
             </Grid>
 
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                label="Especie"
+                helperText={rules("lastName",props.patientDetails.lastName)}
+                error = {rules("lastName",props.patientDetails.lastName)}            
+                label="Apellidos"
                 margin="dense"
-                name="species"
+                name="lastName"
+                onChange={handleChange}
+                required
+                value={props.patientDetails.lastName}
+                variant="outlined"
+                disabled={ mode === "watch" }
+              />
+            </Grid>
+
+            <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                label="Ciudad"
+                margin="dense"
+                name="city"
                 onChange={handleChange}
                 required
                 select
                 // eslint-disable-next-line react/jsx-sort-props
                 SelectProps={{ native: true }}
-                InputLabelProps={{ shrink: !!props.patientDetails.species }}
-                value={props.patientDetails.species}  
+                InputLabelProps={{ shrink: !!props.patientDetails.city }}
+                value={props.patientDetails.city}  
                 variant="outlined"
+                disabled={ mode === "watch" }
               >
                 <option></option>
-                {props.species.map(option => (
+                {cities.map(option => (
                   <option
-                    key={option.name}
+                    key={option._id}
                     value={option._id}
                   >
                     {option.name}
@@ -171,93 +206,70 @@ const FormDetails = props => {
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                label="Raza"
+                helperText={rules("address",props.patientDetails.address)}
+                error = {rules("address",props.patientDetails.address)}
+                label="Dirección"
                 margin="dense"
-                name="breed"
+                name="address"
                 onChange={handleChange}
                 required
-                select
-                // eslint-disable-next-line react/jsx-sort-props
-                SelectProps={{ native: true }}
-                InputLabelProps={{ shrink: !!props.patientDetails.breed }}
-                value={props.patientDetails.breed}  
+                value={props.patientDetails.address}
                 variant="outlined"
-              >
-                <option></option>
-                {props.breeds.filter( data => data.species === props.patientDetails.species ).map(option => (
-                  <option
-                    key={option.name}
-                    value={option._id}
-                  >
-                    {option.name}
-                  </option>
-                ))}
-                
-              </TextField>
+                disabled={ mode === "watch" }
+              />
             </Grid>
-
+            
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                helperText={rules("color",props.patientDetails.color)}
-                error = {rules("color",props.patientDetails.color)}            
-                label="Color"
+                helperText={rules("email",props.patientDetails.email)}
+                error = {rules("email",props.patientDetails.email)}
+                label="Correo electrónico"
                 margin="dense"
-                name="color"
+                name="email"
                 onChange={handleChange}
                 required
-                value={props.patientDetails.color}
+                value={props.patientDetails.email}
                 variant="outlined"
+                disabled={ mode === "watch" }
               />
             </Grid>
 
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                label="Sexo"
+                helperText={rules("phone",props.patientDetails.phone)}
+                error = {rules("phone",props.patientDetails.phone)}
+                label="Número de teléfono"
                 margin="dense"
-                name="sex"
+                name="phone"
                 onChange={handleChange}
+                type="number"
+                value={props.patientDetails.phone}
                 required
-                select
-                // eslint-disable-next-line react/jsx-sort-props
-                SelectProps={{ native: true }}
-                InputLabelProps={{ shrink: !!props.patientDetails.sex }}
-                value={props.patientDetails.sex}  
                 variant="outlined"
-              >
-                <option></option>
-                <option
-                    key={"Masculino"}
-                    value={"M"}
-                  >
-                    {"Masculino"}
-                </option>
-                <option
-                    key={"Femenino"}
-                    value={"F"}
-                  >
-                    {"Femenino"}
-                </option>
-                
-              </TextField>
+                disabled={ mode === "watch" }
+              />
             </Grid>
 
 
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                helperText={rules("age",props.patientDetails.age)}
-                error = {rules("age",props.patientDetails.age)}            
-                label="Edad"
+                helperText={rules("phone2",props.patientDetails.phone2)}
+                error = {rules("phone2",props.patientDetails.phone2)}
+                label="Número de teléfono 2"
                 margin="dense"
-                name="age"
+                name="phone2"
                 onChange={handleChange}
+                type="number"
+                value={props.patientDetails.phone2}
                 required
-                value={props.patientDetails.age}
                 variant="outlined"
+                disabled={ mode === "watch" }
               />
             </Grid>
+
             
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <Grid item md={6} xs={12} container justify="space-around">        
@@ -272,58 +284,87 @@ const FormDetails = props => {
                     KeyboardButtonProps={{
                       'aria-label': 'change date',
                     }}
+                    disabled={ mode === "watch" }
                 />
 
               </Grid>
             </MuiPickersUtilsProvider>
 
-            <Grid item md={6} xs={12}>        
-              <TextField
-                  fullWidth
-                  helperText={rules("description",props.patientDetails.description)}
-                  error = {rules("description",props.patientDetails.description)}            
-                  label="Señales particulares"
-                  margin="dense"
-                  name="description"
-                  onChange={handleChange}
-                  value={props.patientDetails.description}
-                  variant="outlined"
-                  multiline
-                  rows={3}
-                />
-            </Grid>
-
-
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                label="Procedencia"
+                label="Tipo de identificación"
                 margin="dense"
-                name="origin"
+                name="typeId"
                 onChange={handleChange}
                 required
                 select
                 // eslint-disable-next-line react/jsx-sort-props
                 SelectProps={{ native: true }}
-                InputLabelProps={{ shrink: !!props.patientDetails.origin }}
-                value={props.patientDetails.origin}  
+                InputLabelProps={{ shrink: !!props.patientDetails.typeId }}
+                value={props.patientDetails.typeId}  
                 variant="outlined"
+                disabled={ mode === "watch" }
               >
-                <option></option>
-                <option
-                    key={"Urbana"}
-                    value={"urban"}
+                {typesId.map(option => (
+                  <option
+                    key={option.value}
+                    value={option.value}
                   >
-                    {"Urbana"}
-                </option>
-                <option
-                    key={"Rural"}
-                    value={"rural"}
-                  >
-                    {"Rural"}
-                </option>
-                
+                    {option.label}
+                  </option>
+                ))}
               </TextField>
+            </Grid>         
+
+            <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                helperText={rules("identification",props.patientDetails.identification)}
+                error = {rules("identification",props.patientDetails.identification)}
+                label="Número de identificación"
+                margin="dense"
+                name="identification"
+                onChange={handleChange}
+                type="number"
+                value={props.patientDetails.identification}
+                required
+                variant="outlined"
+                disabled={ mode === "watch" }
+              />
+          
+             </Grid>
+
+             <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                helperText={rules("ocupation",props.patientDetails.ocupation)}
+                error = {rules("ocupation",props.patientDetails.ocupation)}            
+                label="Ocupación"
+                margin="dense"
+                name="ocupation"
+                onChange={handleChange}
+                required
+                value={props.patientDetails.ocupation}
+                variant="outlined"
+                disabled={ mode === "watch" } 
+              />
+            </Grid>
+
+            <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                helperText={rules("stratus",props.patientDetails.stratus)}
+                error = {rules("stratus",props.patientDetails.stratus)}            
+                label="Estrato"
+                margin="dense"
+                name="stratus"
+                onChange={handleChange}
+                required
+                value={props.patientDetails.stratus}
+                variant="outlined"
+                disabled={ mode === "watch" }
+              />
             </Grid>
           
           </Grid>
@@ -334,6 +375,7 @@ const FormDetails = props => {
             color="primary"
             variant="contained"
             onClick={savePatient}
+            disabled={ mode === "watch" }
           >
             Guardar
           </Button>

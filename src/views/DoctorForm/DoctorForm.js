@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 const DoctorForm = props => {
   const classes = useStyles();
 
-  const mode = props.location.state.mode ? props.location.state.mode : "form" 
+  const mode = props.location.state?.mode ? props.location.state.mode : "form" 
 
   console.log("props doctor form",props.doctorsState.selectedDoctor)
 

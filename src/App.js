@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import './assets/scss/index.scss';
 import Loading from 'components/Loading'
+import { ConfirmProvider } from 'material-ui-confirm';
 
 import {
   SET_FETCHING,  
@@ -39,7 +40,9 @@ class App extends Component{
           <Loading/> 
           :  
           <Router history={browserHistory}>
-            <Routes />
+            <ConfirmProvider>
+              <Routes />
+            </ConfirmProvider>            
           </Router>
         }
       </ThemeProvider>    

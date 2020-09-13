@@ -39,7 +39,7 @@ const CustomRouterLink = forwardRef((props, ref) => (
   </div>
 ));*/
 
-const PetsToolbar = props => {
+const PatientsToolbar = props => {
   const { className, ...rest } = props;
 
   const classes = useStyles();
@@ -48,7 +48,7 @@ const PetsToolbar = props => {
 
   const addFilterText = event => {
     //console.log("filter text",event.target.value)
-    props.filteredPets(event.target.value)
+    props.filteredPatients(event.target.value)
   }
 
   return (
@@ -61,19 +61,19 @@ const PetsToolbar = props => {
 
         <Grid container>
           
-          <Button className={classes.importButton}  disabled={ props.selectedPet === null } 
+          <Button className={classes.importButton}  disabled={ props.selectedPatient === null } 
             onClick={props.medicalRecordsButton}>Historial medico</Button>
 
-          <Button className={classes.importButton}  disabled={ props.selectedPet === null } 
+          <Button className={classes.importButton}  disabled={ props.selectedPatient === null } 
             onClick={props.medicalAppointmentButton}>Cita</Button>
 
-          <Button className={classes.importButton}  disabled={ props.selectedPet === null } 
-            onClick={props.editButton}>Ver</Button>  
+          <Button className={classes.importButton}  disabled={ props.selectedPatient === null } 
+            onClick={props.watchButton}>Ver</Button>  
 
-          <Button className={classes.importButton}  disabled={ props.selectedPet === null } 
+          <Button className={classes.importButton}  disabled={ props.selectedPatient === null } 
             onClick={props.editButton}>Editar</Button>
           
-          <Button className={classes.exportButton} disabled={ props.selectedPet === null  } 
+          <Button className={classes.exportButton} disabled={ props.selectedPatient === null  } 
             onClick={props.deleteButton}>Inactivar</Button>
           
  
@@ -99,8 +99,8 @@ const PetsToolbar = props => {
   );
 };
 
-PetsToolbar.propTypes = {
+PatientsToolbar.propTypes = {
   className: PropTypes.string
 };
 
-export default PetsToolbar;
+export default PatientsToolbar;

@@ -22,6 +22,8 @@ import {
 
 import { getInitials } from 'helpers';
 
+import  PictureModal  from 'components/PictureModal'
+
 const useStyles = makeStyles(theme => ({
   root: {},
   content: {
@@ -51,7 +53,18 @@ const PatientsTable = props => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
 
+  const [openPm, setOpenPm] = useState(false);
 
+  const [picturePm, setPicturePm] = useState(null);
+
+  const openPictureModal = (picture) => {
+    setPicturePm(process.env.REACT_APP_SERVE_IMAGE+picture)
+    setOpenPm(true)
+  }
+
+  const closePictureModal = () => {
+    setOpenPm(false)
+  }
 
   const handleSelectOne = (event) => {    
     setSelectedPatient(event.target.value)
@@ -70,88 +83,92 @@ const PatientsTable = props => {
   };
 
   return (
-    <Card
-      {...rest}
-      className={clsx(classes.root, className)}
-    >
-      <CardContent className={classes.content}>
-        <PerfectScrollbar>
-          <div className={classes.inner}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell padding="checkbox">
-                  
-                  </TableCell>
-                  <TableCell>Nombre</TableCell>
-                  <TableCell>Apellido</TableCell>
-                  <TableCell>Dirección</TableCell>
-                  <TableCell>Estrato</TableCell>
-                  <TableCell>Ciudad</TableCell>
-                  <TableCell>Teléfono</TableCell>
-                  <TableCell>Ocupación</TableCell>
-                  <TableCell>Fecha de nacimiento</TableCell>
-                  <TableCell>Fecha de registro</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {patients.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(patient => (
-                  <TableRow
-                    className={classes.tableRow}
-                    hover
-                    key={patient.id}
-                    
-                  >
+    <div>
+      <PictureModal open={openPm}  picture={picturePm} handleClose={closePictureModal} ></PictureModal>
+      <Card
+        {...rest}
+        className={clsx(classes.root, className)}
+      >
+        <CardContent className={classes.content}>
+          <PerfectScrollbar>
+            <div className={classes.inner}>
+              <Table>
+                <TableHead>
+                  <TableRow>
                     <TableCell padding="checkbox">
-                      <Radio
-                        checked={selectedPatient === patient._id}
-                        color="primary"
-                        name="selectedPatient"
-                        onChange={handleSelectOne}
-                        value={patient._id}
-                      />
+                    
                     </TableCell>
-                    <TableCell>
-                      <div className={classes.nameContainer}>
-                        <Avatar
-                          className={classes.avatar}
-                          src={  process.env.REACT_APP_SERVE_IMAGE + patient.picture}
-                        >
-                          {getInitials(patient.name)}
-                        </Avatar>
-                        <Typography variant="body1">{patient.name}</Typography>
-                      </div>
-                    </TableCell>
-                    <TableCell>{ patient.lastName }</TableCell>
-                    <TableCell>{ patient.address }</TableCell>
-                    <TableCell>{ patient.stratus }</TableCell>
-                    <TableCell>{ patient.city }</TableCell>
-                    <TableCell>{ patient.phone }</TableCell>
-                    <TableCell>{ patient.ocupation }</TableCell>
-                    <TableCell>{ patient.birthDate }</TableCell>
-                    <TableCell>
-                      {/* moment(patient.date).format('DD/MM/YYYY') */}
-                      { patient.date.split(" ")[0] }
-                    </TableCell>
+                    <TableCell>Nombre</TableCell>
+                    <TableCell>Apellido</TableCell>
+                    <TableCell>Correo</TableCell>
+                    <TableCell>Dirección</TableCell>
+                    <TableCell>Estrato</TableCell>
+                    <TableCell>Ciudad</TableCell>
+                    <TableCell>Teléfono</TableCell>
+                    <TableCell>Fecha de nacimiento</TableCell>
+                    <TableCell>Fecha de registro</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </PerfectScrollbar>
-      </CardContent>
-      <CardActions className={classes.actions}>
-        <TablePagination
-          component="div"
-          count={patients.length}
-          onChangePage={handlePageChange}
-          onChangeRowsPerPage={handleRowsPerPageChange}
-          page={page}
-          rowsPerPage={rowsPerPage}
-          rowsPerPageOptions={[5, 10, 25]}
-        />
-      </CardActions>
-    </Card>
+                </TableHead>
+                <TableBody>
+                  {patients.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(patient => (
+                    <TableRow
+                      className={classes.tableRow}
+                      hover
+                      key={patient.id}
+                      
+                    >
+                      <TableCell padding="checkbox">
+                        <Radio
+                          checked={selectedPatient === patient._id}
+                          color="primary"
+                          name="selectedPatient"
+                          onChange={handleSelectOne}
+                          value={patient._id}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <div className={classes.nameContainer}>
+                          <Avatar
+                            onClick={()=>{ openPictureModal(patient.picture)  }}
+                            className={classes.avatar}
+                            src={  process.env.REACT_APP_SERVE_IMAGE + patient.picture}
+                          >
+                            {getInitials(patient.name)}
+                          </Avatar>
+                          <Typography variant="body1">{patient.name}</Typography>
+                        </div>
+                      </TableCell>
+                      <TableCell>{ patient.lastName }</TableCell>
+                      <TableCell>{ patient.email }</TableCell>
+                      <TableCell>{ patient.address }</TableCell>
+                      <TableCell>{ patient.stratus }</TableCell>
+                      <TableCell>{ patient.cityDetails[0]?.name }</TableCell>
+                      <TableCell>{ patient.phone }</TableCell>
+                      <TableCell>{ patient.birthDate.split("T")[0] }</TableCell>
+                      <TableCell>
+                        {/* moment(patient.date).format('DD/MM/YYYY') */}
+                        { patient.date.split(" ")[0] }
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </PerfectScrollbar>
+        </CardContent>
+        <CardActions className={classes.actions}>
+          <TablePagination
+            component="div"
+            count={patients.length}
+            onChangePage={handlePageChange}
+            onChangeRowsPerPage={handleRowsPerPageChange}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            rowsPerPageOptions={[5, 10, 25]}
+          />
+        </CardActions>
+      </Card>
+    </div>   
   );
 };
 

@@ -117,6 +117,8 @@ import {
         return api.getData("patients/"+id)
         .then(( response ) => {
 
+          console.log("response.data",response.data)
+
           dispatch(selectPatient(response.data));
           
           if(cb) { cb(true,false) }

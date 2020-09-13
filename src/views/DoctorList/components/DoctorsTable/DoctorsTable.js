@@ -106,6 +106,7 @@ const DoctorsTable = props => {
                     <TableCell>Correo</TableCell>                  
                     <TableCell>Telefóno</TableCell>
                     <TableCell>Telefóno 2</TableCell>
+                    <TableCell>Ciudad</TableCell>
                     <TableCell>Estado</TableCell>
                     <TableCell>Tipo ID</TableCell>
                     <TableCell>Identificación</TableCell>
@@ -142,12 +143,13 @@ const DoctorsTable = props => {
                         </div>
                       </TableCell>
                       <TableCell>{ doctor.lastName }</TableCell>
-                      <TableCell>{doctor.email}</TableCell>
+                      <TableCell>{ doctor.email }</TableCell>
                       <TableCell>{ doctor.phone }</TableCell>
                       <TableCell>{ doctor.phone2 }</TableCell>
-                      <TableCell>{doctor.state}</TableCell>
+                      <TableCell>{ doctor.cityDetails[0]?.name }</TableCell>
+                      <TableCell>{ doctor.state }</TableCell>
                       <TableCell>{ doctor.typeId }</TableCell>                    
-                      <TableCell>{doctor.identification}</TableCell>                    
+                      <TableCell>{ doctor.identification }</TableCell>                    
                       <TableCell>
                         {/* moment(doctor.date).format('DD/MM/YYYY') */}
                         { doctor.date.split(" ")[0] }

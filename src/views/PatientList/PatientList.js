@@ -5,7 +5,7 @@ import 'date-fns';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 
-import { PatientsToolbar, PatientsTable,  PatientsMedicine } from './components';
+import { PatientsToolbar, PatientsTable,  PatientsMedicine, PatientsModal  } from './components';
 
 import { connect } from 'react-redux';
 
@@ -74,11 +74,11 @@ class PatientList extends Component{
     this.createButton = this.createButton.bind(this)
     this.editButton = this.editButton.bind(this)
     this.deleteButton = this.deleteButton.bind(this)
+    this.watchButton = this.watchButton.bind(this)
     this.filteredPatients = this.filteredPatients.bind(this)
     this.addSelectedPatient = this.addSelectedPatient.bind(this)
     this.medicalRecordsButton = this.medicalRecordsButton.bind(this)
     this.medicalAppointmentButton = this.medicalAppointmentButton.bind(this)
-    this.ownersButton = this.ownersButton.bind(this)
 
     this.handleOpen = this.handleOpen.bind(this)
     this.handleClose = this.handleClose.bind(this)
@@ -105,41 +105,59 @@ class PatientList extends Component{
   medicalRecordsButton(){
     console.log('medicalRecordsButton')
 
+    if( !this.state.selectedPatient.stratus || !this.state.selectedPatient.address || !this.state.selectedPatient.ocupation )
+    {
+      return Swal.fire("Espera","Para poder agendar una cita necesitas los datos de estrato, dirección y ocupación","warning")
+    }
+
     this.props.setCurrentPatient(this.state.selectedPatient._id)
     
     this.props.history.push({
       pathname: '/medicalRecords',
       state: { id: this.state.selectedPatient._id }
-    })
-
-    
+    })   
 
   }
 
   medicalAppointmentButton(){
-    console.log('medicalAppointmentButton')
+    console.log('medicalAppointmentButton',this.state.selectedPatient)
+    if( !this.state.selectedPatient.stratus || !this.state.selectedPatient.address || !this.state.selectedPatient.ocupation )
+    {
+      return Swal.fire("Espera","Para poder agendar una cita necesitas los datos de estrato, dirección y ocupación","warning")
+    }
+    
     this.handleOpen()
-  }
-
-  ownersButton(){
-    console.log('ownersButton')
-    this.handleOpen3()
   }
 
   createButton(){
     console.log("create Button");
-    this.props.getPatient(null)
-    this.props.history.push('/patients/form')
+    this.props.getPatient(null)    
+    this.props.history.push({pathname: '/patients/form',state: { mode: "form" }})
   }
 
   editButton(){
     console.log("edit Button");
     let self = this
     this.props.getPatient(this.state.selectedPatient._id,(success, error)=>{
+      //console.log("success",success)
       if(success)
       {
-        self.props.history.push('/patients/form')
+        self.props.history.push({pathname: '/patients/form',state: { mode: "form" }})
       }
+      
+    })
+  }
+
+  watchButton(){
+    console.log("watch Button");
+    let self = this
+    this.props.getPatient(this.state.selectedPatient._id,(success, error)=>{
+      //console.log("success",success)
+      if(success)
+      {
+        self.props.history.push({pathname: '/patients/form',state: { mode: "watch" }})
+      }
+      
     })
   }
 
@@ -251,6 +269,7 @@ class PatientList extends Component{
           selectedPatient={this.state.selectedPatient}  
           createButton={this.createButton} 
           editButton={this.editButton}
+          watchButton={this.watchButton}
           deleteButton={this.deleteButton}
           filteredPatients={this.filteredPatients} />
         <div className={classes.content}>
@@ -259,17 +278,12 @@ class PatientList extends Component{
           addSelectedPatient={this.addSelectedPatient} 
           patients={this.state.patients} />
         </div>
-        
+        <PatientsModal open={ this.state.open } handleClose={ this.handleClose } handleOpen={ this.handleOpen }  ></PatientsModal>
         {
           this.state.products ?  
             <PatientsMedicine  selectProduct={this.selectProduct}  products={this.state.products} open={this.state.open2} handleClose={this.handleClose2}  />:
           null
         }
-
-       
-        
-
-
 
       </div>
     );  

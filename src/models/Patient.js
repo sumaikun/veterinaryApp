@@ -3,21 +3,20 @@ export class Patient {
     this._id = null;
     this.name = '';
     this.lastName = '';
+    this.address = '';
     this.typeId = null;
     this.identification = '';
+    this.stratus = '';
     this.city = null;
-    this.birthDate = null;
-    this.address = '';
-    this.email = '';
-    this.role = null;
-    this.state = null;
-    this.password = '';
     this.phone = '';
     this.phone2 = '';
+    this.ocupation = '';
+    this.birthDate = null;
+    this.password = '';
+    this.email = '';    
+    this.state = null;
     this.picture = '';
-    this.specialistType = '';
     this.confirmed = false
-    this.stratus = ''
     this.doctors = []
   }
 }

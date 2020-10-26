@@ -20,6 +20,8 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import mockData from './data';
 
+import moneyIcon from 'assets/branding/Clicalmedic/coin-money-2.png'
+
 const useStyles = makeStyles(() => ({
   root: {
     height: '100%'
@@ -64,7 +66,7 @@ const LatestProducts = props => {
                 <img
                   alt="Product"
                   className={classes.image}
-                  src={product.imageUrl}
+                  src={moneyIcon}
                 />
               </ListItemAvatar>
               <ListItemText

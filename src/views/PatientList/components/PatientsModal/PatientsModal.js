@@ -19,6 +19,8 @@ import { Modal, Backdrop, Fade,
     ExpansionPanelSummary,
     ExpansionPanelDetails
   } from '@material-ui/core'
+
+import Autocomplete from '@material-ui/lab/Autocomplete'; 
   
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
@@ -32,6 +34,9 @@ import Swal from 'sweetalert2'
 
 import { useConfirm } from 'material-ui-confirm';
 
+import moment from 'moment';
+
+import * as cie10 from 'cie10';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -53,6 +58,13 @@ const useStyles = makeStyles(theme => ({
   },
   boldOption: {
       fontWeight: 'bold'
+  },
+  notchedOutline: {
+    color:"white !important",
+    borderColor: "white !important"
+  },
+  floatingLabelFocusStyle: {
+    color: "white !important"
   }
 }));
 
@@ -60,9 +72,13 @@ const PatientsModal = props => {
 
   const confirm = useConfirm();
 
-  const {  open, handleClose, handleOpen, ...rest } = props;
+  const {  open, handleClose, handleOpen,  doctors, ...rest } = props;
+
+  console.log("props",props)
 
   const classes = useStyles();
+
+  const cie10Codes = cie10('array');
 
   const [ medicines , setMedicines ] = useState([
       {
@@ -74,6 +90,13 @@ const PatientsModal = props => {
         duration:null
       }
   ]) 
+
+  const [appointment, setAppointment] = useState({
+    ReasonForConsultation:"",
+    ResultsForConsultation:"",
+    medicines:[],
+    doctor:null
+  })
 
   const addNewMedicament = () => {
 
@@ -114,6 +137,39 @@ const PatientsModal = props => {
   const administrationWaysTypes = [ "Jarabes", "Gotas", "Capsulas", "Polvo", "Granulado", "Emulsión", "Bebible" ]
 
   const handleChange = ( event , key ) => {
+    //console.log(event.target.name, event.target.value, key)
+
+    if(key != null)
+    {
+        const copyArray = JSON.parse( JSON.stringify( medicines ) );
+
+        copyArray[ key ] = { ...copyArray[ key ] , [event.target.name]:event.target.value }
+
+        //console.log("copyArray",copyArray)
+
+        setMedicines([ ...copyArray ])
+
+
+    }else{
+        setAppointment({
+            ...appointment,
+            [event.target.name]:event.target.value
+        })
+    }
+
+  }
+
+  const AutoCompleteChange = (event, complete, name) => {
+
+    console.log("autocomplete changed",event,complete,name)
+    
+    /*if(values){
+      setValues({
+        ...values,
+        [name]: complete.value
+      });
+      //props.changeDetails(name,values.value)
+    }*/
 
   }
 
@@ -136,11 +192,74 @@ const PatientsModal = props => {
 
   //},[]); 
 
-  const [appointment, setAppointment] = useState({
-    ReasonForConsultation:"",
-    ResultsForConsultation:"",
-    medicines:[]
-  })
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleDialogOpen = () => {
+    setOpenDialog(true);
+  };
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+  };
+
+  const [ appointmentErrors , setAppointmentErrors ] = useState([])
+
+  const [ errorTitle , setErrorTitle ] = useState(null)
+
+  const saveAppointment = () => {
+
+      console.log("appintment",appointment)
+
+      console.log("medicines",medicines)
+
+      const copyArray = []
+
+      //setAppointmentErrors(["testing error"])
+
+      if( !appointment.ReasonForConsultation || appointment.ReasonForConsultation < 15 ){
+        copyArray.push("La razón de consulta debe tener por lo menos 15 carácteres")
+      }
+
+      if( !appointment.ResultsForConsultation || appointment.ReasonForConsultation < 15 ){
+        copyArray.push("El resultado de la consulta debe tener por lo menos 15 carácteres")
+      }
+
+      let medicinesValidation = false
+
+      medicines.forEach(  medicine => {
+          if( !medicine.product || !medicine.presentation || !medicine.posology || !medicine.totalDose || !medicine.administrationWay 
+            || medicine.duration ){
+
+                medicinesValidation = true
+
+          }
+
+          if( medicine.product && medicine.product.length < 5 || medicine.posology && medicine.posology.length < 5 || 
+            medicine.totalDose && medicine.totalDose.length < 5  )
+            {
+                medicinesValidation = true
+            }
+      })
+
+      if( medicinesValidation )
+      {
+        copyArray.push("Deben llenarse todos los campos de cada medicamento con valores validos (minimo 5 carácteres) ")
+      }
+
+      if( !appointment.doctor ){
+        copyArray.push("debes poner un doctor para asociar la cita")
+      }
+
+      if(copyArray.length > 0)
+      {
+        setErrorTitle("Espera no puedo guardar la cita")
+        setAppointmentErrors(  copyArray  )  
+        return handleDialogOpen()
+      }
+
+      
+      
+  }
 
 
   
@@ -159,22 +278,47 @@ const PatientsModal = props => {
                 </DialogContentText>
                 <Divider></Divider>
 
-                <ExpansionPanel>  
+                <ExpansionPanel style={{ backgroundColor:"#1b2458" }} >  
                     <ExpansionPanelSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                     >
-                    <Typography className={classes.heading}>Gestionar cita</Typography>
+                    <Typography  style={{ color:"white" }} className={classes.heading}>Gestionar cita</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                     <Divider></Divider>
                         <Grid  container spacing={3}>
 
                             <Grid item md={12} xs={12}>
-                                <TextField  fullWidth  label="Motivo de la consulta" margin="dense"
+                                <TextField  fullWidth  label="Anamnesis (Motivo de la consulta)" margin="dense"
+                                InputProps={{
+                                    classes: {
+                                        notchedOutline: classes.notchedOutline
+                                    },
+                                    style:{ color:"white"  }
+                                }}
+                                InputLabelProps={{
+                                    className: classes.floatingLabelFocusStyle,
+                                }}
                                 onChange={(event)=>{ handleChange(event , null)  }}    
                                 name="ReasonForConsultation"  variant="outlined"
+                                multiline rows={3} />
+                            </Grid>
+
+                            <Grid item md={12} xs={12}>
+                                <TextField  fullWidth  label="Analísis medico (del Motivo de la consulta)" margin="dense"
+                                InputProps={{
+                                    classes: {
+                                        notchedOutline: classes.notchedOutline
+                                    },
+                                    style:{ color:"white"  }
+                                }}
+                                InputLabelProps={{
+                                    className: classes.floatingLabelFocusStyle,
+                                }}
+                                onChange={(event)=>{ handleChange(event , null)  }}    
+                                name="medicalReasonForConsultation"  variant="outlined"
                                 multiline rows={3} />
                             </Grid>
                             
@@ -189,94 +333,173 @@ const PatientsModal = props => {
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                 
-                                <Grid  container>
-
-                                    {
-
-                                    medicines.map( (currElement, index)  => (
                                     <Grid  container>
-                                        <h4>Medicamento: { (index + 1 ) }</h4> <CancelIcon onClick={ () => { deleteMedicine(index)  } } ></CancelIcon>
-                                        <Grid item md={12} xs={12}>
-                                            <TextField  fullWidth name="product"
-                                            label="Principio activo a administrar" variant="outlined"  margin="dense"  />
+
+                                        {medicines.map( (currElement, index)  => (
+                                        <Grid  key={index} container>
+                                            <h4>Medicamento: { (index + 1 ) }</h4> 
+                                            <CancelIcon style={{ marginTop:"-3px" }}  onClick={ () => { deleteMedicine(index)  } } ></CancelIcon>
+                                            <Grid item md={12} xs={12}>
+                                                <TextField  fullWidth name="product"
+                                                onChange={(event)=>{ handleChange(event , index)  }}
+                                                label="Principio activo a administrar" variant="outlined"  margin="dense"  />
+                                            </Grid>
+
+                                            <Grid item md={6} xs={12}>
+                                                <TextField  style={{width:"99%"}} onChange={(event)=>{ handleChange(event , index)  }}
+                                                variant="outlined" name="presentation"  label="Presentación" select  
+                                                margin="dense" SelectProps={{ native: true }} >
+                                                    <option className={classes.boldOption} >Selecciona</option>
+                                                    {presentationTypes.map(option => (
+                                                        <option
+                                                            key={option}
+                                                            value={option}
+                                                        >
+                                                            {option}
+                                                        </option>
+                                                    ))}
+                                                </TextField>
+                                            </Grid>
+
+                                            <Grid  item md={6} xs={12}>
+                                                <TextField style={{width:"99%"}} name="posology"  variant="outlined"
+                                                onChange={(event)=>{ handleChange(event , index)  }}
+                                                label="Posología"  margin="dense"  />
+                                            </Grid>
+
+                                            <Grid item md={6} xs={12}>
+                                                <TextField style={{width:"99%"}} fullWidth name="duration" label="Frecuencia o duración" variant="outlined" 
+                                                onChange={(event)=>{ handleChange(event , null)  }} margin="dense"  />
+                                            </Grid> 
+
+                                            <Grid item md={6} xs={12}>
+                                                <TextField  style={{width:"99%"}} name="administrationWay" label="Via" variant="outlined"
+                                                onChange={(event)=>{ handleChange(event , index)  }}  margin="dense" select  SelectProps={{ native: true }} >
+                                                    <option className={classes.boldOption} >Selecciona</option>
+                                                    {administrationWaysTypes.map(option => (
+                                                        <option
+                                                            key={option}
+                                                            value={option}
+                                                        >
+                                                            {option}
+                                                        </option>
+                                                    ))}
+                                                </TextField>
+                                            </Grid>                                            
+
+                                            <Divider></Divider>            
+                                        
                                         </Grid>
 
-                                        <Grid item md={6} xs={6}>
-                                            <TextField  style={{width:"99%"}}
-                                            variant="outlined" name="presentation"  label="Presentación" select  
-                                            margin="dense" SelectProps={{ native: true }} >
-                                                <option className={classes.boldOption} >Selecciona</option>
-                                                {presentationTypes.map(option => (
-                                                    <option
-                                                        key={option}
-                                                        value={option}
-                                                    >
-                                                        {option}
-                                                    </option>
-                                                ))}
-                                            </TextField>
-                                        </Grid>
-
-                                        <Grid  item md={6} xs={6}>
-                                            <TextField style={{width:"99%"}} name="posology"  variant="outlined"  label="Posología"  margin="dense"  />
-                                        </Grid>
-
-                                        <Grid item md={6} xs={6}>
-                                            <TextField  style={{width:"99%"}} name="totalDose"  label="Dosis total" variant="outlined"  margin="dense"  />
-                                        </Grid>
-
-                                        <Grid item md={6} xs={6}>
-                                            <TextField  style={{width:"99%"}} name="administrationWay" label="Via" variant="outlined"  margin="dense" select  SelectProps={{ native: true }} >
-                                                <option className={classes.boldOption} >Selecciona</option>
-                                                {administrationWaysTypes.map(option => (
-                                                    <option
-                                                        key={option}
-                                                        value={option}
-                                                    >
-                                                        {option}
-                                                    </option>
-                                                ))}
-                                            </TextField>
-                                        </Grid>
-
-                                        <Grid item md={6} xs={6}>
-                                            <TextField  fullWidth name="duration" label="Frecuencia y duración" variant="outlined"  margin="dense"  />
-                                        </Grid> 
-
-                                        <Divider></Divider>            
+                                        ))}
                                     
-                                    </Grid>                                    
-                                    ))
-                                    
-                                    }
+                                        <Divider></Divider>
+                                        <Grid container direction="row" justify="center" alignItems="center">
+                                            <Button color="default" variant="contained" style={{marginTop:"10px",marginLeft:"5px"}} 
+                                                onClick={()=> addNewMedicament() }
+                                            > 
+                                                Añadir otro medicamento
+                                            </Button>
+                                        </Grid>                                
 
+                                    </Grid>
 
-                                   
-                                    <Divider></Divider>
-                                    <Grid container direction="row" justify="center" alignItems="center">
-                                        <Button color="default" variant="contained" style={{marginTop:"10px",marginLeft:"5px"}} 
-                                            onClick={()=> addNewMedicament() }
-                                        > 
-                                            Añadir 
-                                        </Button>
-                                    </Grid>                                
+                                </ExpansionPanelDetails>
+                            </ExpansionPanel>
+                        </Grid>
 
-                                </Grid>
-                            </ExpansionPanelDetails>
-                        </ExpansionPanel>
+                        <Grid item xs={12}>
+                            <Autocomplete
+                                id="combo-box-demo2"
+                                //searchText="example"
+                                options={cie10Codes}
+                                getOptionLabel={(option) => option.d }
+                                
+                                onChange={(event, values) => 
+                                {
+                                    setAppointment({
+                                        ...appointment,
+                                        diagnosticCode:values?.c || null
+                                    })
+                                }}
+                                renderInput={(params) => 
+                                    <TextField {...params} label="Diagnostico tecnico"
+                                        margin="dense"
+                                        InputProps={{
+                                            ...params.InputProps ,
+                                            classes: {
+                                                notchedOutline: classes.notchedOutline
+                                            },
+                                            style:{ color:"white"  }
+                                        }}                            
+                                        InputLabelProps={{
+                                            classes:{
+                                                root: classes.floatingLabelFocusStyle,
+                                                focused: classes.floatingLabelFocusStyle,
+                                            }                                    
+                                        }}                               
+                                        variant="outlined" />}                                
+                            />
                         </Grid>
                         
                      
 
                         <Grid item md={12} xs={12}>
-                            <TextField  fullWidth  label="Resultados y o conclusiones de la consulta" margin="dense"
+                            <TextField  fullWidth  label="Resultados o conclusiones de la consulta" margin="dense"
                                 onChange={(event)=>{ handleChange(event , null)  }}  
+                                InputProps={{
+                                    classes: {
+                                      notchedOutline: classes.notchedOutline
+                                    },
+                                    style:{ color:"white"  }
+                                }}
+                                InputLabelProps={{
+                                    classes:{
+                                        root: classes.floatingLabelFocusStyle,
+                                        focused: classes.floatingLabelFocusStyle,
+                                    }                                    
+                                }}
                                 name="ResultsForConsultation"  variant="outlined"
                                 multiline rows={3} />          
                         </Grid>
 
+                        <Grid item xs={12}>
+                            <Autocomplete
+                                id="combo-box-demo"
+                                //searchText="example"
+                                options={doctors}
+                                getOptionLabel={(option) => option.name +" "+option.lastName+", id: "+option.identification+" ,cel: "+option.phone }
+                                
+                                onChange={(event, values) => 
+                                {
+                                    //console.log(event,values)
+                                    setAppointment({
+                                        ...appointment,
+                                        doctor:values?.id || null
+                                    })
+                                }}
+                                renderInput={(params) => 
+                                    <TextField {...params} label="Médico"
+                                        margin="dense"
+                                        InputProps={{
+                                            ...params.InputProps ,
+                                            classes: {
+                                                notchedOutline: classes.notchedOutline
+                                            },
+                                            style:{ color:"white"  }
+                                        }}                            
+                                        InputLabelProps={{
+                                            classes:{
+                                                root: classes.floatingLabelFocusStyle,
+                                                focused: classes.floatingLabelFocusStyle,
+                                            }                                    
+                                        }}                               
+                                        variant="outlined" />}                                
+                            />
+                        </Grid>
+
                         <Grid  container direction="row" justify="center" alignItems="center">        
-                            <Button color="primary" variant="contained" style={{marginTop:"10px"}} >
+                            <Button color="primary" variant="contained" style={{marginTop:"10px"}} onClick={saveAppointment}    >
                                 Guardar detalles cita
                             </Button>
                         </Grid>
@@ -299,30 +522,44 @@ const PatientsModal = props => {
                 <ExpansionPanelDetails>
                     <Divider></Divider>
                     <Grid  container spacing={3}>
-                    <Grid item md={12} xs={12}>
-                        <TextField
-                        id="datetime-local"
-                        label="Proxima cita"
-                        type="datetime-local"
-                        defaultValue="2017-05-24T10:30"
-                        className={classes.textField}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        />
-                    </Grid>
-                    <Grid item md={12} xs={12}>
-                        <TextField  fullWidth  label="Información a tener en cuenta" margin="dense" name="description"  variant="outlined"
-                            multiline rows={3} />          
-                    </Grid>
-                    <Grid tem md={12} xs={12}>
-                        <Button fullWidth
-                        color="primary"
-                        variant="contained"                          
-                        >
-                        Guardar
-                        </Button>
-                    </Grid>
+                        <Grid item md={12} xs={12}>
+                            <TextField
+                            id="datetime-local"
+                            label="Proxima cita"
+                            type="datetime-local"
+                            defaultValue={ moment().toISOString() }
+                            className={classes.textField}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            />
+                        </Grid>
+                        <Grid item md={12} xs={12}>
+                            <TextField  fullWidth  label="Información a tener en cuenta" margin="dense" name="description"  variant="outlined"
+                                multiline rows={3} />          
+                        </Grid>
+                        <Grid item xs={12}>
+                                <Autocomplete
+                                    id="combo-box-demo"
+                                    //searchText="example"
+                                    options={doctors}
+                                    getOptionLabel={(option) => option.name +" "+option.lastName+",id:"+option.identification+",cel:"+option.phone }
+                                    //onChange={(event, values)=>AutoCompleteChange(event, values,"laboratory")}
+                                    renderInput={(params) => 
+                                        <TextField {...params} label="Médico"
+                                            margin="dense"                           
+                                            variant="outlined" />}                                
+                                        />
+                            </Grid>
+                        <Grid tem md={12} xs={12}>
+                            <Button fullWidth
+                            color="primary"
+                            variant="contained"
+                                                
+                            >
+                            Guardar
+                            </Button>
+                        </Grid>
                     </Grid>
                 </ExpansionPanelDetails>
                 </ExpansionPanel>        
@@ -339,6 +576,37 @@ const PatientsModal = props => {
                 </Button>       
             </DialogActions>
             </Dialog>
+
+
+
+
+            <Dialog
+                open={openDialog}
+                onClose={handleDialogClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{errorTitle}</DialogTitle>
+                <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                <ul>{
+
+                    appointmentErrors.map( aerror  => (
+                        
+                    <li>{ aerror }</li>
+                        
+                    ))
+                }</ul> 
+                </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                <Button onClick={handleDialogClose} color="primary" autoFocus>
+                    Ok
+                </Button>
+                </DialogActions>
+            </Dialog>
+
+
         </div>
       
     );

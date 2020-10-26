@@ -204,6 +204,15 @@ const SignIn = props => {
           >
             Ingresar
           </Button>
+
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"          
+          >
+            Face Login
+          </Button>
+
           <Grid container>
             <Grid item xs>
               { /*<Link href="#" variant="body2">

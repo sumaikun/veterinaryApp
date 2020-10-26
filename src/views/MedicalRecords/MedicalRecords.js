@@ -86,7 +86,7 @@ const MedicalRecords = props => {
 
   useEffect(() => {
 
-    let mounted = true;   
+    let mounted = false;   
 
     if(mounted)
     {
@@ -604,7 +604,7 @@ const MedicalRecords = props => {
        
       <div className={classes.root}>
         
-        <ExpansionPanel  >  
+        <ExpansionPanel defaultExpanded={true} >  
             <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
@@ -614,15 +614,11 @@ const MedicalRecords = props => {
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
 
-                {
-                  
-                  patientReview ?
+             
 
                   <PatientReview  patientReview={ patientReview }
                   saveOrUpdatePatientReview={saveOrUpdatePatientReview} /> :
-                  null
-
-                }                    
+                         
 
             </ExpansionPanelDetails>
         </ExpansionPanel>

@@ -11,6 +11,8 @@ import { connect } from 'react-redux';
 
 import { getPatients , getPatient } from 'actions/patients';
 
+import { getDoctors } from 'actions/doctors';
+
 import { getProducts  } from 'actions/products';
 
 import Swal from 'sweetalert2' 
@@ -62,6 +64,8 @@ class PatientList extends Component{
         selectedPatient:null,
       })
     })
+
+    this.props.getDoctors()
 
     /*this.props.getProducts((success,error)=>{
       this.setState({
@@ -278,7 +282,7 @@ class PatientList extends Component{
           addSelectedPatient={this.addSelectedPatient} 
           patients={this.state.patients} />
         </div>
-        <PatientsModal open={ this.state.open } handleClose={ this.handleClose } handleOpen={ this.handleOpen }  ></PatientsModal>
+        <PatientsModal open={ this.state.open } doctors={ this.props.doctorsState.doctors }  handleClose={ this.handleClose } handleOpen={ this.handleOpen }  ></PatientsModal>
         {
           this.state.products ?  
             <PatientsMedicine  selectProduct={this.selectProduct}  products={this.state.products} open={this.state.open2} handleClose={this.handleClose2}  />:
@@ -297,7 +301,7 @@ const mapStateToProps = state => {
     patientsState: state.patients,  
     appState: state.app,
     productsState: state.products,
-    contactsState: state.contacts,  
+    doctorsState: state.doctors,  
   };
 }
 
@@ -310,4 +314,5 @@ const componentDefinition =  withStyles(useStyles)(PatientList);
 export default  connect(mapStateToProps, { getPatients,
    getPatient,
    getProducts,
-   setCurrentPatient } )(componentDefinition);
+   setCurrentPatient,
+   getDoctors } )(componentDefinition);

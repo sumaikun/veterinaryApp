@@ -1,26 +1,15 @@
 import 'date-fns';
-import React, { useState  , useEffect  } from 'react';
-import clsx from 'clsx';
+import React, { useState  , useEffect, useRef  } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import {
   Divider,
   Typography,
   Grid,
-  FormControlLabel,
-  Checkbox,
   TextField,
-  RadioGroup,
-  Radio,
-  FormControl,
-  Button 
+  Button,
+  Switch
 } from '@material-ui/core';
-import {
-    MuiPickersUtilsProvider,
-    KeyboardDatePicker,
-  } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
-import moment from 'moment';
 import Swal from 'sweetalert2'
 
 
@@ -30,6 +19,40 @@ const useStyles = {
   flexDirection: 'row'}
 };
 
+
+const AntSwitch = withStyles((theme) => ({
+    root: {
+      width: 28,
+      height: 16,
+      padding: 0,
+      display: 'flex',
+    },
+    switchBase: {
+      padding: 2,
+      color: theme.palette.grey[500],
+      '&$checked': {
+        transform: 'translateX(12px)',
+        color: theme.palette.common.white,
+        '& + $track': {
+          opacity: 1,
+          backgroundColor: theme.palette.primary.main,
+          borderColor: theme.palette.primary.main,
+        },
+      },
+    },
+    thumb: {
+      width: 12,
+      height: 12,
+      boxShadow: 'none',
+    },
+    track: {
+      border: `1px solid ${theme.palette.grey[500]}`,
+      borderRadius: 16 / 2,
+      opacity: 1,
+      backgroundColor: theme.palette.common.white,
+    },
+    checked: {},
+  }))(Switch);
 
 
 const PatientReview = props => {
@@ -57,25 +80,29 @@ const PatientReview = props => {
 
   };
 
-  /*const [values, setValues] = useState({
-    pvcVaccine:false,
-    tripleVaccine:false,
-    rabiesVaccine:false,
-    pvcVaccineDate:null,
-    tripleVaccineDate:null,
-    rabiesVaccineDate:null,
-    rabiesVaccineDate:null,
-    desparasitationProduct:"",
-    lastDesparasitation:null,
-    feedingType:null,
-    reproductiveState:null,
-    habitat:null,
+  const [values, setValues] = useState({
+    havePreviousIllness:false,
     previousIllnesses:"",
+    haveSuegeris:false,
     surgeris:"",
+    haveToxicBackground:false,
     familyBackground:"",
-  })*/
+    haveToxicBackground:false,
+    toxicBackground:"",
+    haveAllergies:false,
+    allergies:"",
+    performPhysicalActivity:false,
+    immunizations:"",
+    haveChildBirths:false,
+    childBirdths:null,
+    haveChildAborts:false,
+    childAborts:null,
+    haveMenstruation:true,
+    femaleComments:"",
+    comments:""
+  })
 
-  const [values, setValues] = useState(props.patientReview)
+  //const [values, setValues] = useState(props.patientReview)
 
   const setData = (key , value) => {
     setValues({
@@ -100,12 +127,6 @@ const PatientReview = props => {
 
   const rules = (key,value) =>{
     switch(key){
-        case "desparasitationProduct":
-
-            errors[0] = value.length > 0 && value.length < 12 ?
-            "El producto de desparasitación debe tener mas de 12 carácteres" : false       
-
-        return  errors[0]
 
         case "previousIllnesses":
 
@@ -128,189 +149,79 @@ const PatientReview = props => {
 
             return  errors[3]
 
-        
+        case "toxicBackground":
 
+            errors[4] = value.length > 0 && value.length < 15 ?
+                "La información de antecedentes toxicos debe tener mas de 15 carácteres" : false       
+
+            return  errors[4]
+
+        case "allergies":
+
+            errors[5] = value.length > 0 && value.length < 15 ?
+                "La información de las alergias debe tener mas de 15 carácteres" : false       
+
+            return  errors[5]
+
+        case "immunizations":
+
+            errors[6] = value.length > 0 && value.length < 15 ?
+                "La información de las inmunización debe tener mas de 15 carácteres" : false       
+
+            return  errors[6] 
+        
+        case "femaleComments":
+
+            errors[7] = value.length > 0 && value.length < 15 ?
+                "La información adicional femenina debe tener mas de 15 carácteres" : false       
+
+            return  errors[7]         
+        
+        case "comments":
+
+            errors[8] = value.length > 0 && value.length < 15 ?
+                "Los comentarios o notas deben tener mas de 15 carácteres" : false       
+
+            return  errors[7]   
       default:
         return true
     } 
   }
 
+  const frmCompleteService = useRef();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Event: Form Submit');
+  };
+
   return (
-    <Grid container>
-        <Typography variant="subtitle2">Vacunación</Typography>
+    <form ref={frmCompleteService} onSubmit={handleSubmit}> 
+    <Grid container>          
+        
+        <Typography variant="subtitle2">Antecedentes</Typography>
+        
         <Grid lg={12} md={12} xs={12}>
             <Divider/>
-        </Grid>
+        </Grid>    
 
-        <Grid lg={6} md={6} xs={12}>
-            <FormControlLabel
-                    control={<Checkbox  name="pvcVaccine" />}
-                    label="PVC"
-                    onChange={handleChange}
-                    checked={values.pvcVaccine}
-            />
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <KeyboardDatePicker
-                    name="pvcVaccineDate"
-                    margin="normal"
-                    id="date-picker-dialog"
-                    label="Fecha pvc"
-                    format="MM/dd/yyyy"                   
-                    KeyboardButtonProps={{
-                        'aria-label': 'change date',
-                    }}
-                    onChange={(date)=>setData("pvcVaccineDate",moment(date).add('days', 1).format("YYYY-MM-DD"))}
-                    value={values.pvcVaccineDate}
-                    maxDate={moment()}
-                    disabled={!values.pvcVaccine}
-                />              
-            </MuiPickersUtilsProvider>
-        </Grid>
-
-        <Grid lg={6} md={6} xs={12}>
-            <FormControlLabel
-                    control={<Checkbox  name="tripleVaccine" />}
-                    label="TRIPLE"
-                    onChange={handleChange}
-                    checked={values.tripleVaccine}
-                />
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <KeyboardDatePicker
-                    name ="tripleVaccineDate"
-                    margin="normal"
-                    id="date-picker-dialog"
-                    label="Fecha triple"
-                    format="MM/dd/yyyy"                   
-                    KeyboardButtonProps={{
-                        'aria-label': 'change date',
-                    }}
-                    onChange={(date)=>setData("tripleVaccineDate",moment(date).add('days', 1).format("YYYY-MM-DD"))}
-                    value={values.tripleVaccineDate}
-                    maxDate={moment()}
-                    disabled={!values.tripleVaccine}
-                />              
-            </MuiPickersUtilsProvider>
-        </Grid>   
-                
-        <Grid lg={6} md={6} xs={12}>
-            <FormControlLabel
-                control={<Checkbox  name="rabiesVaccine" />}
-                label="RABIA"
-                onChange={handleChange}
-                checked={values.rabiesVaccine}
-            />
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <KeyboardDatePicker
-                    name="rabiesVaccineDate"
-                    margin="normal"
-                    id="date-picker-dialog"
-                    label="Fecha rabia"
-                    format="MM/dd/yyyy"                   
-                    KeyboardButtonProps={{
-                        'aria-label': 'change date',
-                    }}
-                    onChange={(date)=>setData("rabiesVaccineDate",moment(date).add('days', 1).format("YYYY-MM-DD"))}
-                    value={values.rabiesVaccineDate}
-                    maxDate={moment()}
-                    disabled={!values.rabiesVaccine}
-                />              
-            </MuiPickersUtilsProvider>
-        </Grid>     
-        <Grid lg={12} md={12} xs={12}>
-            <Typography variant="subtitle2">Ultima desparacitación</Typography>
-            <Divider/>
-        </Grid>
-        <Grid
-            container
-            direction="row"
-            justify="center"
-            alignItems="center"
-        >
-            <Grid lg={6} md={6} xs={6}>
-                <TextField
-                    fullWidth
-                    onChange={handleChange}
-                    label="Producto"
-                    margin="dense"
-                    name="desparasitationProduct"
-                    variant="outlined"
-                    value={ values.desparasitationProduct }
-                    helperText={rules("desparasitationProduct",values.desparasitationProduct)}
-                    error = {rules("desparasitationProduct",values.desparasitationProduct)}
-                />
-            </Grid>
-            <Grid lg={6} md={6} xs={6}>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <KeyboardDatePicker
-                        name="lastDesparasitation"
-                        style={{marginLeft:"25px"}}
-                        margin="normal"
-                        id="date-picker-dialog"
-                        label="Fecha"
-                        format="MM/dd/yyyy"                   
-                        KeyboardButtonProps={{
-                            'aria-label': 'change date',
-                        }}
-                        onChange={(date)=>setData("lastDesparasitation",moment(date).add('days', 1).format("YYYY-MM-DD"))}
-                        value={values.lastDesparasitation}
-                        maxDate={moment()}
-                        disabled={!values.desparasitationProduct}
-                    />              
-                </MuiPickersUtilsProvider>       
-            </Grid>            
-        </Grid>
-        
-        <Grid lg={12} md={12} xs={12}>
-            <Typography variant="subtitle2">Alimentación</Typography>
-            <Divider/>
-        </Grid>
-        
-        
-        <Grid  container direction="row" justify="center" alignItems="center">
-            <FormControl component="fieldset">
-                <RadioGroup style={screenWidth > 550 ? useStyles.horizontalGroup : null} 
-                 aria-label="feedingType" onChange={handleChange}
-                 value={ values.feedingType } name="feedingType" >
-                    
-                    <FormControlLabel value="Balanceada" control={<Radio />} 
-                    label="Balanceada"  />
-                    <FormControlLabel value="Casera" control={<Radio />}
-                    label="Casera"  />
-                    <FormControlLabel value="Mixta" control={<Radio />} 
-                    label="Mixta"  />
-                
-                </RadioGroup>
-            </FormControl>
-        </Grid>
-
-        <Grid lg={12} md={12} xs={12}>
-            <Typography variant="subtitle2">Estado reproductivo</Typography>
-            <Divider/>
-        </Grid>
-        
-        <Grid  container direction="row" justify="center" alignItems="center">
-            <FormControl component="fieldset">
-                <RadioGroup style={screenWidth > 550 ? useStyles.horizontalGroup : null}
-                value={ values.reproductiveState }  
-                aria-label="customerBenefit" name="reproductiveState" onChange={handleChange}>
-                    
-                    <FormControlLabel value="Castrado" control={<Radio />} 
-                    label="Castrado"  />
-                    <FormControlLabel value="Gestacion" control={<Radio />}
-                    label="Gestación"  />
-                    <FormControlLabel value="Entero" control={<Radio />} 
-                    label="Entero"  />
-                    <FormControlLabel value="Lactancia" control={<Radio />} 
-                    label="Lactancia"  />
-                
-                </RadioGroup>
-            </FormControl>
+        <Grid lg={12} md={12} xs={12}>            
+            <Typography component="div">
+                <span>¿ Ha tenido o tiene enfermedades cronicas o enfermedades que afectaron en gran medida su salud ? </span>
+                <Grid component="label" container alignItems="center" spacing={1}>
+                    <Grid item>No</Grid>
+                    <Grid item>
+                        <AntSwitch  onChange={handleChange}  checked={ values.havePreviousIllness }name="havePreviousIllness" />
+                    </Grid>
+                    <Grid item>Si</Grid>
+                </Grid>
+            </Typography>
         </Grid>
         
         <Grid lg={12} md={12} xs={12}>
             <TextField
                 fullWidth
-                label="Enfermedades Anteriores"
+                label="Antecedentes patológicos"
                 margin="dense"
                 name="previousIllnesses"
                 variant="outlined"
@@ -320,9 +231,23 @@ const PatientReview = props => {
                 value={ values.previousIllnesses }
                 helperText={rules("previousIllnesses",values.previousIllnesses)}
                 error = {rules("previousIllnesses",values.previousIllnesses)}
-                required
+                required = { values.havePreviousIllness }
+                disabled={!values.havePreviousIllness}
             />
         </Grid>
+
+        <Grid lg={12} md={12} xs={12}>            
+            <Typography component="div">
+                <Grid component="label" container alignItems="center" spacing={1}>
+                    <Grid item>¿ Ha tenido cirugias ? No</Grid>
+                    <Grid item>
+                        <AntSwitch  onChange={handleChange}  checked={ values.haveSuegeris }name="haveSuegeris" />
+                    </Grid>
+                    <Grid item>Si</Grid>
+                </Grid>
+            </Typography>
+        </Grid>
+        
 
         <Grid lg={12} md={12} xs={12}>
             <TextField
@@ -331,13 +256,75 @@ const PatientReview = props => {
                 margin="dense"
                 name="surgeris"
                 variant="outlined"
+                disabled={!values.haveSuegeris}
                 multiline
                 rows={3}
                 onChange={handleChange}
                 value={ values.surgeris }
                 helperText={rules("surgeris",values.surgeris)}
                 error = {rules("surgeris",values.surgeris)}
-                required
+                required = { values.haveSuegeris }
+            />
+        </Grid>
+
+        <Grid lg={12} md={12} xs={12}>            
+            <Typography component="div">
+                <span>¿ Ha tenido incidentes con sustancias tóxicas: medicamentos u otro tipo de compuesto ?</span>
+                <Grid component="label" container alignItems="center" spacing={1}>
+                    <Grid item>No</Grid>
+                    <Grid item>
+                        <AntSwitch  onChange={handleChange}   checked={ values.haveToxicBackground }name="haveToxicBackground" />
+                    </Grid>
+                    <Grid item>Si</Grid>
+                </Grid>
+            </Typography>
+        </Grid>
+        
+        <Grid lg={12} md={12} xs={12}>
+            <TextField
+                fullWidth
+                label="Antecedentes tóxicos"
+                margin="dense"
+                name="toxicBackground"
+                variant="outlined"
+                disabled={!values.haveToxicBackground}
+                multiline
+                rows={3}
+                onChange={handleChange}
+                value={ values.surgeris }
+                helperText={rules("toxicBackground",values.toxicBackground)}
+                error = {rules("toxicBackground",values.toxicBackground)}
+                required = { values.haveToxicBackground }
+            />
+        </Grid>
+
+        <Grid lg={12} md={12} xs={12}>            
+            <Typography component="div">
+                <Grid component="label" container alignItems="center" spacing={1}>
+                    <Grid item>¿Alergías? No</Grid>
+                    <Grid item>
+                        <AntSwitch  onChange={handleChange}  checked={ values.haveAllergies }name="haveAllergies" />
+                    </Grid>
+                    <Grid item>Si</Grid>
+                </Grid>
+            </Typography>
+        </Grid>
+        
+        <Grid lg={12} md={12} xs={12}>
+            <TextField
+                fullWidth
+                label="Alergías"
+                margin="dense"
+                name="allergies"
+                variant="outlined"
+                disabled={!values.allergies}
+                multiline
+                rows={3}
+                onChange={handleChange}
+                value={ values.allergies }
+                helperText={rules("allergies",values.allergies)}
+                error = {rules("allergies",values.allergies)}
+                required = { values.haveAllergies }
             />
         </Grid>
 
@@ -357,32 +344,136 @@ const PatientReview = props => {
                 required
             />
         </Grid>
+
+        <Grid lg={12} md={12} xs={12}>            
+            <Typography component="div">
+                <Grid component="label" container alignItems="center" spacing={1}>
+                    <Grid item>¿ realiza ejercicio ? No</Grid>
+                    <Grid item>
+                        <AntSwitch  onChange={handleChange}  checked={ values.haveSuegeris }name="haveSuegeris" />
+                    </Grid>
+                    <Grid item>Si</Grid>
+                </Grid>
+            </Typography>
+        </Grid>
+
+        <Grid lg={12} md={12} xs={12}>
+            <TextField
+                fullWidth
+                label="Inmunizaciones"
+                margin="dense"
+                name="immunizations"
+                variant="outlined"
+                multiline
+                rows={3}
+                onChange={handleChange}
+                value={ values.immunizations }
+                helperText={rules("immunizations",values.immunizations)}
+                error = {rules("immunizations",values.immunizations)}
+                required
+            />
+        </Grid>
+
+        <Grid lg={12} md={12} xs={12}>
+            <TextField
+                fullWidth
+                label="Notas o comentarios o info adicional (Ej: si toma un medicamento especial actualmente)"
+                margin="dense"
+                name="comments"
+                variant="outlined"
+                multiline
+                rows={3}
+                onChange={handleChange}
+                value={ values.comments }
+                helperText={rules("comments",values.comments)}
+                error = {rules("comments",values.comments)}
+                required
+            />
+        </Grid>
         
         <Grid lg={12} md={12} xs={12}>
-            <Typography variant="subtitle2">Habitat</Typography>
+            <Typography variant="subtitle2">Información femenina</Typography>
             <Divider/>
         </Grid>
-        
-        <Grid  container direction="row" justify="center" alignItems="center">
-            <FormControl component="fieldset">
-                <RadioGroup style={screenWidth > 550 ? useStyles.horizontalGroup : null}
-                onChange={handleChange} name="habitat" value={ values.habitat }
-                aria-label="habitat">
-                    
-                    <FormControlLabel value="Casa" control={<Radio />} 
-                    label="Casa" />
-                    <FormControlLabel value="Lote" control={<Radio />}
-                    label="Lote" />
-                    <FormControlLabel value="Finca" control={<Radio />} 
-                    label="Finca" />
-                    <FormControlLabel value="Taller" control={<Radio />} 
-                    label="Taller" />
-                    <FormControlLabel value="Apartamento" control={<Radio />} 
-                    label="Apartamento" />
-                
-                </RadioGroup>
-            </FormControl>
+
+        <Grid lg={6} md={6} xs={12}>                  
+            <Typography component="div">
+                <Grid component="label" container alignItems="center" spacing={1}>
+                    <Grid item>¿ Ha tenido partos ? No</Grid>
+                    <Grid item>
+                        <AntSwitch  onChange={handleChange}  checked={ values.haveChildBirths }name="haveChildBirths" />
+                    </Grid>
+                    <Grid item>Si</Grid>
+                </Grid>
+            </Typography>
+     
+            <TextField
+                fullWidth
+                label="Partos"
+                margin="dense"
+                name="childBirths"
+                variant="outlined"
+                type="number"
+                onChange={handleChange}
+                value={ values.childBirdths }
+                disabled={ !values.haveChildBirths }              
+                required = { values.haveChildBirths }
+                style={{width:"99%"}}
+            />
         </Grid>
+
+        <Grid lg={6} md={6} xs={12}>
+            <Typography component="div">
+                <Grid component="label" container alignItems="center" spacing={1}>
+                    <Grid item>¿ Ha tenido abortos ? No</Grid>
+                    <Grid item>
+                        <AntSwitch  onChange={handleChange}  checked={ values.haveChildAborts }name="haveChildAborts" />
+                    </Grid>
+                    <Grid item>Si</Grid>
+                </Grid>
+            </Typography>
+            <TextField
+                fullWidth
+                label="Abortos"
+                margin="dense"
+                name="childAborts"
+                variant="outlined"
+                type="number"
+                onChange={handleChange}
+                value={ values.childAborts }
+                disabled={ !values.haveChildAborts } 
+                required={ values.haveChildAborts }
+            />
+        </Grid>
+
+        <Grid lg={12} md={12} xs={12}>            
+            <Typography component="div">
+                <Grid component="label" container alignItems="center" spacing={1}>
+                    <Grid item>¿ su periodo sucede con normalidad ? No</Grid>
+                    <Grid item>
+                        <AntSwitch  onChange={handleChange}  checked={ values.haveMenstruation }name="haveMenstruation" />
+                    </Grid>
+                    <Grid item>Si</Grid>
+                </Grid>
+            </Typography>
+        </Grid>
+
+        <Grid lg={12} md={12} xs={12}>
+            <TextField
+                fullWidth
+                label="Información adicional ginecoobstetrica a tener en cuenta"
+                margin="dense"
+                name="femaleComments"
+                variant="outlined"
+                multiline
+                rows={3}
+                onChange={handleChange}
+                value={ values.femaleComments }
+                helperText={rules("femaleComments",values.femaleComments)}
+                error = {rules("femaleComments",values.femaleComments)}
+            />
+        </Grid>
+        
         
         <Grid lg={12} md={12} xs={12}>
             <Typography variant="subtitle2">Opciones</Typography>
@@ -390,10 +481,15 @@ const PatientReview = props => {
         </Grid>
         
         <Grid  container direction="row" justify="center" alignItems="center">        
-            <Button color="primary" variant="contained" style={{marginTop:"10px"}} 
-                onClick={()=>{
+            <Button type="submit" color="primary" variant="contained" style={{marginTop:"10px"}} 
+                onClick={(e)=>{
 
-                    console.info("values",values)
+                    //e.preventDefault();
+                    //const validation = frmCompleteService.current.submit();
+
+                    //console.info("validation",validation)
+
+                    /*console.info("values",values)
                     
                     console.log("errors",errors)
 
@@ -430,27 +526,14 @@ const PatientReview = props => {
                             props.saveOrUpdatePatientReview(values)
                         }
                         
-                    }
+                    }*/
                     
                 }}>
                 Guardar
             </Button>
         </Grid>
-        
-
-        <Grid lg={12} md={12} xs={12}>
-            <Typography variant="subtitle2">Dueños, encargados o responsables</Typography>
-            <Divider/>
-        </Grid>
-
-        <Grid  container direction="row" justify="center" alignItems="center">        
-            <Button color="primary" variant="contained" style={{marginTop:"10px"}} >
-                Asociar dueño
-            </Button>
-        </Grid>
-
-
     </Grid>  
+    </form> 
   );
 };
 

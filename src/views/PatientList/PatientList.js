@@ -282,12 +282,12 @@ class PatientList extends Component{
           addSelectedPatient={this.addSelectedPatient} 
           patients={this.state.patients} />
         </div>
-        <PatientsModal open={ this.state.open } doctors={ this.props.doctorsState.doctors }  handleClose={ this.handleClose } handleOpen={ this.handleOpen }  ></PatientsModal>
-        {
-          this.state.products ?  
-            <PatientsMedicine  selectProduct={this.selectProduct}  products={this.state.products} open={this.state.open2} handleClose={this.handleClose2}  />:
-          null
-        }
+        <PatientsModal open={ this.state.open }
+         auth={ this.props.authState }
+         doctors={ this.props.doctorsState.doctors }
+         handleClose={ this.handleClose }
+         handleOpen={ this.handleOpen }  ></PatientsModal>
+    
 
       </div>
     );  
@@ -301,7 +301,8 @@ const mapStateToProps = state => {
     patientsState: state.patients,  
     appState: state.app,
     productsState: state.products,
-    doctorsState: state.doctors,  
+    doctorsState: state.doctors,
+    authState: state.auth,   
   };
 }
 

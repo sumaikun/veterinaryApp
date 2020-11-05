@@ -47,7 +47,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+//specialistType --> identify Doctor
 
+//if has role is a system on 
 
 const Sidebar = props => {
   const { open, variant, onClose, className, ...rest } = props;
@@ -74,20 +76,26 @@ const Sidebar = props => {
    
   }
 
-
-
   let pages = [
     {
       title: 'Analítica',
       href: '/dashboard',
       icon: <DashboardIcon />
-    },
-    {
+    }
+  ] 
+
+  if(props.authState.user.role === "ADMIN")
+  {
+    pages.push({
       title: 'Usuarios',
       href: '/users',
       icon: <PeopleIcon />
-    },
-    {
+    })   
+  }
+
+  if(props.authState.user.role)
+  {
+    pages.push({
       title: 'Médicos',
       href: '/doctors',
       icon: <LocalHospitalIcon />
@@ -98,6 +106,42 @@ const Sidebar = props => {
       icon: <AccessibilityIcon />
     },
     {
+      title: 'Parametrización',
+      href: '/parameters',
+      icon: <Build />
+    })   
+  }
+
+  if(props.authState.user.specialistType)
+  {
+    pages.push(
+    {
+      title: 'Pacientes',
+      href: '/patients',
+      icon: <AccessibilityIcon />
+    }) 
+  }
+
+  if(!props.authState.user.role)
+  {
+    pages.push(
+      {
+        title: 'Agenda',
+        href: '/agenda',
+        icon: <Book />
+      },      
+      {
+        title: 'Configuración',
+        href: '/settings',
+        icon: <SettingsIcon />
+      }
+    )
+  }
+
+  /* let pages = [
+    
+    
+    {
       title: 'Productos',
       href: '/products',
       icon: <ShoppingBasketIcon />
@@ -106,11 +150,6 @@ const Sidebar = props => {
       title: 'Centros Médicos',
       href: '/medicalCenters',
       icon: <BusinessCenterIcon />
-    },
-    {
-      title: 'Parametrización',
-      href: '/parameters',
-      icon: <Build />
     },
     {
       title: 'Agenda',
@@ -127,10 +166,10 @@ const Sidebar = props => {
       title: 'Cerrar sesión',
       icon: <Lock/>
     }
-  ];
+  ];*/
 
 
-  if(props.authState.user.role === "developer")
+  if(props.authState.user.role === "DEVELOPER")
   {
     pages.push({
       title: 'Typography',
@@ -143,6 +182,13 @@ const Sidebar = props => {
       icon: <ImageIcon />
     })     
   }
+
+  pages.push({
+    action: logoutUserAction,
+    title: 'Cerrar sesión',
+    icon: <Lock/>
+  })     
+
 
   return (
     <Drawer

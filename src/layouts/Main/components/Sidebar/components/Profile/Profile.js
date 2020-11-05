@@ -26,12 +26,14 @@ const useStyles = makeStyles(theme => ({
 const Profile = props => {
   const { className, ...rest } = props;
 
+  console.log("props.authState",props.authState)
+
   const classes = useStyles();
 
   const user = {
-    name: props.authState.user.name,
+    name: props.authState.user.name + " " +props.authState.user.lastName,
     avatar: process.env.REACT_APP_SERVE_IMAGE+props.authState.user.picture,
-    bio: props.authState.user.role
+    bio: props.authState.user.role ?  props.authState.user.role : props.authState.user.specialistType ? "DOCTOR" : ""
   };
 
   return (

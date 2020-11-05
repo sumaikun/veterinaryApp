@@ -631,15 +631,11 @@ const MedicalRecords = props => {
             >
             <Typography className={classes.heading}>Constantes fisiológicas</Typography>
             </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-                
-              {
-                physiologicalConstant ?  
+            <ExpansionPanelDetails>                
+             
                 <PhysiologicalConstants  physiologicalConstant={ physiologicalConstant }
                 saveOrUpdatePhysiologicalConstant={saveOrUpdatePhysiologicalConstant} 
-                physiologicalConstants={physiologicalConstants} />:
-                null
-              }    
+                physiologicalConstants={physiologicalConstants} />
 
             </ExpansionPanelDetails>            
         </ExpansionPanel>

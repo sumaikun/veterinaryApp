@@ -83,9 +83,8 @@ const PatientReview = props => {
   const [values, setValues] = useState({
     havePreviousIllness:false,
     previousIllnesses:"",
-    haveSuegeris:false,
+    haveSurgeris:false,
     surgeris:"",
-    haveToxicBackground:false,
     familyBackground:"",
     haveToxicBackground:false,
     toxicBackground:"",
@@ -241,7 +240,7 @@ const PatientReview = props => {
                 <Grid component="label" container alignItems="center" spacing={1}>
                     <Grid item>¿ Ha tenido cirugias ? No</Grid>
                     <Grid item>
-                        <AntSwitch  onChange={handleChange}  checked={ values.haveSuegeris }name="haveSuegeris" />
+                        <AntSwitch  onChange={handleChange}  checked={ values.haveSurgeris }name="haveSurgeris" />
                     </Grid>
                     <Grid item>Si</Grid>
                 </Grid>
@@ -256,14 +255,14 @@ const PatientReview = props => {
                 margin="dense"
                 name="surgeris"
                 variant="outlined"
-                disabled={!values.haveSuegeris}
+                disabled={!values.haveSurgeris}
                 multiline
                 rows={3}
                 onChange={handleChange}
                 value={ values.surgeris }
                 helperText={rules("surgeris",values.surgeris)}
                 error = {rules("surgeris",values.surgeris)}
-                required = { values.haveSuegeris }
+                required = { values.haveSurgeris }
             />
         </Grid>
 
@@ -350,7 +349,7 @@ const PatientReview = props => {
                 <Grid component="label" container alignItems="center" spacing={1}>
                     <Grid item>¿ realiza ejercicio ? No</Grid>
                     <Grid item>
-                        <AntSwitch  onChange={handleChange}  checked={ values.haveSuegeris }name="haveSuegeris" />
+                        <AntSwitch  onChange={handleChange}  checked={ values.haveSurgeris }name="haveSurgeris" />
                     </Grid>
                     <Grid item>Si</Grid>
                 </Grid>

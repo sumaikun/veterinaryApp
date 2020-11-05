@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef  } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Modal, Backdrop, Fade,
     Card,
@@ -17,7 +17,8 @@ import { Modal, Backdrop, Fade,
     Typography,
     ExpansionPanel,
     ExpansionPanelSummary,
-    ExpansionPanelDetails
+    ExpansionPanelDetails,
+    Switch
   } from '@material-ui/core'
 
 import Autocomplete from '@material-ui/lab/Autocomplete'; 
@@ -37,6 +38,8 @@ import { useConfirm } from 'material-ui-confirm';
 import moment from 'moment';
 
 import * as cie10 from 'cie10';
+
+import { withStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -73,8 +76,6 @@ const PatientsModal = props => {
   const confirm = useConfirm();
 
   const {  open, handleClose, handleOpen,  doctors, ...rest } = props;
-
-  console.log("props",props)
 
   const classes = useStyles();
 
@@ -128,13 +129,47 @@ const PatientsModal = props => {
       .catch(() => { /* ... */ });
   };
 
+  const AntSwitch = withStyles((theme) => ({
+    root: {
+      width: 28,
+      height: 16,
+      padding: 0,
+      display: 'flex',
+    },
+    switchBase: {
+      padding: 2,
+      color: theme.palette.grey[500],
+      '&$checked': {
+        transform: 'translateX(12px)',
+        color: theme.palette.common.white,
+        '& + $track': {
+          opacity: 1,
+          backgroundColor: theme.palette.primary.main,
+          borderColor: theme.palette.primary.main,
+        },
+      },
+    },
+    thumb: {
+      width: 12,
+      height: 12,
+      boxShadow: 'none',
+    },
+    track: {
+      border: `1px solid ${theme.palette.grey[500]}`,
+      borderRadius: 16 / 2,
+      opacity: 1,
+      backgroundColor: theme.palette.common.white,
+    },
+    checked: {},
+  }))(Switch);
+
 
 
   //console.log("medicines",medicines)
 
   const presentationTypes = [ "Jarabes", "Gotas", "Capsulas", "Polvo", "Granulado", "Emulsión", "Bebible" ]
 
-  const administrationWaysTypes = [ "Jarabes", "Gotas", "Capsulas", "Polvo", "Granulado", "Emulsión", "Bebible" ]
+  const administrationWaysTypes = [ "Oral", "Intravenosa", "Intramuscular", "Subcutanea", "tópica", "inhalatoria" ]
 
   const handleChange = ( event , key ) => {
     //console.log(event.target.name, event.target.value, key)
@@ -208,9 +243,9 @@ const PatientsModal = props => {
 
   const saveAppointment = () => {
 
-      console.log("appintment",appointment)
+    console.log("appintment",appointment)
 
-      console.log("medicines",medicines)
+    console.log("medicines",medicines)   
 
       const copyArray = []
 
@@ -227,8 +262,7 @@ const PatientsModal = props => {
       let medicinesValidation = false
 
       medicines.forEach(  medicine => {
-          if( !medicine.product || !medicine.presentation || !medicine.posology || !medicine.totalDose || !medicine.administrationWay 
-            || medicine.duration ){
+          if( !medicine.product || !medicine.presentation || !medicine.posology || !medicine.administrationWay  ){
 
                 medicinesValidation = true
 
@@ -246,9 +280,19 @@ const PatientsModal = props => {
         copyArray.push("Deben llenarse todos los campos de cada medicamento con valores validos (minimo 5 carácteres) ")
       }
 
-      if( !appointment.doctor ){
-        copyArray.push("debes poner un doctor para asociar la cita")
+      if(props.auth?.user.role)
+      {
+        if( !appointment.doctor ){
+            copyArray.push("debes poner un doctor para asociar la cita")
+        }
       }
+      else{
+          if(props.auth?.user.specialistType)
+          {
+            appointment.doctor = props.auth?.user.id
+          }
+      }
+      
 
       if(copyArray.length > 0)
       {
@@ -257,9 +301,27 @@ const PatientsModal = props => {
         return handleDialogOpen()
       }
 
-      
+      console.log("appintment",appointment)
+
+      console.log("medicines",medicines)      
       
   }
+
+  const frmCompleteService = useRef();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Event: Form Submit');
+    saveAppointment()
+  };
+
+  const frmCompleteService2 = useRef();
+
+  const handleSubmit2 = (e) => {
+    e.preventDefault();
+    console.log('Event: Form Submit');
+  };
+
 
 
   
@@ -278,6 +340,7 @@ const PatientsModal = props => {
                 </DialogContentText>
                 <Divider></Divider>
 
+                { props.auth?.user.specialistType &&
                 <ExpansionPanel style={{ backgroundColor:"#1b2458" }} >  
                     <ExpansionPanelSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -287,11 +350,13 @@ const PatientsModal = props => {
                     <Typography  style={{ color:"white" }} className={classes.heading}>Gestionar cita</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
+                    <form ref={frmCompleteService} onSubmit={handleSubmit}> 
                     <Divider></Divider>
                         <Grid  container spacing={3}>
 
                             <Grid item md={12} xs={12}>
                                 <TextField  fullWidth  label="Anamnesis (Motivo de la consulta)" margin="dense"
+                                required
                                 InputProps={{
                                     classes: {
                                         notchedOutline: classes.notchedOutline
@@ -308,6 +373,7 @@ const PatientsModal = props => {
 
                             <Grid item md={12} xs={12}>
                                 <TextField  fullWidth  label="Analísis medico (del Motivo de la consulta)" margin="dense"
+                                required
                                 InputProps={{
                                     classes: {
                                         notchedOutline: classes.notchedOutline
@@ -322,7 +388,7 @@ const PatientsModal = props => {
                                 multiline rows={3} />
                             </Grid>
                             
-                            <Grid item md={12} xs={12}>
+                        <Grid item md={12} xs={12}>
                             <ExpansionPanel>  
                                 <ExpansionPanelSummary
                                 expandIcon={<ExpandMoreIcon />}
@@ -369,7 +435,7 @@ const PatientsModal = props => {
 
                                             <Grid item md={6} xs={12}>
                                                 <TextField style={{width:"99%"}} fullWidth name="duration" label="Frecuencia o duración" variant="outlined" 
-                                                onChange={(event)=>{ handleChange(event , null)  }} margin="dense"  />
+                                                onChange={(event)=>{ handleChange(event , index)  }} margin="dense"  />
                                             </Grid> 
 
                                             <Grid item md={6} xs={12}>
@@ -414,7 +480,7 @@ const PatientsModal = props => {
                                 //searchText="example"
                                 options={cie10Codes}
                                 getOptionLabel={(option) => option.d }
-                                
+                                required
                                 onChange={(event, values) => 
                                 {
                                     setAppointment({
@@ -444,8 +510,10 @@ const PatientsModal = props => {
                         
                      
 
-                        <Grid item md={12} xs={12}>
+                        <Grid item md={12} xs={12}>                        
+       
                             <TextField  fullWidth  label="Resultados o conclusiones de la consulta" margin="dense"
+                                required
                                 onChange={(event)=>{ handleChange(event , null)  }}  
                                 InputProps={{
                                     classes: {
@@ -463,52 +531,83 @@ const PatientsModal = props => {
                                 multiline rows={3} />          
                         </Grid>
 
-                        <Grid item xs={12}>
-                            <Autocomplete
-                                id="combo-box-demo"
-                                //searchText="example"
-                                options={doctors}
-                                getOptionLabel={(option) => option.name +" "+option.lastName+", id: "+option.identification+" ,cel: "+option.phone }
-                                
-                                onChange={(event, values) => 
-                                {
-                                    //console.log(event,values)
-                                    setAppointment({
-                                        ...appointment,
-                                        doctor:values?.id || null
-                                    })
-                                }}
-                                renderInput={(params) => 
-                                    <TextField {...params} label="Médico"
-                                        margin="dense"
-                                        InputProps={{
-                                            ...params.InputProps ,
-                                            classes: {
-                                                notchedOutline: classes.notchedOutline
-                                            },
-                                            style:{ color:"white"  }
-                                        }}                            
-                                        InputLabelProps={{
-                                            classes:{
-                                                root: classes.floatingLabelFocusStyle,
-                                                focused: classes.floatingLabelFocusStyle,
-                                            }                                    
-                                        }}                               
-                                        variant="outlined" />}                                
-                            />
+                        <Grid item md={12} xs={12}>
+
+                            <Typography component="div">
+                                    <Grid component="label" container alignItems="center" spacing={1}>
+                                        <Grid style={{color:"white"}} item>¿ Desea agendar un examen para esta cita ? No</Grid>
+                                        <Grid item>
+                                            <AntSwitch  onChange={(e)=>{
+                                                setAppointment({
+                                                    ...appointment,
+                                                    haveMedicalTest:e.target.checked
+                                                })
+                                            }} checked={ appointment.haveMedicalTest }  />
+                                        </Grid>
+                                        <Grid item>Si</Grid>
+                                    </Grid>
+                            </Typography>
+
                         </Grid>
 
+                        
+
+                        
+                        <Grid item md={12} xs={12}>
+                            <ExpansionPanel expanded={appointment.haveMedicalTest || false} disabled={!appointment.haveMedicalTest || false}>  
+                                <ExpansionPanelSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1a-content"
+                                id="panel1a-header"
+                                >
+                                <Typography className={classes.heading}>Agendar Examen o solicitar examen</Typography>
+                                </ExpansionPanelSummary>
+                                <ExpansionPanelDetails>
+                                
+                                    <Grid  container>
+
+                                    <Grid item md={12} xs={12}>
+                                        <TextField style={{width:"99%"}} name="testName"  variant="outlined"
+                                            required={appointment.haveMedicalTest} onChange={(event)=>{ handleChange(event , null)  }}
+                                            label="Nombre del examen"  margin="dense"  />
+                                    </Grid>
+
+                                    <Grid item md={6} xs={6}>
+                                        <TextField style={{width:"99%"}} name="laboratory"  variant="outlined"
+                                                required={appointment.haveMedicalTest} 
+                                                onChange={(event)=>{ handleChange(event , null)  }}
+                                                label="Laboratorio"  margin="dense"  />
+                                    </Grid>
+
+                                    <Grid item md={6} xs={6}>
+                                        <TextField style={{width:"99%"}} name="laboratoryAddress"  variant="outlined"
+                                                required={appointment.haveMedicalTest} 
+                                                onChange={(event)=>{ handleChange(event , null)  }}
+                                                label="Dirección"  margin="dense"  />
+                                    </Grid>
+                                    
+                                                                   
+
+                                    </Grid>
+
+                                </ExpansionPanelDetails>
+                            </ExpansionPanel>
+                        </Grid>
+
+                        
+
                         <Grid  container direction="row" justify="center" alignItems="center">        
-                            <Button color="primary" variant="contained" style={{marginTop:"10px"}} onClick={saveAppointment}    >
+                            <Button color="primary" type="submit"  variant="contained" style={{marginTop:"10px"}} >
                                 Guardar detalles cita
                             </Button>
                         </Grid>
                         
                     </Grid>
                     
-                
+                    </form>
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
+                }
 
                 
                 <ExpansionPanel>  
@@ -521,6 +620,7 @@ const PatientsModal = props => {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <Divider></Divider>
+                    <form ref={frmCompleteService2} onSubmit={handleSubmit2}> 
                     <Grid  container spacing={3}>
                         <Grid item md={12} xs={12}>
                             <TextField
@@ -538,6 +638,8 @@ const PatientsModal = props => {
                             <TextField  fullWidth  label="Información a tener en cuenta" margin="dense" name="description"  variant="outlined"
                                 multiline rows={3} />          
                         </Grid>
+                        
+                        { props.auth?.user.role &&
                         <Grid item xs={12}>
                                 <Autocomplete
                                     id="combo-box-demo"
@@ -550,7 +652,9 @@ const PatientsModal = props => {
                                             margin="dense"                           
                                             variant="outlined" />}                                
                                         />
-                            </Grid>
+                        </Grid>
+                        }
+
                         <Grid tem md={12} xs={12}>
                             <Button fullWidth
                             color="primary"
@@ -561,6 +665,7 @@ const PatientsModal = props => {
                             </Button>
                         </Grid>
                     </Grid>
+                    </form>
                 </ExpansionPanelDetails>
                 </ExpansionPanel>        
 

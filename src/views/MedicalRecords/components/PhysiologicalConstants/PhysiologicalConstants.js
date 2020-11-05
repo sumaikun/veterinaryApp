@@ -67,20 +67,16 @@ const PhysiologicalConstants = props => {
 
   };
 
-  /*const [values, setValues] = useState({
-    tlic:"",
-    heartRate:"",
-    respiratoryRate:"",
-    heartBeat:"",
-    temperature:"",
-    weight:"",
-    attitude:null,
-    bodyCondition:null,
+  const [values, setValues] = useState({
+    bloodPressure:null,
+    heartRate:null,
+    respiratoryRate:null,
+    oxygenStauration:null,
+    heartBeat:null,
+    temperature:null,
+    weight:null,
+    height:null,
     hidrationStatus:null,
-    conjuntivalMucosa:"",
-    oralMucosa:"",
-    vulvalMucosa:"",
-    rectalMucosa:"",
     physicalsEye:"",
     physicalsEars:"",
     physicalsLinfaticmodules:"",
@@ -92,9 +88,9 @@ const PhysiologicalConstants = props => {
     physicalsRespiratorysystem:"",
     physicalsDigestivesystem:"",
     physicalsGenitourinarysystem:""
-  })*/
+  })
 
-  const [values, setValues] = useState(props.physiologicalConstant)
+  //const [values, setValues] = useState(props.physiologicalConstant)
 
   //console.log("values",values)
 
@@ -110,75 +106,6 @@ const PhysiologicalConstants = props => {
 
   const rules = (key,value) =>{
     switch(key){
-        case "tlic":
-
-            errors[0] = value.length > 0 && value.length < 5 ?
-            "El T.LI.C debe tener mas de 5 carácteres" : false       
-
-        return  errors[0]
-
-        case "heartRate":
-
-            errors[1] = value.length > 0 && value.length < 5 ?
-                "La frecuencia cardiaca debe tener mas de 5 carácteres" : false       
-
-            return  errors[1]
-
-        case "respiratoryRate":
-
-            errors[2] = value.length > 0 && value.length < 5 ?
-                "La frecuencia respiratoria debe tener mas de 5 carácteres" : false       
-
-            return  errors[2]
-
-        case "heartBeat":
-
-            errors[3] = value.length > 0 && value.length < 5 ?
-                "La ritmo cardiaco debe tener mas de 5 carácteres" : false       
-
-            return  errors[3]
-
-        case "temperature":
-
-            errors[4] = value.length > 0 && value.length < 5 ?
-                "La temperatura debe tener mas de 5 carácteres" : false       
-
-            return  errors[4]
-
-        case "weight":
-
-            errors[5] = value.length > 0 && value.length < 5 ?
-                "El peso debe tener mas de 5 carácteres" : false       
-
-            return  errors[5]
-
-        case "conjuntivalMucosa":
-
-            errors[6] = value.length > 0 && value.length < 15 ?
-                "La mucosa conjuntival debe tener mas de 15 carácteres" : false       
-
-            return  errors[6]
-
-        case "oralMucosa":
-
-            errors[7] = value.length > 0 && value.length < 15 ?
-                "La mucosa oral debe tener mas de 15 carácteres" : false       
-
-            return  errors[7]
-
-        case "vulvalMucosa":
-
-            errors[8] = value.length > 0 && value.length < 15 ?
-                "La mucosa vulvar debe tener mas de 15 carácteres" : false       
-
-            return  errors[8]
-
-        case "rectalMucosa":
-
-            errors[9] = value.length > 0 && value.length < 15 ?
-                "La mucosa rectal debe tener mas de 15 carácteres" : false       
-
-            return  errors[9]
 
         case "physicalsEye":
 
@@ -272,26 +199,33 @@ const PhysiologicalConstants = props => {
             justify="center"
             alignItems="center"
         >
+            <Typography variant="subtitle2">Signos vitales</Typography>
+        
+            <Grid lg={12} md={12} xs={12}>
+                <Divider/>
+            </Grid>  
+
             <Grid lg={4} md={4} xs={12} >
                 <TextField  className={classes.paper}
                     fullWidth
-                    label="T.LI.C"
+                    label="Presión sanguinea"
                     margin="dense"
-                    name="tlic"
+                    name="bloodPressure"
                     variant="outlined"
                     InputLabelProps={{
                         className: classes.floatingLabelFocusStyle,
                     }}
                     onChange={handleChange}
-                    value={values.tlic}
-                    helperText={rules("tlic",values.tlic)}
-                    error = {rules("tlic",values.tlic)}
+                    value={values.bloodPressure}
+                    type="number"
+                    required
+                    min={0}
                 />
             </Grid>
             <Grid lg={4} md={4} xs={12} >
                 <TextField  className={classes.paper}
                     fullWidth
-                    label="F.C"
+                    label="Frecuencia cardiaca"
                     margin="dense"
                     name="heartRate"
                     variant="outlined"
@@ -300,14 +234,15 @@ const PhysiologicalConstants = props => {
                     }}
                     onChange={handleChange}
                     value={values.heartRate}
-                    helperText={rules("heartRate",values.heartRate)}
-                    error = {rules("heartRate",values.heartRate)}
+                    type="number"
+                    required
+                    min={0}
                 />
             </Grid>
             <Grid lg={4} md={4} xs={12} >
                 <TextField  className={classes.paper}
                     fullWidth
-                    label="F.R"
+                    label="Frecuencia respiratoria X minuto"
                     margin="dense"
                     name="respiratoryRate"
                     variant="outlined"
@@ -316,8 +251,9 @@ const PhysiologicalConstants = props => {
                     }}
                     onChange={handleChange}
                     value={values.respiratoryRate}
-                    helperText={rules("respiratoryRate",values.respiratoryRate)}
-                    error = {rules("respiratoryRate",values.respiratoryRate)}
+                    type="number"
+                    required
+                    min={0}
                 />
             </Grid>
         </Grid>
@@ -330,6 +266,24 @@ const PhysiologicalConstants = props => {
             <Grid lg={4} md={4} xs={12} >
                 <TextField  className={classes.paper}
                     fullWidth
+                    label="Saturación de oxigeno (SpO2)"
+                    margin="dense"
+                    name="oxigenSaturation"
+                    variant="outlined"
+                    InputLabelProps={{
+                        className: classes.floatingLabelFocusStyle,
+                    }}
+                    onChange={handleChange}
+                    value={values.oxigenSaturation}
+                    type="number"
+                    required
+                    min={0}
+                />
+            </Grid>
+
+            <Grid lg={4} md={4} xs={12} >
+                <TextField  className={classes.paper}
+                    fullWidth
                     label="PULSO"
                     margin="dense"
                     name="heartBeat"
@@ -339,14 +293,16 @@ const PhysiologicalConstants = props => {
                     }}
                     onChange={handleChange}
                     value={values.heartBeat}
-                    helperText={rules("heartBeat",values.heartBeat)}
-                    error = {rules("heartBeat",values.heartBeat)}
+                    type="number"
+                    required
+                    min={0}
                 />
             </Grid>
+
             <Grid lg={4} md={4} xs={12} >
                 <TextField  className={classes.paper}
                     fullWidth
-                    label="TEMPERATURA"
+                    label="TEMPERATURA (grados centigrados)"
                     margin="dense"
                     name="temperature"
                     variant="outlined"
@@ -355,10 +311,20 @@ const PhysiologicalConstants = props => {
                     }}
                     onChange={handleChange}
                     value={values.temperature}
-                    helperText={rules("temperature",values.temperature)}
-                    error = {rules("temperature",values.temperature)}
+                    type="number"
+                    required
+                    min={0}
                 />
             </Grid>
+    
+        </Grid>
+        <Grid
+            container
+            direction="row"
+            justify="center"
+            alignItems="center"
+        >            
+           
             <Grid lg={4} md={4} xs={12} >
                 <TextField  className={classes.paper}
                     fullWidth
@@ -371,52 +337,46 @@ const PhysiologicalConstants = props => {
                     }}
                     onChange={handleChange}
                     value={values.weight}
-                    helperText={rules("weight",values.weight)}
-                    error = {rules("weight",values.weight)}
+                    type="number"
+                    required
+                    min={0}
+                />
+            </Grid>
+
+            <Grid lg={4} md={4} xs={12} >
+                <TextField  className={classes.paper}
+                    fullWidth
+                    label="ALTURA"
+                    margin="dense"
+                    name="height"
+                    variant="outlined"
+                    InputLabelProps={{
+                        className: classes.floatingLabelFocusStyle,
+                    }}
+                    onChange={handleChange}
+                    value={values.temperature}
+                    type="number"
+                    required
+                    min={0}
+                />
+            </Grid>
+
+            <Grid lg={4} md={4} xs={12} >
+                <TextField  className={classes.paper}
+                    fullWidth
+                    label="INDICE DE MASA CORPORAL (IMC)"
+                    margin="dense"
+                    name="imc"
+                    variant="outlined"
+                    InputLabelProps={{
+                        className: classes.floatingLabelFocusStyle,
+                    }}
+                    value={ values.weight / ( values.height * values.height ) || 0  }
+                    readOnly={true}
                 />
             </Grid>
         </Grid>
-        <Typography variant="subtitle2">Actitud</Typography>
-        <Divider/> 
-        <Grid  container direction="row" justify="center" alignItems="center">
-            <FormControl component="fieldset">
-                <RadioGroup style={useStyles.horizontalGroup} 
-                name="attitude" onChange={handleChange} value={ values.attitude }
-                aria-label="attitude">
-                    
-                    <FormControlLabel value="Astenico" control={<Radio/>} 
-                    label="Asténico" />
-                    <FormControlLabel value="Apopletico" control={<Radio/>}
-                    label="Apoplético" />
-                    <FormControlLabel value="Linfatico" control={<Radio/>} 
-                    label="Linfático" />
-                
-                </RadioGroup>
-            </FormControl>
-        </Grid>
-        <Typography variant="subtitle2">Condición corporal</Typography>
-        <Divider/>
-        <Grid  container direction="row" justify="center" alignItems="center">
-            <FormControl component="fieldset">
-                <RadioGroup style={useStyles.horizontalGroup} 
-                     name="bodyCondition" onChange={handleChange}
-                     value={ values.bodyCondition }
-                    aria-label="bodyCondition">
-                    
-                    <FormControlLabel value="Caquetico" control={<Radio/>} 
-                    label="Caquético" />
-                    <FormControlLabel value="Delgado" control={<Radio/>}
-                    label="Delgado" />
-                    <FormControlLabel value="Normal" control={<Radio/>} 
-                    label="Normal" />
-                    <FormControlLabel value="Obeso" control={<Radio/>} 
-                    label="Obeso" />
-                    <FormControlLabel value="Sobrepeso" control={<Radio/>} 
-                    label="Sobrepeso" />
-                
-                </RadioGroup>
-            </FormControl>
-        </Grid>
+
         <Typography variant="subtitle2">Estado de hidratación</Typography>
         <Divider/>
         <Grid  container direction="row" justify="center" alignItems="center">
@@ -440,86 +400,8 @@ const PhysiologicalConstants = props => {
                 </RadioGroup>
             </FormControl>
         </Grid>
-        <Typography variant="subtitle2">Mucosas</Typography>
-        <Divider/>
 
-        <Grid lg={12} md={12} xs={12}>
-            <TextField
-                fullWidth
-                label="Mucosa Conjuntival"
-                margin="dense"
-                name="conjuntivalMucosa"
-                variant="outlined"
-                multiline
-                rows={3}
-                InputLabelProps={{
-                    className: classes.floatingLabelFocusStyle,
-                }}
-                onChange={handleChange}
-                value={values.conjuntivalMucosa}
-                helperText={rules("conjuntivalMucosa",values.conjuntivalMucosa)}
-                error = {rules("conjuntivalMucosa",values.conjuntivalMucosa)}
-            />
-        </Grid>
-
-        <Grid lg={12} md={12} xs={12}>
-            <TextField
-                fullWidth
-                label="Mucosa Oral"
-                margin="dense"
-                name="oralMucosa"
-                variant="outlined"
-                multiline
-                rows={3}
-                InputLabelProps={{
-                    className: classes.floatingLabelFocusStyle,
-                }}
-                onChange={handleChange}
-                value={values.oralMucosa}
-                helperText={rules("oralMucosa",values.oralMucosa)}
-                error = {rules("oralMucosa",values.oralMucosa)}
-            />
-        </Grid>
-
-        <Grid lg={12} md={12} xs={12}>
-            <TextField
-                fullWidth
-                label="Mucosa Vulvar/prepucial"
-                margin="dense"
-                name="vulvalMucosa"
-                variant="outlined"
-                multiline
-                rows={3}
-                InputLabelProps={{
-                    className: classes.floatingLabelFocusStyle,
-                }}
-                onChange={handleChange}
-                value={values.vulvalMucosa}
-                helperText={rules("vulvalMucosa",values.vulvalMucosa)}
-                error = {rules("vulvalMucosa",values.vulvalMucosa)}
-            />
-        </Grid>
-
-        <Grid lg={12} md={12} xs={12}>
-            <TextField
-                fullWidth
-                label="Mucosa Rectal"
-                margin="dense"
-                name="rectalMucosa"
-                variant="outlined"
-                multiline
-                rows={3}
-                InputLabelProps={{
-                    className: classes.floatingLabelFocusStyle,
-                }}
-                onChange={handleChange}
-                value={values.rectalMucosa}
-                helperText={rules("rectalMucosa",values.rectalMucosa)}
-                error = {rules("rectalMucosa",values.rectalMucosa)}
-            />
-        </Grid>
-
-        <Typography variant="subtitle2">Estado físico</Typography>            
+        <Typography variant="subtitle2">Estado físico (Solo comentar si hay algo anormal)</Typography>            
         <Divider/>
 
         <TextField

@@ -1,10 +1,6 @@
-import React, { useState, useEffect, useRef  } from 'react';
+import React, { useState, useCallback, useRef, useEffect  } from 'react';
 import { makeStyles } from '@material-ui/styles';
-import { Modal, Backdrop, Fade,
-    Card,
-    CardHeader,
-    CardContent,
-    CardActions,
+import {
     Divider,
     Grid, TextField,
     Dialog,
@@ -13,7 +9,6 @@ import { Modal, Backdrop, Fade,
     DialogContentText,
     DialogActions,
     Button,
-    Slide,
     Typography,
     ExpansionPanel,
     ExpansionPanelSummary,
@@ -27,11 +22,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import CancelIcon from '@material-ui/icons/Cancel';
 
-import  api  from 'middleware/api'
-
 import 'date-fns';
-
-import Swal from 'sweetalert2'
 
 import { useConfirm } from 'material-ui-confirm';
 
@@ -40,6 +31,8 @@ import moment from 'moment';
 import * as cie10 from 'cie10';
 
 import { withStyles } from '@material-ui/core/styles';
+
+import { debounce } from "lodash";
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -73,9 +66,43 @@ const useStyles = makeStyles(theme => ({
 
 const PatientsModal = props => {
 
+    const AntSwitch = withStyles((theme) => ({
+        root: {
+            width: 28,
+            height: 16,
+            padding: 0,
+            display: 'flex',
+        },
+        switchBase: {
+            padding: 2,
+            color: theme.palette.grey[500],
+            '&$checked': {
+            transform: 'translateX(12px)',
+            color: theme.palette.common.white,
+            '& + $track': {
+                opacity: 1,
+                backgroundColor: theme.palette.primary.main,
+                borderColor: theme.palette.primary.main,
+            },
+            },
+        },
+        thumb: {
+            width: 12,
+            height: 12,
+            boxShadow: 'none',
+        },
+        track: {
+            border: `1px solid ${theme.palette.grey[500]}`,
+            borderRadius: 16 / 2,
+            opacity: 1,
+            backgroundColor: theme.palette.common.white,
+        },
+        checked: {},
+        }))(Switch);
+
   const confirm = useConfirm();
 
-  const {  open, handleClose, handleOpen,  doctors, ...rest } = props;
+  const {  open, handleOpen,  doctors,  ...rest } = props;
 
   const classes = useStyles();
 
@@ -86,18 +113,109 @@ const PatientsModal = props => {
         product:null,
         presentation:null,
         posology:null,
-        totalDose:null,
         administrationWay:null,
         duration:null
       }
   ]) 
 
   const [appointment, setAppointment] = useState({
-    ReasonForConsultation:"",
-    ResultsForConsultation:"",
+    reasonForConsultation:"",
+    resultsForConsultation:"",
     medicines:[],
-    doctor:null
+    doctor:null,
+    haveMedicalTest:false,
+    _id:null
   })
+
+  const [avaliableCieCodes, setAvaliableCieCodes] = useState([])
+
+  const [ appointmentErrors , setAppointmentErrors ] = useState([])
+
+  const [ errorTitle , setErrorTitle ] = useState(null)
+
+  useEffect(() => {
+
+      if(props.patient)
+      {
+        props.getAppointmentsByPatientAndDate(props.patient._id,moment().format("Y-M-D"),
+            (success,error)=>{
+                if(success && success[0])
+                {
+                    console.log("day appointment",success[0])
+
+                    const searchCodeVlue = success[0].diagnosticCode
+
+                    const avaliableCodes =  searchCodeVlue.length > 0 ? cie10Codes.filter( option => option.c.toLowerCase().includes(searchCodeVlue.toLowerCase())  ) : [] 
+                    //console.log("avaliableCodes",avaliableCodes)    
+                    setAvaliableCieCodes(avaliableCodes)
+
+                    setAppointment({
+                        ...success[0]
+                    })
+
+                    props.getMedicinesByAppointment(success[0]._id,
+                        (success,error)=>{
+
+                            setMedicines(success)
+                        }
+                    )
+                }
+            }
+        )
+      }
+      
+  }, [props.patient])
+
+  /**  Dialogs for notifications */
+
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const [openDialog2, setOpenDialog2] = useState(false);
+
+  const handleDialogOpen = () => {
+    setOpenDialog(true);
+  };
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+  };
+
+  const handleDialogOpen2 = () => {
+    setOpenDialog2(true);
+  };
+
+  const handleDialogClose2 = () => {
+    setOpenDialog2(false);
+  };
+
+  /**  Dialogs for notifications */
+
+  const presentationTypes = [ "Jarabes", "Gotas", "Capsulas", "Polvo", "Granulado", "Emulsión", "Bebible" ]
+
+  const administrationWaysTypes = [ "Oral", "Intravenosa", "Intramuscular", "Subcutanea", "tópica", "inhalatoria" ]
+
+  const handleChange = ( event , key ) => {
+
+
+    if(key != null)
+    {
+        const copyArray = JSON.parse( JSON.stringify( medicines ) );
+
+        copyArray[ key ] = { ...copyArray[ key ] , [event.target.name]:event.target.value }
+
+        //console.log("copyArray",copyArray)
+
+        setMedicines([ ...copyArray ])
+
+
+    }else{
+        setAppointment({
+            ...appointment,
+            [event.target.name]:event.target.value
+        })
+    }
+
+  }
 
   const addNewMedicament = () => {
 
@@ -105,7 +223,6 @@ const PatientsModal = props => {
         product:null,
         presentation:null,
         posology:null,
-        totalDose:null,
         administrationWay:null,
         duration:null
     }])
@@ -129,118 +246,6 @@ const PatientsModal = props => {
       .catch(() => { /* ... */ });
   };
 
-  const AntSwitch = withStyles((theme) => ({
-    root: {
-      width: 28,
-      height: 16,
-      padding: 0,
-      display: 'flex',
-    },
-    switchBase: {
-      padding: 2,
-      color: theme.palette.grey[500],
-      '&$checked': {
-        transform: 'translateX(12px)',
-        color: theme.palette.common.white,
-        '& + $track': {
-          opacity: 1,
-          backgroundColor: theme.palette.primary.main,
-          borderColor: theme.palette.primary.main,
-        },
-      },
-    },
-    thumb: {
-      width: 12,
-      height: 12,
-      boxShadow: 'none',
-    },
-    track: {
-      border: `1px solid ${theme.palette.grey[500]}`,
-      borderRadius: 16 / 2,
-      opacity: 1,
-      backgroundColor: theme.palette.common.white,
-    },
-    checked: {},
-  }))(Switch);
-
-
-
-  //console.log("medicines",medicines)
-
-  const presentationTypes = [ "Jarabes", "Gotas", "Capsulas", "Polvo", "Granulado", "Emulsión", "Bebible" ]
-
-  const administrationWaysTypes = [ "Oral", "Intravenosa", "Intramuscular", "Subcutanea", "tópica", "inhalatoria" ]
-
-  const handleChange = ( event , key ) => {
-    //console.log(event.target.name, event.target.value, key)
-
-    if(key != null)
-    {
-        const copyArray = JSON.parse( JSON.stringify( medicines ) );
-
-        copyArray[ key ] = { ...copyArray[ key ] , [event.target.name]:event.target.value }
-
-        //console.log("copyArray",copyArray)
-
-        setMedicines([ ...copyArray ])
-
-
-    }else{
-        setAppointment({
-            ...appointment,
-            [event.target.name]:event.target.value
-        })
-    }
-
-  }
-
-  const AutoCompleteChange = (event, complete, name) => {
-
-    console.log("autocomplete changed",event,complete,name)
-    
-    /*if(values){
-      setValues({
-        ...values,
-        [name]: complete.value
-      });
-      //props.changeDetails(name,values.value)
-    }*/
-
-  }
-
-
-  //useEffect(() => {
-
- 
-    /*
-    const getPlanTypes = async () => {
-        const response = await api.getData("planTypes") 
-  
-        let arrayData = [{label:"",value:""}]
-        console.log(response.data)
-        response.data.forEach( data => arrayData.push({label:data.name,value:data._id}) )
-        setPlanTypes(arrayData) 
-  
-      }
-  
-    getPlanTypes()*/
-
-  //},[]); 
-
-  const [openDialog, setOpenDialog] = useState(false);
-
-  const handleDialogOpen = () => {
-    setOpenDialog(true);
-  };
-
-  const handleDialogClose = () => {
-    setOpenDialog(false);
-  };
-
-  const [ appointmentErrors , setAppointmentErrors ] = useState([])
-
-  const [ errorTitle , setErrorTitle ] = useState(null)
-
   const saveAppointment = () => {
 
     console.log("appintment",appointment)
@@ -251,11 +256,11 @@ const PatientsModal = props => {
 
       //setAppointmentErrors(["testing error"])
 
-      if( !appointment.ReasonForConsultation || appointment.ReasonForConsultation < 15 ){
+      if( !appointment.reasonForConsultation || appointment.reasonForConsultation < 15 ){
         copyArray.push("La razón de consulta debe tener por lo menos 15 carácteres")
       }
 
-      if( !appointment.ResultsForConsultation || appointment.ReasonForConsultation < 15 ){
+      if( !appointment.resultsForConsultation || appointment.resultsForConsultation < 15 ){
         copyArray.push("El resultado de la consulta debe tener por lo menos 15 carácteres")
       }
 
@@ -268,11 +273,6 @@ const PatientsModal = props => {
 
           }
 
-          if( medicine.product && medicine.product.length < 5 || medicine.posology && medicine.posology.length < 5 || 
-            medicine.totalDose && medicine.totalDose.length < 5  )
-            {
-                medicinesValidation = true
-            }
       })
 
       if( medicinesValidation )
@@ -301,9 +301,39 @@ const PatientsModal = props => {
         return handleDialogOpen()
       }
 
-      console.log("appintment",appointment)
+      //console.log("appintment",appointment)
 
-      console.log("medicines",medicines)      
+      //console.log("medicines",medicines)  
+      
+      props.saveAppointment({
+        patient:props.patient._id,
+        state:'DONE',
+        appointmentDate:moment().format("YYYY-MM-DD HH:mm:ss"),
+        ...appointment
+      },(success,error)=>{
+          if(success)
+          {                    
+            setAppointment({ ...appointment, _id:success.data.id })
+            medicines.map( medicine => {
+                props.saveMedicine({
+                    ...medicine,
+                    patient:props.patient._id,
+                    appointment:success.data.id
+                },(success,error)=>{
+                    console.log("medicines success",success)
+                })
+            })
+            //alert("cita guardada")
+
+            handleDialogOpen2(true)
+          }
+          if(error)
+          {
+            setErrorTitle("Espera no puedo guardar la cita")
+            setAppointmentErrors(  ["Sucedio un error con el servidor"]  )  
+            handleDialogOpen()
+          }
+      })
       
   }
 
@@ -322,7 +352,20 @@ const PatientsModal = props => {
     console.log('Event: Form Submit');
   };
 
+  //** filter helper for very huge array */
+  const handlerAutocompleteBox = useCallback(debounce( (event) => {
+      //console.log("something",event.target.value)
+      const searchVlue  = event.target.value
+      //console.log("cie10Codes",cie10Codes)
+      const avaliableCodes =  searchVlue.length > 0 ? cie10Codes.filter( option => option.d.toLowerCase().includes(searchVlue.toLowerCase())  ) : [] 
+      //console.log("avaliableCodes",avaliableCodes)    
+      setAvaliableCieCodes(avaliableCodes)
+  },1500), []);
 
+
+  const handleClose = () => {
+    props.handleClose()
+  }
 
   
     return (
@@ -367,7 +410,8 @@ const PatientsModal = props => {
                                     className: classes.floatingLabelFocusStyle,
                                 }}
                                 onChange={(event)=>{ handleChange(event , null)  }}    
-                                name="ReasonForConsultation"  variant="outlined"
+                                name="reasonForConsultation"  variant="outlined"
+                                value={  appointment.reasonForConsultation  }
                                 multiline rows={3} />
                             </Grid>
 
@@ -385,6 +429,7 @@ const PatientsModal = props => {
                                 }}
                                 onChange={(event)=>{ handleChange(event , null)  }}    
                                 name="medicalReasonForConsultation"  variant="outlined"
+                                value={  appointment.medicalReasonForConsultation  }
                                 multiline rows={3} />
                             </Grid>
                             
@@ -408,12 +453,15 @@ const PatientsModal = props => {
                                             <Grid item md={12} xs={12}>
                                                 <TextField  fullWidth name="product"
                                                 onChange={(event)=>{ handleChange(event , index)  }}
-                                                label="Principio activo a administrar" variant="outlined"  margin="dense"  />
+                                                label="Principio activo a administrar" variant="outlined"
+                                                value={ medicines[index].product }
+                                                margin="dense"  />
                                             </Grid>
 
                                             <Grid item md={6} xs={12}>
                                                 <TextField  style={{width:"99%"}} onChange={(event)=>{ handleChange(event , index)  }}
                                                 variant="outlined" name="presentation"  label="Presentación" select  
+                                                value={ medicines[index].presentation }
                                                 margin="dense" SelectProps={{ native: true }} >
                                                     <option className={classes.boldOption} >Selecciona</option>
                                                     {presentationTypes.map(option => (
@@ -430,17 +478,19 @@ const PatientsModal = props => {
                                             <Grid  item md={6} xs={12}>
                                                 <TextField style={{width:"99%"}} name="posology"  variant="outlined"
                                                 onChange={(event)=>{ handleChange(event , index)  }}
-                                                label="Posología"  margin="dense"  />
+                                                label="Posología"  margin="dense" value={ medicines[index].posology }  />
                                             </Grid>
 
                                             <Grid item md={6} xs={12}>
                                                 <TextField style={{width:"99%"}} fullWidth name="duration" label="Frecuencia o duración" variant="outlined" 
-                                                onChange={(event)=>{ handleChange(event , index)  }} margin="dense"  />
+                                                onChange={(event)=>{ handleChange(event , index)  }} margin="dense" value={ medicines[index].duration }  />
                                             </Grid> 
 
                                             <Grid item md={6} xs={12}>
                                                 <TextField  style={{width:"99%"}} name="administrationWay" label="Via" variant="outlined"
-                                                onChange={(event)=>{ handleChange(event , index)  }}  margin="dense" select  SelectProps={{ native: true }} >
+                                                onChange={(event)=>{ handleChange(event , index)  }}  
+                                                value={ medicines[index].administrationWay }
+                                                margin="dense" select  SelectProps={{ native: true }} >
                                                     <option className={classes.boldOption} >Selecciona</option>
                                                     {administrationWaysTypes.map(option => (
                                                         <option
@@ -478,18 +528,24 @@ const PatientsModal = props => {
                             <Autocomplete
                                 id="combo-box-demo2"
                                 //searchText="example"
-                                options={cie10Codes}
+                                options={avaliableCieCodes}
                                 getOptionLabel={(option) => option.d }
                                 required
                                 onChange={(event, values) => 
                                 {
+                                    console.log("event",event)
                                     setAppointment({
                                         ...appointment,
                                         diagnosticCode:values?.c || null
                                     })
-                                }}
+                                }}    
+                                value={ appointment.diagnosticCode ? avaliableCieCodes.filter( code => code.c === appointment.diagnosticCode )[0] : {} }                         
                                 renderInput={(params) => 
                                     <TextField {...params} label="Diagnostico tecnico"
+                                        onChange={ (event)=>{
+                                            event.persist()
+                                            handlerAutocompleteBox(event)                                   
+                                        }}
                                         margin="dense"
                                         InputProps={{
                                             ...params.InputProps ,
@@ -527,7 +583,8 @@ const PatientsModal = props => {
                                         focused: classes.floatingLabelFocusStyle,
                                     }                                    
                                 }}
-                                name="ResultsForConsultation"  variant="outlined"
+                                name="resultsForConsultation"  variant="outlined"
+                                value={  appointment.resultsForConsultation  }
                                 multiline rows={3} />          
                         </Grid>
 
@@ -707,6 +764,32 @@ const PatientsModal = props => {
                 <DialogActions>
                 <Button onClick={handleDialogClose} color="primary" autoFocus>
                     Ok
+                </Button>
+                </DialogActions>
+            </Dialog>
+
+
+            <Dialog
+                open={openDialog2}
+                onClose={handleDialogClose2}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{errorTitle}</DialogTitle>
+                <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                    <div>
+                        <h2>¡Datos registros!</h2>
+                        <span>¿Deseas enviar un correo al paciente con el diagnostico general y los medicamentos?</span>
+                    </div>
+                </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                <Button onClick={handleDialogClose2} color="primary" autoFocus>
+                    Enviar
+                </Button>
+                <Button onClick={handleDialogClose2} color="primary" autoFocus>
+                    Terminar
                 </Button>
                 </DialogActions>
             </Dialog>

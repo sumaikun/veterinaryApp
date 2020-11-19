@@ -6,7 +6,6 @@ import { Main as MainLayout, Minimal as MinimalLayout } from './layouts';
 
 import {
   Dashboard as DashboardView,
-  ProductList as ProductListView,
   UserList as UserListView,
   DoctorList as DoctorListView,  
   Typography as TypographyView,
@@ -18,7 +17,6 @@ import {
   NotFound as NotFoundView,
   UserForm as UserFormView,
   DoctorForm as DoctorFormView,
-  ProductForm as ProductFormView,
   PatientList as PatientListView,
   PatientForm as PatientFormView,
   Parameters as ParametersView,
@@ -70,20 +68,6 @@ const Routes = () => {
         layout={MainLayout}
         authenticated={true}
         path="/doctors/form"
-      />
-      <RouteWithLayout
-        component={ProductListView}
-        exact
-        layout={MainLayout}
-        authenticated={true}
-        path="/products"
-      />
-      <RouteWithLayout
-        component={ProductFormView}
-        exact
-        layout={MainLayout}
-        authenticated={true}
-        path="/products/form"
       />
       <RouteWithLayout
         component={PatientListView}

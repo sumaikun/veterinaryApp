@@ -6,7 +6,7 @@ import { FormFile, FormDetails } from './components';
 
 import { connect } from 'react-redux';
 
-import { saveProduct } from 'actions/products';
+import { saveProduct } from 'actions/medicines';
 
 import { uploadFileToServer, deleteFile } from 'actions/app'
 

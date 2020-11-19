@@ -11,8 +11,6 @@ import Swal from 'sweetalert2'
 import { PatientReview, PhysiologicalConstants, DiagnosticPlan,
   TherapeuticPlan, Appointments, Diseases, PatientFiles  } from './components'
 import 'date-fns';
-
-import { getProducts  } from 'actions/products';
 import { setCurrentPatient } from 'actions/app';
 import { getPatientReviewsByPatient, savePatientReview } from 'actions/patientReviews';
 import { getPhysiologicalConstantsByPatient, savePhysiologicalConstant } from 'actions/pyshiologicalConstants';
@@ -739,7 +737,6 @@ const mapStateToProps = state => {
 
 
 export default  connect(mapStateToProps, {
-  getProducts,
   setCurrentPatient,
   getPatientReviewsByPatient,
   getPhysiologicalConstantsByPatient,

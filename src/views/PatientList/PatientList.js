@@ -5,7 +5,7 @@ import 'date-fns';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 
-import { PatientsToolbar, PatientsTable,  PatientsMedicine, PatientsModal  } from './components';
+import { PatientsToolbar, PatientsTable, PatientsModal  } from './components';
 
 import { connect } from 'react-redux';
 
@@ -13,7 +13,9 @@ import { getPatients , getPatient } from 'actions/patients';
 
 import { getDoctors } from 'actions/doctors';
 
-import { getProducts  } from 'actions/products';
+import { saveAppointment, getAppointmentsByPatientAndDate } from 'actions/appointments'
+
+import { saveMedicine, getMedicinesByAppointment } from 'actions/medicines'
 
 import Swal from 'sweetalert2' 
 
@@ -124,7 +126,6 @@ class PatientList extends Component{
   }
 
   medicalAppointmentButton(){
-    console.log('medicalAppointmentButton',this.state.selectedPatient)
     if( !this.state.selectedPatient.stratus || !this.state.selectedPatient.address || !this.state.selectedPatient.ocupation )
     {
       return Swal.fire("Espera","Para poder agendar una cita necesitas los datos de estrato, dirección y ocupación","warning")
@@ -134,13 +135,11 @@ class PatientList extends Component{
   }
 
   createButton(){
-    console.log("create Button");
     this.props.getPatient(null)    
     this.props.history.push({pathname: '/patients/form',state: { mode: "form" }})
   }
 
   editButton(){
-    console.log("edit Button");
     let self = this
     this.props.getPatient(this.state.selectedPatient._id,(success, error)=>{
       //console.log("success",success)
@@ -153,7 +152,6 @@ class PatientList extends Component{
   }
 
   watchButton(){
-    console.log("watch Button");
     let self = this
     this.props.getPatient(this.state.selectedPatient._id,(success, error)=>{
       //console.log("success",success)
@@ -166,7 +164,6 @@ class PatientList extends Component{
   }
 
   deleteButton(){
-    console.log("delete Button");
   }
 
   handleOpen = () => {
@@ -283,12 +280,15 @@ class PatientList extends Component{
           patients={this.state.patients} />
         </div>
         <PatientsModal open={ this.state.open }
-         auth={ this.props.authState }
-         doctors={ this.props.doctorsState.doctors }
-         handleClose={ this.handleClose }
-         handleOpen={ this.handleOpen }  ></PatientsModal>
-    
-
+          auth={ this.props.authState }
+          doctors={ this.props.doctorsState.doctors }
+          handleClose={ this.handleClose }
+          handleOpen={ this.handleOpen }
+          saveAppointment={ this.props.saveAppointment }
+          saveMedicine={ this.props.saveMedicine }
+          getAppointmentsByPatientAndDate={ this.props.getAppointmentsByPatientAndDate }
+          getMedicinesByAppointment ={ this.props.getMedicinesByAppointment }
+         patient = { this.state.selectedPatient }  />
       </div>
     );  
   }
@@ -314,6 +314,9 @@ const componentDefinition =  withStyles(useStyles)(PatientList);
 
 export default  connect(mapStateToProps, { getPatients,
    getPatient,
-   getProducts,
    setCurrentPatient,
-   getDoctors } )(componentDefinition);
+   getDoctors,
+   saveAppointment,
+   saveMedicine,
+   getAppointmentsByPatientAndDate,
+   getMedicinesByAppointment } )(componentDefinition);

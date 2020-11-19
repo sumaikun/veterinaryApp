@@ -7,7 +7,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { ProductsToolbar, ProductCard } from './components';
 import { connect } from 'react-redux';
 
-import { getProducts , getProduct } from 'actions/products';
+import { getProducts , getProduct } from 'actions/medicines';
 
 const useStyles = theme => ({
   root: {

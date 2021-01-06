@@ -43,6 +43,7 @@ const DoctorForm = props => {
     typeId: props.doctorsState.selectedDoctor.typeId,
     identification: props.doctorsState.selectedDoctor.identification,
     picture: props.doctorsState.selectedDoctor.picture ? props.doctorsState.selectedDoctor.picture : null,
+    aboutDoctor: props.doctorsState.selectedDoctor.aboutDoctor,
     file: null
   });
 

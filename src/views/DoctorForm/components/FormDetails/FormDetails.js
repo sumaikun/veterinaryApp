@@ -11,11 +11,15 @@ import {
   Divider,
   Grid,
   Button,
-  TextField
+  TextField,
+  InputLabel,
+  Select,
+  Chip,
+  Input,
+  MenuItem
 } from '@material-ui/core';
 
 import  api  from '../../../../middleware/api'
-
 
 import {
   MuiPickersUtilsProvider,
@@ -27,11 +31,20 @@ import DateFnsUtils from '@date-io/date-fns';
 
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
+  chips: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  chip: {
+    margin: 2,
+  },
 }));
 
 const FormDetails = props => {
   const { className, mode, ...rest } = props;
+
+  console.log("form details props",props)
 
   const classes = useStyles();
 
@@ -43,7 +56,9 @@ const FormDetails = props => {
  
 
   const handleChange = event => {
-  
+    
+    console.log("event.target.name,event.target.value")
+
     props.changeDetails(event.target.name,event.target.value)
 
   };
@@ -54,6 +69,7 @@ const FormDetails = props => {
   const [cities, setCities ] = useState([]);
 
   const [specialistTypes, setSpecialistTypes ] = useState([]);
+
 
   useEffect(() => {
 
@@ -78,6 +94,7 @@ const FormDetails = props => {
     
     const getSpecialistTypes = async () => {
       const response = await api.getData("specialistTypes") 
+      console.log("response",response)
       setSpecialistTypes(response.data)
     }
 
@@ -143,6 +160,30 @@ const FormDetails = props => {
   const saveDoctor = () =>{
     props.submitData(errors)
   }
+
+  const names = [
+    'Oliver Hansen',
+    'Van Henry',
+    'April Tucker',
+    'Ralph Hubbard',
+    'Omar Alexander',
+    'Carlos Abbott',
+    'Miriam Wagner',
+    'Bradley Wilkerson',
+    'Virginia Andrews',
+    'Kelly Snyder',
+  ];
+
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
 
 
   return (
@@ -346,7 +387,7 @@ const FormDetails = props => {
               </Grid>
             </MuiPickersUtilsProvider>
 
-            <Grid item md={6} xs={12}>
+            {/*<Grid item md={6} xs={12}>
               <TextField
                 fullWidth
                 label="Tipo de especialización"
@@ -355,6 +396,7 @@ const FormDetails = props => {
                 onChange={handleChange}
                 required
                 select
+                multiple
                 // eslint-disable-next-line react/jsx-sort-props
                 SelectProps={{ native: true }}
                 InputLabelProps={{ shrink: !!props.doctorDetails.specialistType }}
@@ -372,7 +414,54 @@ const FormDetails = props => {
                   </option>
                 ))}
               </TextField>
+                </Grid>*/}
+
+            <Grid item md={6} xs={12}>
+              <InputLabel id="demo-mutiple-chip-label">Especializaciones</InputLabel>
+                <Select
+                  labelId="demo-mutiple-chip-label"
+                  id="demo-mutiple-chip"
+                  multiple
+                  name="specialistType"
+                  value={Array.isArray(props.doctorDetails.specialistType) && props.doctorDetails.specialistType || [] }  
+                  onChange={handleChange}
+                  input={<Input id="select-multiple-chip" />}
+                  renderValue={(selected) => (
+                    <div className={classes.chips}>
+                      {Array.isArray(selected) && selected?.map((value) => {
+                        console.log("selectedvalue",value)
+                        return(
+                        <Chip key={value} label={specialistTypes?.filter( type => type._id === value )[0]?.name || ""} className={classes.chip} />)
+                    })}
+                    </div>
+                  )}
+                  MenuProps={MenuProps}
+                  fullWidth
+                >
+                  { Array.isArray(specialistTypes) && specialistTypes.map((option) => (
+                    <MenuItem key={option._id} value={option._id}>
+                      {option.name}
+                    </MenuItem>
+                  ))}
+                </Select>
             </Grid>
+
+            <Grid item md={12} xs={12}>
+              <TextField  fullWidth  label="Acerca del medico (esta info estara en el lading page)" margin="dense"
+              required
+              InputProps={{
+                  classes: {
+                      notchedOutline: classes.notchedOutline
+                  }
+              }}
+              InputLabelProps={{
+                  className: classes.floatingLabelFocusStyle,
+              }}
+              onChange={handleChange}  
+              name="aboutDoctor"  variant="outlined"
+              value={  props.doctorDetails.aboutDoctor  }
+              multiline rows={3} />
+          </Grid>
             
           
           </Grid>

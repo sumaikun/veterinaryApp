@@ -141,3 +141,7 @@ export const ADD_AGENDA_ANNOTATION = "ADD_AGENDA_ANNOTATION";
 export const REMOVE_AGENDA_ANNOTATION = "REMOVE_AGENDA_ANNOTATION";
 
 export const SELECT_AGENDA_ANNOTATION = "SELECT_AGENDA_ANNOTATION";
+
+// ---------------- DoctorConfig types --------------------------------
+
+export const SET_DOCTOR_CONFIG = "SAVE_DOCTOR_CONFIG";

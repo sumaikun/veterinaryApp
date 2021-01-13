@@ -23,8 +23,6 @@ function receiveLogin(user,token) {
 
 export function loginUser(creds,cb = null) {
 
-  console.log("got in function");
-
   return dispatch => {
     // We dispatch requestLogin to kickoff the call to the API
     //console.log("got dispatch");

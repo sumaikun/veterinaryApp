@@ -26,8 +26,6 @@ const useStyles = makeStyles(theme => ({
 const Profile = props => {
   const { className, ...rest } = props;
 
-  console.log("props.authState",props.authState)
-
   const classes = useStyles();
 
   const user = {

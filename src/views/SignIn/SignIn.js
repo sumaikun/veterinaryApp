@@ -22,7 +22,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 import clicalPicture from 'assets/branding/Clicalmedic/svgClical2.svg'
 
-console.log("clicalPicture",clicalPicture)
+//console.log("clicalPicture",clicalPicture)
 
 const schema = {
   Username: {

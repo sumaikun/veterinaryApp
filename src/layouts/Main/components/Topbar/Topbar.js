@@ -9,14 +9,15 @@ import PetsIcon from '@material-ui/icons/Pets';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
 import Swal from 'sweetalert2'
-
 import { connect } from "react-redux"
-
 import { logoutUser } from "actions/auth"
+import dogPicture from 'assets/branding/logo.png'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    boxShadow: 'none'
+    boxShadow: 'none',
+    backgroundColor: "black",
+    height:100
   },
   flexGrow: {
     flexGrow: 1
@@ -57,16 +58,12 @@ const Topbar = props => {
   }
 
   return (
-    <AppBar
-     
+    <AppBar     
       className={clsx(classes.root, className)}
     >
       <Toolbar>
         <RouterLink to="/">
-          <IconButton color="white">
-            <PetsIcon style={{color:"white"}} />
-            <span style={{color:"white"}}>&nbsp;&nbsp;{"Sistema de gestión veterinaría"}</span>
-          </IconButton>
+          <img style={{width:"150px"}} src={dogPicture} alt="unDogtor Icon"></img>
         </RouterLink>
         <div className={classes.flexGrow} />
         <Hidden mdDown>

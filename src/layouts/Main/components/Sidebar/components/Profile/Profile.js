@@ -29,9 +29,9 @@ const Profile = props => {
   const classes = useStyles();
 
   const user = {
-    name: props.authState.user.name,
+    name: `${props.authState.user.name} ${props.authState.user.lastName || ''}`,
     avatar: process.env.REACT_APP_SERVE_IMAGE+props.authState.user.picture,
-    bio: props.authState.user.role
+    bio:  props.authState.user.role  || props.authState.userType == 2 &&  "DOCTOR" || props.authState.userType == 3 & "PATIENT"
   };
 
   return (

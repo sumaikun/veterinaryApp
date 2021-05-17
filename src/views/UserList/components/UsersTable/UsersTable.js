@@ -84,6 +84,7 @@ const UsersTable = props => {
                   
                   </TableCell>
                   <TableCell>Nombre</TableCell>
+                  <TableCell>Rol</TableCell>
                   <TableCell>Correo</TableCell>
                   <TableCell>Dirección</TableCell>
                   <TableCell>Telefóno</TableCell>
@@ -118,6 +119,7 @@ const UsersTable = props => {
                         <Typography variant="body1">{user.name}</Typography>
                       </div>
                     </TableCell>
+                    <TableCell>{user.role}</TableCell>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>
                       {user.address}
@@ -125,7 +127,7 @@ const UsersTable = props => {
                     <TableCell>{user.phone}</TableCell>
                     <TableCell>
                       {/* moment(user.date).format('DD/MM/YYYY') */}
-                      { user.date.split(" ")[0] }
+                      { user.date?.split(" ")[0] }
                     </TableCell>
                   </TableRow>
                 ))}

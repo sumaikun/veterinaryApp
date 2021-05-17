@@ -68,7 +68,7 @@ const PetsModal = props => {
 
       let arrayData = [{label:"",value:""}]
       console.log(response.data)
-      response.data.forEach( data => arrayData.push({label:data.name,value:data._id}) )
+      response.data &&  response.data.forEach( data => arrayData.push({label:data.name,value:data._id}) )
       setExamTypes(arrayData) 
 
     }
@@ -80,10 +80,10 @@ const PetsModal = props => {
   
         let arrayData = [{label:"",value:""}]
         console.log(response.data)
-        response.data.forEach( data => arrayData.push({label:data.name,value:data._id}) )
+        response.data && response.data.forEach( data => arrayData.push({label:data.name,value:data._id}) )
         setPlanTypes(arrayData) 
   
-      }
+    }
   
     getPlanTypes()
 

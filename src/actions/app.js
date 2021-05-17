@@ -36,64 +36,9 @@ export function deleteFile(file,cb){
     });
 }
 
-
-function setBreeds(breeds) {
-    return {
-      type: SET_BREEDS,   
-      payload:breeds
-    };
-}
-
-function setSpecies(species) {
-    return {
-      type: SET_SPECIES,   
-      payload:species
-    };
-}
-
 export function setCurrentPatient(patientId) {
   return {
     type: SET_CURRENT_PATIENT,   
     payload:patientId
   };
 }
-
-export function getBreeds(cb=null) {
-    
-    
-    return dispatch => {
-      return api.getData("breeds")
-        .then(( response ) => {
-
-          dispatch(setBreeds(response.data ? response.data : []));
-          
-          if(cb) { cb(true,false) }
-          
-        })
-        .catch(err => { console.log("Error: ", err)
-          
-          if(cb) { cb(false,true) }
-        
-      });
-    }
-}
-
-export function getSpecies(cb=null) {
-    
-    
-    return dispatch => {
-      return api.getData("species")
-        .then(( response ) => {
-
-          dispatch(setSpecies(response.data ? response.data : []));
-          
-          if(cb) { cb(true,false) }
-          
-        })
-        .catch(err => { console.log("Error: ", err)
-          
-          if(cb) { cb(false,true) }
-        
-      });
-    }
-  }

@@ -17,3 +17,8 @@ export { default as PetForm } from './PetForm';
 export { default as Parameters } from './Parameters';
 export { default as MedicalRecords } from './MedicalRecords';
 export { default as Agenda } from './Agenda';
+export { default as DoctorList } from './DoctorList'
+export { default as DoctorForm } from './DoctorForm'
+export { default as RecoverPassword } from './RecoverPassword'
+export { default as ConfirmAccount } from './ConfirmAccount'
+export { default as ForgotPassword } from './ForgotPassword'

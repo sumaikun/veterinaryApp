@@ -47,9 +47,9 @@ const useStyles = makeStyles(theme => ({
 const ParametersTable = props => {
   const { className, headers, columns, data, ...rest  } = props;
 
-   console.log("headers",headers) 
+   //console.log("headers",headers) 
 
-   console.log("data",data)
+   //console.log("data",data)
 
   const classes = useStyles();
 
@@ -59,30 +59,17 @@ const ParametersTable = props => {
 
 
   const handlePageChange = (event, page) => {
-    console.log("handle change",event,page)
+    //console.log("handle change",event,page)
     setPage(page);
   };
 
   const handleRowsPerPageChange = event => {
-    console.log("rows per page event")
+    //console.log("rows per page event")
     setRowsPerPage(event.target.value);
     setPage(0)
   };
 
-  const [species, setSpecies ] = useState([]);
-
-  useEffect(() => {
-
-    const getSpecies = async () => {
-
-      const response = await api.getData("species") 
-      
-      setSpecies(response.data) 
-    }
-
-    getSpecies()
-
-  },[]); 
+ 
 
   return (
     <Card
@@ -120,10 +107,8 @@ const ParametersTable = props => {
                             <Button onClick={ () => { props.editButton(data) } } >Editar</Button>
                             <Button onClick={ () => { props.deleteButton(data) } } >Eliminar</Button>
                           </div> :
-                          cell === 'date' ? data[cell].split(" ")[0]:
-                          cell === 'species' ? 
-                            species.filter( specie => specie._id === data[cell] )[0].name  :
-                          data[cell] }
+                          cell === 'date' ? data[cell].split(" ")[0]:data[cell]
+                          }
                         </TableCell>
                       )
                     )}                    

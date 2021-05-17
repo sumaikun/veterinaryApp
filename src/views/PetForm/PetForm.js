@@ -12,8 +12,6 @@ import { uploadFileToServer, deleteFile  } from 'actions/app'
 
 import Swal from 'sweetalert2' 
 
-import { getBreeds } from "actions/app"
-
 const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(4)
@@ -28,7 +26,7 @@ const PetForm = props => {
 
 
   useEffect(() => {
-    props.getBreeds()
+
   },[]);
   //
 
@@ -184,4 +182,4 @@ const mapStateToProps = state => {
 }
 
 
-export default  connect(mapStateToProps, { savePet , getBreeds  } )(PetForm);
+export default  connect(mapStateToProps, { savePet  } )(PetForm);

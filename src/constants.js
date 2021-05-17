@@ -11,9 +11,7 @@ export const SET_CURRENT_PATIENT = "SET_CURRENT_PATIENT";
 
 // ---------------- Apps Extended types --------------------------
 
-export const SET_BREEDS = "SET_BREEDS";
 
-export const SET_SPECIES = "SET_SPECIES";
 
 // ---------------- Users types --------------------------
 
@@ -137,3 +135,27 @@ export const ADD_PATIENT_FILE = "ADD_PATIENT_FILE";
 export const REMOVE_PATIENT_FILE = "REMOVE_PATIENT_FILE";
 
 export const SELECT_PATIENT_FILE = "SELECT_PATIENT_FILE";
+
+// ---------------- AgendaAnnotations types --------------------------------
+
+export const SET_AGENDA_ANNOTATIONS = "SET_AGENDA_ANNOTATIONS";
+
+export const ADD_AGENDA_ANNOTATION = "ADD_AGENDA_ANNOTATION";
+
+export const REMOVE_AGENDA_ANNOTATION = "REMOVE_AGENDA_ANNOTATION";
+
+export const SELECT_AGENDA_ANNOTATION = "SELECT_AGENDA_ANNOTATION";
+
+// ---------------- DoctorConfig types --------------------------------
+
+export const SET_DOCTOR_CONFIG = "SAVE_DOCTOR_CONFIG";
+
+// --------------- Doctors types ----------------------------
+
+export const SET_DOCTORS = "SET_DOCTORS";
+
+export const ADD_DOCTOR = "ADD_DOCTOR";
+
+export const REMOVE_DOCTOR = "REMOVE_DOCTOR";
+
+export const SELECT_DOCTOR = "SELECT_DOCTOR";

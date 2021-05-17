@@ -449,6 +449,8 @@ const MedicalRecords = props => {
     console.log("appointment to save",values)
 
     values.patient = currentPatientId
+
+    values.state = "done"
     
     if(idAToSave)
     {

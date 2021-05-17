@@ -64,7 +64,7 @@ const PetsMedicine = props => {
   const [openMedicineConfirmation, setOpenMedicineConfirmation] = useState(false);
 
   useEffect(() => {
-      console.log("products",props.products)
+      //console.log("products",props.products)
     setFilteredProducts(products)
   },[]); 
   

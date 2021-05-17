@@ -9,7 +9,8 @@ export default {
   primary: {
     contrastText: white,
     dark: colors.indigo[900],
-    main: colors.indigo[500],
+    //main: colors.indigo[500],
+    main: "#E1288D",
     light: colors.indigo[100]
   },
   secondary: {
@@ -44,13 +45,15 @@ export default {
   },
   text: {
     primary: colors.blueGrey[900],
-    secondary: colors.blueGrey[600],
+    //secondary: colors.blueGrey[600],
+    secondary: "#129FAD",
     link: colors.blue[600]
   },
   background: {
     default: '#F4F6F8',
     paper: white
   },
-  icon: colors.blueGrey[600],
+  //icon: colors.blueGrey[600],
+  icon: "#129FAD",
   divider: colors.grey[200]
 };

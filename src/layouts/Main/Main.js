@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
     paddingLeft: 240
   },
   content: {
-    height: '100%'
+    height: '100%',
   }
 }));
 
@@ -57,6 +57,7 @@ const Main = props => {
         variant={isDesktop ? 'persistent' : 'temporary'}
       />
       <main className={classes.content}>
+        <br/><br/>
         {children}
         <Footer />
       </main>

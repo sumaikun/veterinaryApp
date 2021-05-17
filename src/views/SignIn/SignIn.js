@@ -9,7 +9,8 @@ import {
   Button,
   IconButton,
   TextField,
-  Typography
+  Typography,
+  Link
 } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
@@ -18,8 +19,6 @@ import { Facebook as FacebookIcon, Google as GoogleIcon } from 'icons';
 import { connect } from "react-redux";
 
 import { loginUser } from "actions/auth";
-
-import { getBreeds, getSpecies } from "actions/app"
 
 import Swal from 'sweetalert2'
 
@@ -58,10 +57,13 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundImage: 'url(/images/auth.jpg)',
+    //backgroundImage: 'url(/images/auth.jpg)',
+    backgroundImage: 'url(https://placeimg.com/640/640/animals)',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center'
+    backgroundPosition: 'center',
+    opacity: 1,
+    transition: "3s"
   },
   quoteInner: {
     textAlign: 'center',
@@ -148,6 +150,8 @@ const SignIn = props => {
     errors: {}
   });
 
+
+
   useEffect(() => {
     const errors = validate(formState.values, schema);
 
@@ -157,6 +161,26 @@ const SignIn = props => {
       errors: errors || {}
     }));
   }, [formState.values]);
+
+  useEffect(()=>{
+
+    const imagesArray = [
+      "https://placeimg.com/640/640/people",
+      "https://placeimg.com/640/640/nature",
+      "https://placeimg.com/640/640/animals",
+      "https://placeimg.com/640/640/tech",
+    ]
+
+
+    setInterval(() => {
+      //console.log("changed", document.querySelector("#quote-background"))
+      //console.log("random",Math.floor(Math.random() * 4))
+      const reloadElement = document.querySelector("#quote-background")
+      if(reloadElement){
+        reloadElement.style.backgroundImage = `url(${imagesArray[Math.floor(Math.random() * 4)]})`;
+      }      
+    }, 8000);
+  },[])
 
   const handleBack = () => {
     history.goBack();
@@ -188,8 +212,6 @@ const SignIn = props => {
     console.log(formState.values)
     props.loginUser(formState.values, ( success , error ) =>{
       if(success){
-        props.getBreeds()
-        props.getSpecies()
         history.push('/');
       }
       if(error){
@@ -228,28 +250,32 @@ const SignIn = props => {
           item
           lg={5}
         >
-          <div className={classes.quote}>
-            <div className={classes.quoteInner}>
-              <Typography
-                className={classes.quoteText}
-                variant="h1"
-              >
-                El mejor médico del mundo es el veterinario: 
-              </Typography>
-              <div className={classes.person}>
+          <div id="quote-background" className={classes.quote}>
+            <div style={{width:"100%",height:"100%",backgroundColor:"rgba(1,1,1,0.4)",display:"flex",justifyContent:"center",alignItems:"center"}} >
+              <div className={classes.quoteInner}>
                 <Typography
-                  className={classes.name}
-                  variant="body1"
+                  className={classes.quoteText}
+                  variant="h1"
                 >
-                  El no puede preguntarles a sus 
-                pacientes que les pasa, simplemente lo tienen que saber
+                  El mejor médico del mundo es el veterinario: 
                 </Typography>
-                <Typography
-                  className={classes.bio}
-                  variant="body2"
-                >
-                  Will Rogers
-                </Typography>
+                <div className={classes.person}>
+                  <Typography
+                    className={classes.name}
+                    variant="body1"
+                    style={{fontWeight:"bold"}}
+                  >
+                    El no puede preguntarles a sus 
+                  pacientes que les pasa, simplemente lo tienen que saber
+                  </Typography>
+                  <Typography
+                    className={classes.bio}
+                    variant="body2"
+                    style={{fontWeight:"bold"}}
+                  >
+                    Will Rogers
+                  </Typography>
+                </div>
               </div>
             </div>
           </div>
@@ -295,6 +321,7 @@ const SignIn = props => {
                       onClick={handleSignIn}
                       size="large"
                       variant="contained"
+                      disabled
                     >
                       <FacebookIcon className={classes.socialIcon} />
                       Login with Facebook
@@ -305,6 +332,7 @@ const SignIn = props => {
                       onClick={handleSignIn}
                       size="large"
                       variant="contained"
+                      disabled
                     >
                       <GoogleIcon className={classes.socialIcon} />
                       Login with Google
@@ -350,6 +378,12 @@ const SignIn = props => {
                   value={formState.values.Password || ''}
                   variant="outlined"
                 />
+                <Link  variant="body2" style={{cursor:"pointer"}}  onClick={ (e) => {
+                    e.preventDefault()  
+                    props.history.push("/forgot-password")
+                  }}>
+                    {"¿ Olvidaste la contraseña ? Haz click aqui"}
+                </Link>
                 <Button
                   className={classes.signInButton}
                   color="primary"
@@ -361,6 +395,15 @@ const SignIn = props => {
                 >
                   INGRESAR
                 </Button>
+
+                <Grid item>          
+                  <Link  variant="body2" style={{cursor:"pointer"}} onClick={ (e) => {
+                    e.preventDefault()  
+                    props.history.push("/sign-up")
+                  }}>
+                    {"¿ No tienes una cuenta ? Registrarse"}
+                  </Link>
+                </Grid>
                 
                 {/*  <Typography
                   color="textSecondary"
@@ -391,8 +434,6 @@ SignIn.propTypes = {
 
 const mapDispatchToProps = {
   loginUser,
-  getBreeds,
-  getSpecies
  };
  
 export default connect(null, mapDispatchToProps)(withRouter(SignIn));

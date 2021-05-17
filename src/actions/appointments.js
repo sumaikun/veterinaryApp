@@ -59,6 +59,27 @@ import {
     }
   }
 
+  export function getAppointments(cb=null) {
+    
+    return dispatch => {
+      return api.getData(modelPoint)
+        .then(( response ) => {
+
+          const result = response.data ? response.data : []
+
+          dispatch(setAppointments(result));
+          
+          if(cb) { cb(result,false) }
+          
+        })
+        .catch(err => { console.log("Error: ", err)
+          
+          if(cb) { cb(false,true) }
+        
+      });
+    }
+  }
+
 
   export function saveAppointment(appointment,cb = null) {  
 

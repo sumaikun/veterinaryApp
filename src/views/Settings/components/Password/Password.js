@@ -40,14 +40,14 @@ const Password = props => {
     >
       <form>
         <CardHeader
-          subheader="Update password"
-          title="Password"
+          subheader="Cambiar contraseña"
+          title=""
         />
         <Divider />
         <CardContent>
           <TextField
             fullWidth
-            label="Password"
+            label="Contraseña"
             name="password"
             onChange={handleChange}
             type="password"
@@ -56,7 +56,7 @@ const Password = props => {
           />
           <TextField
             fullWidth
-            label="Confirm password"
+            label="Confirmar contraseña"
             name="confirm"
             onChange={handleChange}
             style={{ marginTop: '1rem' }}
@@ -71,7 +71,7 @@ const Password = props => {
             color="primary"
             variant="outlined"
           >
-            Update
+            Actualizar
           </Button>
         </CardActions>
       </form>

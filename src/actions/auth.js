@@ -12,18 +12,17 @@ import api from "../middleware/api";
 
 
 
-function receiveLogin(user,token) {
+function receiveLogin(user,token,userType) {
   return {
     type: LOGIN_SUCCESS,   
     token: token,
-    user: user
+    user: user,
+    userType
   };
 }
 
 
 export function loginUser(creds,cb = null) {
-
-  console.log("got in function");
 
   return dispatch => {
     // We dispatch requestLogin to kickoff the call to the API
@@ -32,7 +31,7 @@ export function loginUser(creds,cb = null) {
       .then(( response ) => {
         //console.log(response)
         // Dispatch the success action
-        dispatch(receiveLogin(response.data.user,response.data.token));
+        dispatch(receiveLogin(response.data.user,response.data.token,response.data.userType));
         if(cb) { cb(true,false) }
       })
       .catch(err => { console.log("Error: ", err)

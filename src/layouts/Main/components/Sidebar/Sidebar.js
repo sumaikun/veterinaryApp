@@ -5,9 +5,10 @@ import { makeStyles } from '@material-ui/styles';
 import { Divider, Drawer } from '@material-ui/core';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/People';
-import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
-import TextFieldsIcon from '@material-ui/icons/TextFields';
-import ImageIcon from '@material-ui/icons/Image';
+//import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
+//import TextFieldsIcon from '@material-ui/icons/TextFields';
+//import ImageIcon from '@material-ui/icons/Image';
+import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PetsIcon from '@material-ui/icons/Pets';
@@ -29,8 +30,8 @@ const useStyles = makeStyles(theme => ({
   drawer: {
     width: 240,
     [theme.breakpoints.up('lg')]: {
-      marginTop: 64,
-      height: 'calc(100% - 64px)'
+      marginTop: 94,
+      height: 'calc(100% - 94px)'
     }
   },
   root: {
@@ -51,6 +52,7 @@ const useStyles = makeStyles(theme => ({
 
 
 const Sidebar = props => {
+
   const { open, variant, onClose, className, ...rest } = props;
 
   const classes = useStyles();
@@ -77,7 +79,7 @@ const Sidebar = props => {
 
 
 
-  let pages = [
+  /*let pages = [
     {
       title: 'Analítica',
       href: '/dashboard',
@@ -87,6 +89,11 @@ const Sidebar = props => {
       title: 'Usuarios',
       href: '/users',
       icon: <PeopleIcon />
+    },
+    {
+      title: 'Médicos',
+      href: '/doctors',
+      icon: <LocalHospitalIcon />
     },
     {
       title: 'Productos',
@@ -123,10 +130,83 @@ const Sidebar = props => {
       title: 'Cerrar sesión',
       icon: <Lock/>
     }
-  ];
+  ];*/
+
+  let pages = [
+    {
+      title: 'Notificaciones',
+      href: '/dashboard',
+      icon: <DashboardIcon />
+    }
+  ] 
+
+  if(props.authState.user.role === "ADMIN")
+  {
+    pages.push({
+      title: 'Usuarios',
+      href: '/users',
+      icon: <PeopleIcon />
+    })   
+  }
+
+  if(props.authState.user.role)
+  {
+    pages.push({
+      title: 'Médicos',
+      href: '/doctors',
+      icon: <LocalHospitalIcon />
+    },
+    {
+      title: 'Pacientes',
+      href: '/pets',
+      icon: <PetsIcon />
+    },
+    {
+      title: 'Contactos',
+      href: '/contacts',
+      icon: <AccountBoxIcon />
+    },
+    {
+      title: 'Parametrización',
+      href: '/parameters',
+      icon: <Build />
+    })   
+  }
 
 
-  if(props.authState.user.role === "developer")
+  if(props.authState.userType == 2)
+  {
+    pages.push(
+      {
+        title: 'Pacientes',
+        href: '/pets',
+        icon: <PetsIcon />
+      },
+      {
+        title: 'Contactos',
+        href: '/contacts',
+        icon: <AccountBoxIcon />
+      },
+      {
+        title: 'Agenda',
+        href: '/agenda',
+        icon: <Book />
+      },      
+      {
+        title: 'Configuración',
+        href: '/settings',
+        icon: <SettingsIcon />
+      }
+    )
+  }
+
+  pages.push({
+    action: logoutUserAction,
+    title: 'Cerrar sesión',
+    icon: <Lock/>
+  })
+
+  /*if(props.authState.user.role === "developer")
   {
     pages.push({
       title: 'Typography',
@@ -138,7 +218,7 @@ const Sidebar = props => {
       href: '/icons',
       icon: <ImageIcon />
     })     
-  }
+  }*/
 
   return (
     <Drawer

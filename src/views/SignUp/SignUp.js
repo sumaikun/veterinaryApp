@@ -1,385 +1,454 @@
-import React, { useState, useEffect } from 'react';
-import { Link as RouterLink, withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import validate from 'validate.js';
-import { makeStyles } from '@material-ui/styles';
-import {
-  Grid,
-  Button,
-  IconButton,
-  TextField,
-  Link,
-  FormHelperText,
-  Checkbox,
-  Typography
-} from '@material-ui/core';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import React, { useState, useEffect }  from 'react';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Link from '@material-ui/core/Link';
+import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import Swal from 'sweetalert2'
+import  api  from 'middleware/api'
 
-const schema = {
-  firstName: {
-    presence: { allowEmpty: false, message: 'is required' },
-    length: {
-      maximum: 32
-    }
-  },
-  lastName: {
-    presence: { allowEmpty: false, message: 'is required' },
-    length: {
-      maximum: 32
-    }
-  },
-  email: {
-    presence: { allowEmpty: false, message: 'is required' },
-    email: true,
-    length: {
-      maximum: 64
-    }
-  },
-  password: {
-    presence: { allowEmpty: false, message: 'is required' },
-    length: {
-      maximum: 128
-    }
-  },
-  policy: {
-    presence: { allowEmpty: false, message: 'is required' },
-    checked: true
-  }
-};
+//import Autocomplete from '@material-ui/lab/Autocomplete'; 
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    backgroundColor: theme.palette.background.default,
-    height: '100%'
-  },
-  grid: {
-    height: '100%'
-  },
-  quoteContainer: {
-    [theme.breakpoints.down('md')]: {
-      display: 'none'
-    }
-  },
-  quote: {
-    backgroundColor: theme.palette.neutral,
-    height: '100%',
+
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(8),
     display: 'flex',
-    justifyContent: 'center',
+    flexDirection: 'column',
     alignItems: 'center',
-    backgroundImage: 'url(/images/auth.jpg)',
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center'
   },
-  quoteInner: {
-    textAlign: 'center',
-    flexBasis: '600px'
-  },
-  quoteText: {
-    color: theme.palette.white,
-    fontWeight: 300
-  },
-  name: {
-    marginTop: theme.spacing(3),
-    color: theme.palette.white
-  },
-  bio: {
-    color: theme.palette.white
-  },
-  contentContainer: {},
-  content: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  contentHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    paddingTop: theme.spacing(5),
-    paddingBototm: theme.spacing(2),
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2)
-  },
-  logoImage: {
-    marginLeft: theme.spacing(4)
-  },
-  contentBody: {
-    flexGrow: 1,
-    display: 'flex',
-    alignItems: 'center',
-    [theme.breakpoints.down('md')]: {
-      justifyContent: 'center'
-    }
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    paddingLeft: 100,
-    paddingRight: 100,
-    paddingBottom: 125,
-    flexBasis: 700,
-    [theme.breakpoints.down('sm')]: {
-      paddingLeft: theme.spacing(2),
-      paddingRight: theme.spacing(2)
-    }
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(3),
   },
-  title: {
-    marginTop: theme.spacing(3)
+  submit: {
+    margin: theme.spacing(3, 0, 2),
   },
-  textField: {
-    marginTop: theme.spacing(2)
-  },
-  policy: {
-    marginTop: theme.spacing(1),
-    display: 'flex',
-    alignItems: 'center'
-  },
-  policyCheckbox: {
-    marginLeft: '-14px'
-  },
-  signUpButton: {
-    margin: theme.spacing(2, 0)
-  }
 }));
 
-const SignUp = props => {
-  const { history } = props;
+export default function SignUp(props) {
+
+  const [values, setValues] = useState(
+    { 
+     name:"",
+     lastName:"",
+     email:"",
+     password:"",
+     confirmPassword:"",
+     phone:""
+    })
+
+
+  const errors =  new Array(5)
+
+  const rules = (key,value) =>{
+
+    //console.log("values",values)
+
+    switch(key){
+      case "name":
+
+        errors[0] = value.length > 0 && value.length < 3 ?
+         "El nombre debe tener mas de tres digitos" : false       
+
+        return  errors[0]
+
+      case "lastName":
+
+        errors[1] = value.length > 0 && value.length < 3 ?
+         "El apellido debe tener mas de tres digitos" : false  
+
+        return  errors[1]
+         
+      case "email":
+
+        errors[2] = value.length > 0 && ( !value.match(/\S+@\S+\.\S+/) ) ?
+          "No es un correo valido":false
+        
+          return  errors[2]    
+
+      case "password":
+
+        errors[3] = value.length > 0 && (  !value.match(/^(?=.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/) )  ?
+        "La contraseña debe tener una mayuscula, una minuscula y tener al menos 8 dígitos":false
+      
+        return  errors[3]
+
+      case "confirmPassword":
+
+        errors[4] = value.confirmPassword.length > 0 && value.password != value.confirmPassword ?
+          "Las contraseñas deben coincidir":false         
+          
+        return  errors[4]
+
+      case "phone":
+              
+        errors[5] = value.length > 0 && (value.length > 10 || value.length < 7) ?
+          "El telefono debe tener entre 7 a 10 carácteres":false         
+          
+        return  errors[5]
+
+
+      default:
+        return true
+    } 
+  }
+
+
+  const [cities, setCities ] = useState([]);
+
+  useEffect(() => {
+    
+    const getCityTypes = async () => {
+      const response = await api.getData("cityTypes") 
+      setCities(response.data)
+    }
+
+    getCityTypes()   
+    
+
+  },[]); 
+
+
+  const handleChange = event => {
+
+    //console.log(event,event.target.name,event.target.value)
+
+    setValues({
+      ...values,
+      [event.target.name]: event.target.value
+    });   
+
+  };
+
+
+  const handleCheck = (event) => {
+    //console.log(event.target.checked,event.target.name);
+
+    setValues({
+      ...values,
+      [event.target.name]: event.target.checked
+    });
+
+  };
+
+  const AutoCompleteChange = (event, complete, name) => {
+
+   // console.log("autocomplete changed",event,complete,name)
+    
+    if(values){
+      setValues({
+        ...values,
+        [name]: complete.value
+      });
+      //props.changeDetails(name,values.value)
+    }
+
+  }
+
+  const sendForm = event => {
+
+    event.preventDefault()
+
+    for (var i = 0; i < errors.length; i++) {
+        if(errors[i])
+        {
+          return Swal.fire({
+            icon: 'error',
+            title: 'Espera',
+            text: "Existen errores de validación en el formulario",          
+          })
+        }
+    }
+
+    if(  !values.name || !values.lastName || !values.email || !values.password || !values.confirmPassword || !values.phone || !values.city || !values.type ){
+      return Swal.fire({
+        icon: 'warning',
+        title: 'Espera',
+        text: "Debes llenar todos los campos",          
+      })
+    }   
+
+    if( !values.confirmed ){
+      return Swal.fire({
+        icon: 'warning',
+        title: 'Espera',
+        text: "Si quieres registrarte debes aceptar los terminos y condiciones",          
+      })
+    }
+
+    const { name, lastName, email, password, phone, city, type } = values
+
+    console.log("type",type)
+
+    const user = { name, lastName, email, password, phone, city }
+
+    delete user.confirmPassword
+
+    if( type === "Patient" )
+    {
+      api.postData("registerPatient",user).then(( response ) => {
+
+        return Swal.fire({
+          icon: 'success',
+          title: 'Bien',
+          text: "Busca en tu correo te mandamos un mensaje de confirmación",          
+        })
+       
+      })
+      .catch(err => { console.log("Error: ", err)
+       
+        return Swal.fire({
+          icon: 'error',
+          title: 'Espera',
+          text: "Intentalo de nuevo, puede estar sucediendo un problema con el servidor",          
+        })
+  
+      })
+    }
+
+ 
+
+    if( type === "Doctor" )
+    {
+      api.postData("registerDoctor",user).then(( response ) => {
+
+        return Swal.fire({
+          icon: 'success',
+          title: 'Bien',
+          text: "espera que el administrador habilite tu usario y podras ingresar",          
+        })
+       
+      })
+      .catch(err => { console.log("Error: ", err)
+       
+        return Swal.fire({
+          icon: 'error',
+          title: 'Espera',
+          text: "Intentalo de nuevo, puede estar sucediendo un problema con el servidor",          
+        })
+  
+      })
+    }
+
+  }
 
   const classes = useStyles();
 
-  const [formState, setFormState] = useState({
-    isValid: false,
-    values: {},
-    touched: {},
-    errors: {}
-  });
-
-  useEffect(() => {
-    const errors = validate(formState.values, schema);
-
-    setFormState(formState => ({
-      ...formState,
-      isValid: errors ? false : true,
-      errors: errors || {}
-    }));
-  }, [formState.values]);
-
-  const handleChange = event => {
-    event.persist();
-
-    setFormState(formState => ({
-      ...formState,
-      values: {
-        ...formState.values,
-        [event.target.name]:
-          event.target.type === 'checkbox'
-            ? event.target.checked
-            : event.target.value
-      },
-      touched: {
-        ...formState.touched,
-        [event.target.name]: true
-      }
-    }));
-  };
-
-  const handleBack = () => {
-    history.goBack();
-  };
-
-  const handleSignUp = event => {
-    event.preventDefault();
-    history.push('/');
-  };
-
-  const hasError = field =>
-    formState.touched[field] && formState.errors[field] ? true : false;
-
   return (
-    <div className={classes.root}>
-      <Grid
-        className={classes.grid}
-        container
-      >
-        <Grid
-          className={classes.quoteContainer}
-          item
-          lg={5}
-        >
-          <div className={classes.quote}>
-            <div className={classes.quoteInner}>
-              <Typography
-                className={classes.quoteText}
-                variant="h1"
+    <Container component="main" maxWidth="xs" style={{marginTop: "4%", marginBottom: "4%"}} >
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar} style={{backgroundColor:"#e1298d"}}   >
+          <LockOutlinedIcon/>
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Registrarse
+        </Typography>
+        <form className={classes.form} onSubmit={sendForm}  noValidate>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                helperText={rules("name",values.name)}
+                error = {rules("name",values.name)} 
+             
+                name="name"
+                variant="outlined"
+                required
+                fullWidth
+                id="firstName"
+                label="Nombre"
+                onChange={handleChange}
+                autoFocus
+                value={values.name}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                helperText={rules("lastName",values.lastName)}
+                error = {rules("lastName",values.lastName)} 
+                variant="outlined"
+                required
+                fullWidth
+                id="lastName"
+                label="Apellido"
+                name="lastName"
+             
+                onChange={handleChange}
+                value={values.lastName}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                helperText={rules("email",values.email)}
+                error = {rules("email",values.email)} 
+                variant="outlined"
+                required
+                fullWidth
+                id="email"
+                label="Correo electrónico"
+                name="email"
+                
+                onChange={handleChange}
+                value={values.email}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                helperText={rules("phone",values.phone)}
+                error = {rules("phone",values.phone)} 
+                variant="outlined"
+                required
+                fullWidth
+                id="email"
+                label="Teléfono o celular"
+                name="phone"                
+                onChange={handleChange}
+                value={values.phone}
+              />
+            </Grid>
+
+            <Grid item  xs={12}>
+              <TextField
+                fullWidth
+                label="Ciudad"
+                margin="dense"
+                name="city"
+                onChange={handleChange}
+                required
+                select
+                // eslint-disable-next-line react/jsx-sort-props
+                SelectProps={{ native: true }}
+                variant="outlined"
               >
-                Hella narwhal Cosby sweater McSweeney's, salvia kitsch before
-                they sold out High Life.
-              </Typography>
-              <div className={classes.person}>
-                <Typography
-                  className={classes.name}
-                  variant="body1"
-                >
-                  Takamaru Ayako
-                </Typography>
-                <Typography
-                  className={classes.bio}
-                  variant="body2"
-                >
-                  Manager at inVision
-                </Typography>
-              </div>
-            </div>
-          </div>
-        </Grid>
-        <Grid
-          className={classes.content}
-          item
-          lg={7}
-          xs={12}
-        >
-          <div className={classes.content}>
-            <div className={classes.contentHeader}>
-              <IconButton onClick={handleBack}>
-                <ArrowBackIcon />
-              </IconButton>
-            </div>
-            <div className={classes.contentBody}>
-              <form
-                className={classes.form}
-                onSubmit={handleSignUp}
+                 <option></option>
+                 {cities?.map(option => (
+                  <option
+                    key={option._id}
+                    value={option._id}
+                  >
+                    {option.name}
+                  </option>
+                ))}               
+              </TextField>
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                helperText={rules("password",values.password)}
+                error = {rules("password",values.password)} 
+                variant="outlined"
+                required
+                fullWidth
+                name="password"
+                label="Contraseña"
+                type="password"
+                id="password"
+              
+                onChange={handleChange}
+                value={values.password}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                helperText={rules("confirmPassword",values)}
+                error = {rules("confirmPassword",values)} 
+                variant="outlined"
+                required
+                fullWidth
+                name="confirmPassword"
+                label="confirmar contraseña"
+                type="password"
+                id="confirmPassword"
+             
+                onChange={handleChange}
+                value={values.confirmPassword}
+              />
+            </Grid>
+
+            <Grid item  xs={12}>
+              <TextField
+                fullWidth
+                label="Paciente o Médico"
+                margin="dense"
+                name="type"
+                onChange={handleChange}
+                required
+                select
+                // eslint-disable-next-line react/jsx-sort-props
+                SelectProps={{ native: true }}
+                variant="outlined"
               >
-                <Typography
-                  className={classes.title}
-                  variant="h2"
-                >
-                  Create new account
-                </Typography>
-                <Typography
-                  color="textSecondary"
-                  gutterBottom
-                >
-                  Use your email to create new account
-                </Typography>
-                <TextField
-                  className={classes.textField}
-                  error={hasError('firstName')}
-                  fullWidth
-                  helperText={
-                    hasError('firstName') ? formState.errors.firstName[0] : null
-                  }
-                  label="First name"
-                  name="firstName"
-                  onChange={handleChange}
-                  type="text"
-                  value={formState.values.firstName || ''}
-                  variant="outlined"
-                />
-                <TextField
-                  className={classes.textField}
-                  error={hasError('lastName')}
-                  fullWidth
-                  helperText={
-                    hasError('lastName') ? formState.errors.lastName[0] : null
-                  }
-                  label="Last name"
-                  name="lastName"
-                  onChange={handleChange}
-                  type="text"
-                  value={formState.values.lastName || ''}
-                  variant="outlined"
-                />
-                <TextField
-                  className={classes.textField}
-                  error={hasError('email')}
-                  fullWidth
-                  helperText={
-                    hasError('email') ? formState.errors.email[0] : null
-                  }
-                  label="Email address"
-                  name="email"
-                  onChange={handleChange}
-                  type="text"
-                  value={formState.values.email || ''}
-                  variant="outlined"
-                />
-                <TextField
-                  className={classes.textField}
-                  error={hasError('password')}
-                  fullWidth
-                  helperText={
-                    hasError('password') ? formState.errors.password[0] : null
-                  }
-                  label="Password"
-                  name="password"
-                  onChange={handleChange}
-                  type="password"
-                  value={formState.values.password || ''}
-                  variant="outlined"
-                />
-                <div className={classes.policy}>
-                  <Checkbox
-                    checked={formState.values.policy || false}
-                    className={classes.policyCheckbox}
-                    color="primary"
-                    name="policy"
-                    onChange={handleChange}
-                  />
-                  <Typography
-                    className={classes.policyText}
-                    color="textSecondary"
-                    variant="body1"
+                <option></option>
+                { /*
+                <option
+                    key={"Patient"}
+                    value={"Patient"}
                   >
-                    I have read the{' '}
-                    <Link
-                      color="primary"
-                      component={RouterLink}
-                      to="#"
-                      underline="always"
-                      variant="h6"
-                    >
-                      Terms and Conditions
-                    </Link>
-                  </Typography>
-                </div>
-                {hasError('policy') && (
-                  <FormHelperText error>
-                    {formState.errors.policy[0]}
-                  </FormHelperText>
-                )}
-                <Button
-                  className={classes.signUpButton}
-                  color="primary"
-                  disabled={!formState.isValid}
-                  fullWidth
-                  size="large"
-                  type="submit"
-                  variant="contained"
-                >
-                  Sign up now
-                </Button>
-                <Typography
-                  color="textSecondary"
-                  variant="body1"
-                >
-                  Have an account?{' '}
-                  <Link
-                    component={RouterLink}
-                    to="/sign-in"
-                    variant="h6"
+                    {"Paciente"}
+                </option>*/
+                }
+                <option
+                    key={"Doctor"}
+                    value={"Doctor"}
                   >
-                    Sign in
-                  </Link>
-                </Typography>
-              </form>
-            </div>
-          </div>
-        </Grid>
-      </Grid>
-    </div>
+                    {"Médico"}
+                </option>
+                
+              </TextField>
+            </Grid>
+            
+           
+
+            <Grid item xs={12}>
+
+              <FormControlLabel
+                control={<Checkbox name="confirmed"  onChange={handleCheck} />}
+                label="¿Acepta terminos y condiciones?" 
+              />
+
+            </Grid>
+            
+           
+          </Grid>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
+            Registrarse
+          </Button>
+          <Grid container justify="flex-end">
+            <Grid item>
+              <Link  variant="body2"  style={{cursor:"pointer"}} onClick={ (e) => {
+                e.preventDefault()
+                props.history.push("/sign-in")
+              }} >
+                ¿ Ya tienes una cuenta ? Ingresar
+              </Link>
+            </Grid>
+          </Grid>
+        </form>
+      </div>
+     
+    </Container>
   );
-};
-
-SignUp.propTypes = {
-  history: PropTypes.object
-};
-
-export default withRouter(SignUp);
+}

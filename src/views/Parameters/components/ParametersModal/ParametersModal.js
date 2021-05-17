@@ -6,48 +6,25 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import  api  from '../../../../middleware/api'
 
 const ParametersModal = props => {
 
-  console.log("props",props)
-
   let formContent = ""
-
-  const [species, setSpecies ] = useState([]);
-
-  useEffect(() => {
-
-    const getSpecies = async () => {
-
-      const response = await api.getData("species") 
-
-      let arrayData = [{label:"Especie",value:""}]
-      console.log("species",response.data)
-      response.data.forEach( data => arrayData.push({label:data.name,value:data._id}) )
-      setSpecies(arrayData) 
-    }
-
-    getSpecies()
-
-  },[]); 
-
 
   const handleChange = event => {
   
     props.changeFormData(event.target.name,event.target.value)
 
-  };
-
-  switch(props.newButtonText)
-  {
-    case "Crear nueva especie":
+  }; 
+   
+  if(props.newButtonText === "Agregar nuevo tipo de especialización" 
+      || props.newButtonText === "Agregar nueva ciudad de atención"
+    ){              
       formContent = 
       <div>
-        
         <TextField
           fullWidth
-          label="Nombre Especie"
+          label="Nombre"
           value={props.formData.name}
           onChange={handleChange}
           name="name"   
@@ -55,95 +32,16 @@ const ParametersModal = props => {
         </TextField>
         <TextField
           fullWidth
-          label="Info adicional"
+          label="Descripción"
           value={props.formData.meta}
           onChange={handleChange}
-          name="meta"    
+          name="meta"  
+          rows={2}
+          multiline  
         >
         </TextField>
+      </div> }
 
-      </div>
-    
-      break;
-    case "Crear nueva raza":      
-
-      formContent = <div>
-        
-        <TextField
-          fullWidth
-          label="Nombre Raza"
-          value={props.formData.name}
-          name="name"
-          onChange={handleChange}   
-        >
-        </TextField>
-        <TextField
-          fullWidth
-          label="Info adicional"
-          value={props.formData.meta}
-          name="meta"
-          onChange={handleChange}       
-        >
-        </TextField>
-        <TextField
-                fullWidth
-                margin="dense"
-                name="species"                
-                required
-                select
-                // eslint-disable-next-line react/jsx-sort-props
-                SelectProps={{ native: true }}
-                InputLabelProps={{ shrink: !!props.formData.species }}
-                value={props.formData.species}  
-                variant="outlined"
-                onChange={handleChange}
-              >
-                {species.map(option => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                  >
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
-      
-      </div>
-      break;          
-    default:
-      if(props.newButtonText === "Crear nuevo tipo de examen" 
-          || props.newButtonText === "Crear nuevo tipo de plan"
-          || props.newButtonText === "Agregar enfermedad"){              
-          formContent = 
-          <div>
-            <TextField
-              fullWidth
-              label="Nombre"
-              value={props.formData.name}
-              onChange={handleChange}
-              name="name"   
-            >
-            </TextField>
-            <TextField
-              fullWidth
-              label="Descripción"
-              value={props.formData.meta}
-              onChange={handleChange}
-              name="meta"  
-              rows={2}
-              multiline  
-            >
-            </TextField>
-          </div> }
-      break;
-  }
-
-
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    //setOpen(true);
-  };
 
   const handleClose = () => {    
     //setOpen(false);

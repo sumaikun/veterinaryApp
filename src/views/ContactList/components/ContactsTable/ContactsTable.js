@@ -45,7 +45,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ContactsTable = props => {
-  const {  selectMultiple,  className, contacts, ...rest } = props;
+  
+  const {  selectMultiple,  className, selectedContacts, contacts, pets, ...rest } = props;
 
   const classes = useStyles();
 
@@ -62,40 +63,34 @@ const ContactsTable = props => {
 
   const handleSelectMultiple = (checkedStatus, id) => {
 
-    //console.log(checkedContacts,event.target.value,event.target.checked)
+    //console.log(checkedStatus,id)
 
-    const data = id
-
-    const contacts = checkedContacts
+    const contacts = JSON.parse(JSON.stringify(checkedContacts))
 
     if(checkedStatus)
     { 
-      contacts.push(data)
+      contacts.push(id)
     }else{
-      const index = contacts.indexOf(data);
+      const index = contacts.indexOf(id);
       contacts.splice(index, 1);
     }
-
-    console.log("checkedContacts",contacts)
 
     if(props.addContactsSelected)
     {
       props.addContactsSelected(contacts)
     }
 
-    window.setTimeout(function(){ setCheckedContacts( contacts ) }, 1000);
-
-    return
+    setCheckedContacts( contacts )
     
   }
 
   const handlePageChange = (event, page) => {
-    console.log("handle change",event,page)
+    //console.log("handle change",event,page)
     setPage(page);
   };
 
   const handleRowsPerPageChange = event => {
-    console.log("rows per page event")
+    //console.log("rows per page event")
     setRowsPerPage(event.target.value);
     setPage(0)
   };
@@ -122,6 +117,7 @@ const ContactsTable = props => {
                   <TableCell>Dirección</TableCell>
                   <TableCell>Telefóno</TableCell>
                   <TableCell>Ocupación</TableCell>
+                  <TableCell>Mascotas</TableCell>
                   <TableCell>fecha de registro</TableCell>
                 </TableRow>
               </TableHead>
@@ -146,14 +142,15 @@ const ContactsTable = props => {
                         /> :
 
                         <FormControlLabel
+                            checked={ (()=>{
+                              return selectedContacts?.indexOf(contact._id) != -1
+                            })() }
                             style={{marginLeft:"5px"}}
                             control={<Checkbox color="primary"    />}
                             onChange={(event) => handleSelectMultiple(event.target.checked,contact._id)}                            
                         />
 
-                      }
-
-                      
+                      }                      
                     </TableCell>
                     <TableCell>
                       <div className={classes.nameContainer}>
@@ -173,6 +170,21 @@ const ContactsTable = props => {
                     </TableCell>
                     <TableCell>{contact.phone}</TableCell>
                     <TableCell>{contact.ocupation}</TableCell>
+                    <TableCell>{ pets.map( pet => {
+                      return pet.contacts.map( sContact => {
+                          console.log(sContact,contact._id,sContact == contact._id)
+                          if (sContact == contact._id){
+                            return (
+                            <Avatar
+                              className={classes.avatar}
+                              src={  process.env.REACT_APP_SERVE_IMAGE + pet.picture}
+                            >
+                              {getInitials(pet.name)}
+                            </Avatar>
+                            )
+                          }                          
+                      })
+                    }) }</TableCell>
                     <TableCell>
                       {/* moment(contact.date).format('DD/MM/YYYY') */}
                       { contact.date.split(" ")[0] }

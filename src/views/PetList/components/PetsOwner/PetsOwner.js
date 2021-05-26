@@ -53,20 +53,25 @@ const useStyles = makeStyles(theme => ({
 
 const PetsOwner = props => {
   
-  const {  open, contacts,selectContact, handleClose,  ...rest } = props;
-
-  console.log("pets medicine props",props)
-
-  const [selectedContact, setSelectedContact] = useState(null);
+  const {  open, contacts, selectedPet, handleClose } = props;
    
   const [filteredContacts, setFilteredContacts] = useState([]);
 
-  const [openMedicineConfirmation, setOpenMedicineConfirmation] = useState(false);
+  const [ openDialog, setOpenDialog ] = useState(open)
+
+  const [ selectedContacts, setSelectedContacts ] = useState([])
 
   useEffect(() => {
-      console.log("contacts",contacts)
     setFilteredContacts(contacts)
-  },[]); 
+  },[]);
+
+  useEffect(() => {
+    setSelectedContacts(selectedPet?.contacts || [])
+  },[selectedPet]);
+  
+  useEffect(() => {
+    setOpenDialog(open)
+  },[open]);
   
   const addFilterText = event => {
     //console.log("filter text",event.target.value)
@@ -91,9 +96,6 @@ const PetsOwner = props => {
     }
   }
 
-  const [ selectedContacts, setSelectedContacts ] = useState([])
-
-
   const addContactsSelected = (contacts) => {
     setSelectedContacts(contacts)
   }
@@ -103,7 +105,7 @@ const PetsOwner = props => {
     return (
         <div>
             <Dialog
-                open={open}              
+                open={openDialog}              
                 onClose={handleClose}
                 aria-labelledby="alert-dialog-slide-title"
                 aria-describedby="alert-dialog-slide-description"
@@ -119,11 +121,35 @@ const PetsOwner = props => {
                     placeholder="Buscar"
                     onChange={addFilterText}
                 />  
-                <ContactsTable addContactsSelected={addContactsSelected} selectMultiple={true} contacts={filteredContacts || []} />
+                <ContactsTable addContactsSelected={addContactsSelected} selectMultiple={true} contacts={filteredContacts || []} 
+                 selectedContacts={selectedContacts} />
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} color="primary" onClick={()=>{
-                  console.log(selectedContacts)
+
+                  api.putData(`updatePetContactsEndPoint/${selectedPet._id}`,{ contacts:selectedContacts  })
+                  .then( () => {
+
+                    setOpenDialog(false)
+
+                    Swal.fire({
+                      icon: 'success',
+                      title: '',
+                      text: 'Fueron asociados los dueños al sistema',          
+                    }).then( () => {
+                      setOpenDialog(true)
+                    })  
+                                  
+                  })
+                  .catch( error => {
+                    console.error("error",error)
+                    return Swal.fire({
+                      icon: 'error',
+                      title: 'Ooops',
+                      text: 'Sucedio un error en el servidor',          
+                    })
+                  })
+
                 }} >
                   Guardar
                 </Button>

@@ -98,6 +98,14 @@ const FormDetails = props => {
         
           return  errors[3]
 
+      case "breed":
+
+        errors[1] = value.length > 0 && value.length < 3 ?
+          "La raza debe tener mas de tres digitos" : false       
+
+        return  errors[1]
+          
+
 
       default:
         return true
@@ -157,43 +165,35 @@ const FormDetails = props => {
                 variant="outlined"
               >
                 <option></option>
-                {props.species.map(option => (
-                  <option
-                    key={option.name}
-                    value={option._id}
+                <option
+                    key={"Dog"}
+                    value={"Dog"}
                   >
-                    {option.name}
-                  </option>
-                ))}
+                    {"Perro"}
+                </option>
+                <option
+                    key={"Cat"}
+                    value={"Cat"}
+                  >
+                    {"Gato"}
+                </option>                
+                
               </TextField>
             </Grid>
 
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
+                helperText={rules("breed",props.petDetails.breed)}
+                error = {rules("breed",props.petDetails.breed)}            
                 label="Raza"
                 margin="dense"
                 name="breed"
                 onChange={handleChange}
                 required
-                select
-                // eslint-disable-next-line react/jsx-sort-props
-                SelectProps={{ native: true }}
-                InputLabelProps={{ shrink: !!props.petDetails.breed }}
-                value={props.petDetails.breed}  
+                value={props.petDetails.breed}
                 variant="outlined"
-              >
-                <option></option>
-                {props.breeds.filter( data => data.species === props.petDetails.species ).map(option => (
-                  <option
-                    key={option.name}
-                    value={option._id}
-                  >
-                    {option.name}
-                  </option>
-                ))}
-                
-              </TextField>
+              />
             </Grid>
 
             <Grid item md={6} xs={12}>
@@ -256,6 +256,7 @@ const FormDetails = props => {
                 required
                 value={props.petDetails.age}
                 variant="outlined"
+                type="number"
               />
             </Grid>
             
@@ -297,7 +298,7 @@ const FormDetails = props => {
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                label="Procedencia"
+                label="Procedencia (lugar actual)"
                 margin="dense"
                 name="origin"
                 onChange={handleChange}

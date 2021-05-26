@@ -71,10 +71,7 @@ const PetsToolbar = props => {
 
           <Button className={classes.importButton}  disabled={ props.selectedPet === null } 
             onClick={props.editButton}>Editar</Button>
-          
-          <Button className={classes.exportButton} disabled={ props.selectedPet === null  } 
-            onClick={props.deleteButton}>Eliminar</Button>
-          
+           
           {/*<Button
             color="primary"
             variant="contained"

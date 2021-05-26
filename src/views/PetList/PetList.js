@@ -58,29 +58,29 @@ class PetList extends Component{
   componentDidMount(){
     
     this.props.getPets((success,error)=>{
-      this.setState({
-        ...this.state,
-        pets:this.props.petsState.pets,
-        selectedPet:null,
-      })
+    this.setState({
+      ...this.state,
+      pets:this.props.petsState.pets,
+      selectedPet:null,
+    })
     })
 
     this.props.getProducts((success,error)=>{
-      this.setState({
-        ...this.state,
-        products:this.props.productsState.products,
-        selectedProduct:null,
-      })
+    this.setState({
+      ...this.state,
+      products:this.props.productsState.products,
+      selectedProduct:null,
+    })
     })
 
     this.props.getContacts((success,error)=>{
-      this.setState({
-        ...this.state,
-        contacts:this.props.contactsState.contacts,
-        selectedContacts:[],
-      })
+    this.setState({
+      ...this.state,
+      contacts:this.props.contactsState.contacts,
+      selectedContacts:[],
     })
-    
+    })
+
     this.createButton = this.createButton.bind(this)
     this.editButton = this.editButton.bind(this)
     this.deleteButton = this.deleteButton.bind(this)
@@ -261,7 +261,7 @@ class PetList extends Component{
           selectedPet={this.state.selectedPet}  
           createButton={this.createButton} 
           editButton={this.editButton}
-          deleteButton={this.deleteButton}
+          //deleteButton={this.deleteButton}
           filteredPets={this.filteredPets} />
         <div className={classes.content}>
           <PetsTable species={this.props.appState.species}  
@@ -279,7 +279,7 @@ class PetList extends Component{
 
         {
           this.state.contacts ?  
-            <PetsOwner  contacts={this.state.contacts} open={this.state.open3} handleClose={this.handleClose3}  />:
+            <PetsOwner  contacts={this.state.contacts} open={this.state.open3} selectedPet={this.state.selectedPet} handleClose={this.handleClose3}  />:
           null
         }
         

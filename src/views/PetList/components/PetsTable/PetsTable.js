@@ -120,11 +120,9 @@ const PetsTable = props => {
                         <Typography variant="body1">{pet.name}</Typography>
                       </div>
                     </TableCell>
-                    <TableCell>{  species.length > 0 ? species.filter( specie => specie._id === pet.species )[0].name : null  }</TableCell>
-                    <TableCell>{  breeds.length > 0 ? breeds.filter( breed => breed._id === pet.breed )[0].name : null  }</TableCell>
-                    <TableCell>
-                      {pet.color}
-                    </TableCell>
+                    <TableCell>{  pet.species }</TableCell>
+                    <TableCell>{  pet.breed }</TableCell>
+                    <TableCell>{pet.color}</TableCell>
                     <TableCell>{pet.sex}</TableCell>
                     <TableCell>{pet.age}</TableCell>
                     <TableCell>

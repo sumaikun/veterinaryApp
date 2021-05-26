@@ -61,9 +61,6 @@ const ContactsToolbar = props => {
         <Button className={classes.importButton}  disabled={ props.selectedContact === null } 
           onClick={props.editButton}>Editar</Button>
         
-        <Button className={classes.exportButton} disabled={ props.selectedContact === null  } 
-          onClick={props.deleteButton}>Eliminar</Button>
-        
         {/*<Button
           color="primary"
           variant="contained"
@@ -73,9 +70,10 @@ const ContactsToolbar = props => {
           Agregar Usuario
         </Button>*/}
 
-        <Button className={classes.exportButton} disabled={ props.selectedContact === null  } 
-          onClick={props.deleteButton}>Mascotas</Button>
-
+        {/*<Button className={classes.exportButton} disabled={ props.selectedContact === null  } 
+          onClick={props.deleteButton}>Mascotas</Button>*/
+        }
+        
         <Button
           color="primary"
           variant="contained"

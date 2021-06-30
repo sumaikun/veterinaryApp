@@ -21,9 +21,16 @@ import { getProducts } from "actions/products";
 
 import { getContacts, getContact } from "actions/contacts";
 
-import Swal from "sweetalert2";
+//import Swal from "sweetalert2";
 
 import { setCurrentPatient } from "actions/app";
+
+import {
+  saveAppointment,
+  getAppointmentsByPatientAndDate,
+} from "actions/appointments";
+
+import { saveMedicine, getMedicinesByAppointment } from "actions/medicines";
 
 const useStyles = (theme) => ({
   root: {
@@ -274,6 +281,13 @@ class PetList extends Component {
           openMedicinesModal={this.handleOpen2}
           open={this.state.open}
           handleClose={this.handleClose}
+          saveAppointment={this.props.saveAppointment}
+          saveMedicine={this.props.saveMedicine}
+          getAppointmentsByPatientAndDate={
+            this.props.getAppointmentsByPatientAndDate
+          }
+          getMedicinesByAppointment={this.props.getMedicinesByAppointment}
+          pet={this.state.selectedPet}
         />
 
         {this.state.products ? (
@@ -320,4 +334,8 @@ export default connect(mapStateToProps, {
   setCurrentPatient,
   getContacts,
   getContact,
+  saveAppointment,
+  saveMedicine,
+  getAppointmentsByPatientAndDate,
+  getMedicinesByAppointment
 })(componentDefinition);

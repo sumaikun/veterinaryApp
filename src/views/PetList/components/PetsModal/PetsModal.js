@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { makeStyles } from "@material-ui/styles";
 import {
   Divider,
@@ -22,6 +22,10 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { getInitials } from "helpers";
 
 import "date-fns";
+
+import moment from "moment";
+
+import Swal from "sweetalert2";
 
 import {
   MuiPickersUtilsProvider,
@@ -151,6 +155,68 @@ const PetsModal = (props) => {
       .catch(() => {
         /* ... */
       });
+  };
+
+  /**  Dialogs for notifications */
+
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const [openDialog2, setOpenDialog2] = useState(false);
+
+  const handleDialogOpen = () => {
+    setOpenDialog(true);
+  };
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+  };
+
+  const handleDialogOpen2 = () => {
+    setOpenDialog2(true);
+  };
+
+  const handleDialogClose2 = () => {
+    setOpenDialog2(false);
+  };
+
+  /**  Dialogs for notifications */
+
+  /** services functions */
+
+  const [errorTitle, setErrorTitle] = useState();
+
+  const [appointmentErrors, setAppointmentErrors] = useState([]);
+
+  const frmScheduleAppointment = useRef();
+
+  const ScheduleAppointment = (e) => {
+    e.preventDefault();
+
+    const finalDate = appointment.appointmentDate || props.defaultDate;
+
+    //console.log("finalDate",finalDate)
+
+    const dataToSend = {
+      patient: props.patient?._id || props.patient,
+      state: "PENDING",
+      appointmentDate: moment(finalDate).format("YYYY-MM-DD HH:mm:ss"),
+      agendaAnnotation: appointment.agendaAnnotation,
+    };
+
+    props.saveAppointment(dataToSend, (success, error) => {
+      if (success) {
+        handleClose(true);
+
+        window.setTimeout(() => {
+          Swal.fire("ok", "cita agendada", "success");
+        }, 300);
+      }
+      if (error) {
+        setErrorTitle("Espera no puedo guardar la cita");
+        setAppointmentErrors(["Sucedio un error con el servidor"]);
+        handleDialogOpen();
+      }
+    });
   };
 
   return (
@@ -539,34 +605,39 @@ const PetsModal = (props) => {
             <ExpansionPanelDetails>
               <Divider></Divider>
               <Grid container spacing={3}>
-                <Grid item md={12} xs={12}>
-                  <TextField
-                    id="datetime-local"
-                    label="Proxima cita"
-                    type="datetime-local"
-                    defaultValue="2017-05-24T10:30"
-                    className={classes.textField}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </Grid>
-                <Grid item md={12} xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Información a tener en cuenta"
-                    margin="dense"
-                    name="description"
-                    variant="outlined"
-                    multiline
-                    rows={3}
-                  />
-                </Grid>
-                <Grid tem md={12} xs={12}>
-                  <Button fullWidth color="primary" variant="contained">
-                    Guardar
-                  </Button>
-                </Grid>
+                <form
+                  ref={frmScheduleAppointment}
+                  onSubmit={ScheduleAppointment}
+                >
+                  <Grid item md={12} xs={12}>
+                    <TextField
+                      id="datetime-local"
+                      label="Proxima cita"
+                      type="datetime-local"
+                      defaultValue="2017-05-24T10:30"
+                      className={classes.textField}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item md={12} xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Información a tener en cuenta"
+                      margin="dense"
+                      name="description"
+                      variant="outlined"
+                      multiline
+                      rows={3}
+                    />
+                  </Grid>
+                  <Grid tem md={12} xs={12}>
+                    <Button fullWidth color="primary" variant="contained">
+                      Guardar
+                    </Button>
+                  </Grid>
+                </form>
               </Grid>
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -574,6 +645,57 @@ const PetsModal = (props) => {
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cerrar
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openDialog}
+        onClose={handleDialogClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{errorTitle}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <ul>
+              {appointmentErrors.map((aerror) => (
+                <li>{aerror}</li>
+              ))}
+            </ul>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} color="primary" autoFocus>
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openDialog2}
+        onClose={handleDialogClose2}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{errorTitle}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <div>
+              <h2>¡Datos registros!</h2>
+              <span>
+                ¿Deseas enviar un correo al paciente con el diagnostico general
+                y los medicamentos?
+              </span>
+            </div>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose2} color="primary" autoFocus>
+            Enviar
+          </Button>
+          <Button onClick={handleDialogClose2} color="primary" autoFocus>
+            Terminar
           </Button>
         </DialogActions>
       </Dialog>

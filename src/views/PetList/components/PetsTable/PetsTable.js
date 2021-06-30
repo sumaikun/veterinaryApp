@@ -17,7 +17,8 @@ import {
   TableHead,
   TableRow,
   Typography,
-  TablePagination
+  TablePagination,
+  Tooltip
 } from '@material-ui/core';
 
 import { getInitials } from 'helpers';
@@ -43,7 +44,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const PetsTable = props => {
-  const { className, pets, species, breeds, ...rest } = props;
+  const { className, pets, species, breeds, contacts, ...rest } = props;
 
   const classes = useStyles();
 
@@ -89,6 +90,7 @@ const PetsTable = props => {
                   <TableCell>Color</TableCell>
                   <TableCell>Sexo</TableCell>
                   <TableCell>Edad</TableCell>
+                  <TableCell>Dueños</TableCell>
                   <TableCell>fecha de registro</TableCell>
                 </TableRow>
               </TableHead>
@@ -120,11 +122,35 @@ const PetsTable = props => {
                         <Typography variant="body1">{pet.name}</Typography>
                       </div>
                     </TableCell>
-                    <TableCell>{  pet.species }</TableCell>
-                    <TableCell>{  pet.breed }</TableCell>
+                    <TableCell>{pet.species}</TableCell>
+                    <TableCell>{pet.breed}</TableCell>
                     <TableCell>{pet.color}</TableCell>
                     <TableCell>{pet.sex}</TableCell>
                     <TableCell>{pet.age}</TableCell>
+                    <TableCell>
+                    { pet?.contacts?.map( contact =>{ 
+                      const sContact = contacts?.filter( element => element._id == contact )[0]
+                      return (
+                        <Tooltip title={sContact?.name} arrow>
+                          <Avatar
+                            className={classes.avatar}
+                            src={  process.env.REACT_APP_SERVE_IMAGE + sContact?.picture}
+                            key={ contact }
+                            onClick={()=>{
+                              props.getContact(sContact?._id,(success, error)=>{
+                                if(success && !error)
+                                {
+                                  props.history.push('/contacts/form')
+                                }
+                              })
+                            }}
+                          >
+                            {getInitials(sContact?.name)}
+                          </Avatar>
+                        </Tooltip>
+                      )
+                    })}
+                    </TableCell>
                     <TableCell>
                       {/* moment(pet.date).format('DD/MM/YYYY') */}
                       { pet.date.split(" ")[0] }

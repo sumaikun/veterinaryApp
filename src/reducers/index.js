@@ -15,6 +15,7 @@ import { detectedDiseases } from "./detectedDiseases"
 import { patientFiles } from "./patientFiles"
 import { agendaAnnotations } from "./agendaAnnotations"
 import { doctors } from "./doctors"
+import { settings } from "./settings"
 
 const reducers = combineReducers({
   auth,
@@ -32,7 +33,8 @@ const reducers = combineReducers({
   detectedDiseases,
   patientFiles,
   agendaAnnotations,
-  doctors
+  doctors,
+  settings
 });
 
 export default reducers;

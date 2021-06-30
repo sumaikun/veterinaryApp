@@ -13,7 +13,6 @@ import {
   TextField
 } from '@material-ui/core';
 
-import api from '../../../../middleware/api'
 
 const useStyles = makeStyles(() => ({
   root: {}
@@ -26,37 +25,6 @@ const FormDetails = props => {
   const { className, ...rest } = props;
 
   const classes = useStyles();
-
-  const [administrationWays, setAdministrationWays ] = useState([]);
-
-  const [presentations, setPresentations ] = useState([]);
-
-  useEffect(() => {
-
-    const getPresentations = async () => {
-      const response = await api.getData("presentations") 
-
-      let arrayData = [{label:"",value:""}]
-      console.log(response.data)
-      response.data.forEach( data => arrayData.push({label:data,value:data}) )
-      setPresentations(arrayData)
-
-    }
-
-    const getAdministrationWays = async () => {
-      const response = await api.getData("administrationWays") 
-
-      let arrayData = [{label:"",value:""}]
-      console.log(response.data)
-      response.data.forEach( data => arrayData.push({label:data,value:data}) )
-      setAdministrationWays(arrayData)
-
-    }
-
-    getPresentations()
-    getAdministrationWays()
-
-  },[]); 
 
   const handleChange = event => {
   
@@ -144,56 +112,6 @@ const FormDetails = props => {
                 variant="outlined"
                 type="number"
               />
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                label="Via de administración"
-                margin="dense"
-                name="administrationWay"
-                onChange={handleChange}
-                required
-                select
-                // eslint-disable-next-line react/jsx-sort-props
-                SelectProps={{ native: true }}
-                InputLabelProps={{ shrink: !!props.productDetails.administrationWay }}
-                value={ props.productDetails.administrationWay }  
-                variant="outlined"
-              >
-                {administrationWays.map(option => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                  >
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                label="Presentación"
-                margin="dense"
-                name="presentation"
-                onChange={handleChange}
-                required
-                select
-                // eslint-disable-next-line react/jsx-sort-props
-                SelectProps={{ native: true }}
-                InputLabelProps={{ shrink: !!props.productDetails.presentation }}
-                value={ props.productDetails.presentation }  
-                variant="outlined"
-              >
-                {presentations.map(option => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                  >
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
             </Grid>
             <Grid item md={12} xs={12}>
               <TextField

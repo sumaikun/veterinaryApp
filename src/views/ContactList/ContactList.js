@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 
 import { getContacts , getContact } from 'actions/contacts';
 
-import { getPets } from 'actions/pets';
+import { getPets, getPet } from 'actions/pets';
 
 const useStyles = theme => ({
   root: {
@@ -139,7 +139,9 @@ class ContactList extends Component{
           deleteButton={this.deleteButton}
           filteredContacts={this.filteredContacts} />
         <div className={classes.content}>
-          <ContactsTable  addSelectedContact={this.addSelectedContact}  pets={this.props.pets} contacts={this.state.contacts} />
+          <ContactsTable  addSelectedContact={this.addSelectedContact}  pets={this.props.pets} contacts={this.state.contacts}
+            getPet={this.props.getPet} history={this.props.history}
+          />
         </div>
       </div>
     );  
@@ -161,4 +163,4 @@ ContactList.propTypes = {
 
 const componentDefinition =  withStyles(useStyles)(ContactList);
 
-export default  connect(mapStateToProps, { getContacts , getContact, getPets } )(componentDefinition);
+export default  connect(mapStateToProps, { getContacts , getContact, getPets, getPet } )(componentDefinition);

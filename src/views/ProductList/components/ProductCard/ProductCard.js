@@ -35,8 +35,8 @@ const useStyles = makeStyles(theme => ({
   avatar: {
     marginLeft: 'auto',
     marginRight: 'auto',
-    height: 300,
-    width: 350,
+    height: 200,
+    width: 200,
     flexShrink: 0,
     flexGrow: 0
   },
@@ -71,6 +71,7 @@ const ProductCard = props => {
           </Avatar>
          
         </div>
+        <br/>
         <Typography
           align="center"
           gutterBottom
@@ -115,7 +116,8 @@ const ProductCard = props => {
               display="inline"
               variant="body2"
               onClick={()=>{
-                props.deleteButton(product._id)
+                  alert("proximamente")
+                //props.deleteButton(product._id)
               }}
             >
               Eliminar

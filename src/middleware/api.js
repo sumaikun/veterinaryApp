@@ -63,6 +63,7 @@ instance.interceptors.response.use((response) => {
       Window.Store.dispatch({type:LOGOUT_SUCCESS})    
       window.location.assign("/dashboard")     
       alert("Credenciales expiradas ,Debe volver a logearse");
+      localStorage.clear()
       //window.setTimeout(function(){ window.location.reload(); alert("Credenciales expiradas ,Debe volver a logearse");  }, 3000);
       
     }

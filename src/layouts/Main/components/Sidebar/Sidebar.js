@@ -15,6 +15,7 @@ import PetsIcon from '@material-ui/icons/Pets';
 import Lock from '@material-ui/icons/Lock';
 import Build from '@material-ui/icons/Build';
 import Book from '@material-ui/icons/Book';
+import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import Swal from 'sweetalert2'
 //import { Profile, SidebarNav, UpgradePlan } from './components';
 
@@ -186,6 +187,11 @@ const Sidebar = props => {
         title: 'Contactos',
         href: '/contacts',
         icon: <AccountBoxIcon />
+      },
+      {
+        title: 'Product. o Procedi.',
+        href: '/products',
+        icon: <ShoppingBasketIcon />
       },
       {
         title: 'Agenda',

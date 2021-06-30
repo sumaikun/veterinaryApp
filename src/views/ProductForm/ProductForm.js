@@ -33,7 +33,6 @@ const ProductForm = props => {
     description: props.productsState.selectedProduct.description,
     picture: props.productsState.selectedProduct.picture ? props.productsState.selectedProduct.picture : null,
     administrationWay: props.productsState.selectedProduct.administrationWay,
-    presentation: props.productsState.selectedProduct.presentation,
     file: null
   });
 

@@ -20,6 +20,7 @@ import {
   TablePagination,
   FormControlLabel,
   Checkbox,
+  Tooltip
 } from '@material-ui/core';
 
 import { getInitials } from 'helpers';
@@ -170,17 +171,28 @@ const ContactsTable = props => {
                     </TableCell>
                     <TableCell>{contact.phone}</TableCell>
                     <TableCell>{contact.ocupation}</TableCell>
-                    <TableCell>{ pets.map( pet => {
+                    <TableCell>{ pets?.map( pet => {
                       return pet.contacts.map( sContact => {
                           console.log(sContact,contact._id,sContact == contact._id)
                           if (sContact == contact._id){
                             return (
-                            <Avatar
-                              className={classes.avatar}
-                              src={  process.env.REACT_APP_SERVE_IMAGE + pet.picture}
-                            >
-                              {getInitials(pet.name)}
-                            </Avatar>
+                            <Tooltip title={pet?.name} arrow 
+                              onClick={()=>{
+                                props.getPet(pet?._id,(success, error)=>{
+                                  if(success && !error)
+                                  {
+                                    props.history.push('/pets/form')
+                                  }
+                                })
+                              }}
+                              >
+                              <Avatar
+                                className={classes.avatar}
+                                src={  process.env.REACT_APP_SERVE_IMAGE + pet.picture}
+                              >
+                                {getInitials(pet.name)}
+                              </Avatar>
+                            </Tooltip>
                             )
                           }                          
                       })

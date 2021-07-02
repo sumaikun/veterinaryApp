@@ -192,6 +192,14 @@ const PetsModal = (props) => {
   const ScheduleAppointment = (e) => {
     e.preventDefault();
 
+    if(moment().diff(moment(appointment.appointmentDate),'hours') > 0)
+    {
+      setErrorTitle("Espera no puedo guardar la cita");
+      setAppointmentErrors(["La fecha de agendamiento debe ser mayor al dia de hoy"]);
+      handleDialogOpen();
+      return;
+    }    
+
     const finalDate = appointment.appointmentDate || props.defaultDate;
 
     //console.log("finalDate",finalDate)
@@ -604,21 +612,25 @@ const PetsModal = (props) => {
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <Divider></Divider>
-              <Grid container spacing={3}>
-                <form
-                  ref={frmScheduleAppointment}
-                  onSubmit={ScheduleAppointment}
-                >
+              <form ref={frmScheduleAppointment} onSubmit={ScheduleAppointment}>
+                <Grid container spacing={3}>
                   <Grid item md={12} xs={12}>
                     <TextField
                       id="datetime-local"
                       label="Proxima cita"
                       type="datetime-local"
-                      defaultValue="2017-05-24T10:30"
                       className={classes.textField}
                       InputLabelProps={{
                         shrink: true,
                       }}
+                      defaultValue={
+                        props.defaultDate || moment().toISOString()
+                      }
+                      name="appointmentDate"
+                      onChange={(event) => {
+                        handleChange(event, null);
+                      }}
+                      required
                     />
                   </Grid>
                   <Grid item md={12} xs={12}>
@@ -629,16 +641,26 @@ const PetsModal = (props) => {
                       name="description"
                       variant="outlined"
                       multiline
+                      name="agendaAnnotation"
+                      onChange={(event) => {
+                        handleChange(event, null);
+                      }}
                       rows={3}
+                      required
                     />
                   </Grid>
                   <Grid tem md={12} xs={12}>
-                    <Button fullWidth color="primary" variant="contained">
+                    <Button
+                      fullWidth
+                      color="primary"
+                      type="submit"
+                      variant="contained"
+                    >
                       Guardar
                     </Button>
                   </Grid>
-                </form>
-              </Grid>
+                </Grid>
+              </form>
             </ExpansionPanelDetails>
           </ExpansionPanel>
         </DialogContent>

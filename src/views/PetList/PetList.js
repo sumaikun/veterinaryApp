@@ -96,14 +96,12 @@ class PetList extends Component {
     this.medicalRecordsButton = this.medicalRecordsButton.bind(this);
     this.medicalAppointmentButton = this.medicalAppointmentButton.bind(this);
     this.ownersButton = this.ownersButton.bind(this);
-
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
-
     this.handleOpen2 = this.handleOpen2.bind(this);
     this.handleClose2 = this.handleClose2.bind(this);
-
     this.selectProduct = this.selectProduct.bind(this);
+    this.handleProducts = this.handleProducts.bind(this);
   }
 
   addSelectedPet(id) {
@@ -227,8 +225,6 @@ class PetList extends Component {
   }
 
   selectProduct(product) {
-    console.log("select product", product);
-
     const index = this.state.selectedProducts.findIndex(
       (element) => element._id == product._id
     );
@@ -245,6 +241,24 @@ class PetList extends Component {
         selectedProducts: copyProducts,
       });
     }
+  }
+
+  handleProducts(products) {
+    let ArrayToHandle = [];
+
+    products.map((element) => {
+      const elemPush = this.state.products.filter(
+        (product) => product._id == element
+      )[0];
+      ArrayToHandle.push(elemPush);
+    });
+
+    console.log("ArrayToHandle",ArrayToHandle)
+
+    this.setState({
+      ...this.state,
+      selectedProducts: ArrayToHandle,
+    });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -288,6 +302,7 @@ class PetList extends Component {
           }
           getMedicinesByAppointment={this.props.getMedicinesByAppointment}
           pet={this.state.selectedPet}
+          handleProducts={this.handleProducts}
         />
 
         {this.state.products ? (
@@ -337,5 +352,5 @@ export default connect(mapStateToProps, {
   saveAppointment,
   saveMedicine,
   getAppointmentsByPatientAndDate,
-  getMedicinesByAppointment
+  getMedicinesByAppointment,
 })(componentDefinition);

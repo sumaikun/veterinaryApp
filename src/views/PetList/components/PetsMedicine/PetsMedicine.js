@@ -55,11 +55,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PetsMedicine = (props) => {
+  
   const { open, products, selectProduct, handleClose, ...rest } = props;
 
   //console.log("pets medicine props",props)
 
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState();
 
   const [filteredProducts, setFilteredProducts] = useState([]);
 
@@ -97,7 +98,6 @@ const PetsMedicine = (props) => {
 
   const medicineSelected = (data) => {
     const product = products.filter((product) => product._id === data)[0];
-    console.log("medicineSelected", product);
     setOpenMedicineConfirmation(true);
     setSelectedProduct(product);
   };

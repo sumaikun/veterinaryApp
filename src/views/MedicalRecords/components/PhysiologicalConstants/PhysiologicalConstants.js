@@ -112,147 +112,147 @@ const PhysiologicalConstants = props => {
     switch(key){
         case "tlic":
 
-            errors[0] = value.length > 0 && value.length < 5 ?
+            errors[0] = value?.length > 0 && value?.length < 5 ?
             "El T.LI.C debe tener mas de 5 carácteres" : false       
 
         return  errors[0]
 
         case "heartRate":
 
-            errors[1] = value.length > 0 && value.length < 5 ?
+            errors[1] = value?.length > 0 && value?.length < 5 ?
                 "La frecuencia cardiaca debe tener mas de 5 carácteres" : false       
 
             return  errors[1]
 
         case "respiratoryRate":
 
-            errors[2] = value.length > 0 && value.length < 5 ?
+            errors[2] = value?.length > 0 && value?.length < 5 ?
                 "La frecuencia respiratoria debe tener mas de 5 carácteres" : false       
 
             return  errors[2]
 
         case "heartBeat":
 
-            errors[3] = value.length > 0 && value.length < 5 ?
+            errors[3] = value?.length > 0 && value?.length < 5 ?
                 "La ritmo cardiaco debe tener mas de 5 carácteres" : false       
 
             return  errors[3]
 
         case "temperature":
 
-            errors[4] = value.length > 0 && value.length < 5 ?
+            errors[4] = value?.length > 0 && value?.length < 5 ?
                 "La temperatura debe tener mas de 5 carácteres" : false       
 
             return  errors[4]
 
         case "weight":
 
-            errors[5] = value.length > 0 && value.length < 5 ?
+            errors[5] = value?.length > 0 && value?.length < 5 ?
                 "El peso debe tener mas de 5 carácteres" : false       
 
             return  errors[5]
 
         case "conjuntivalMucosa":
 
-            errors[6] = value.length > 0 && value.length < 15 ?
+            errors[6] = value?.length > 0 && value?.length < 15 ?
                 "La mucosa conjuntival debe tener mas de 15 carácteres" : false       
 
             return  errors[6]
 
         case "oralMucosa":
 
-            errors[7] = value.length > 0 && value.length < 15 ?
+            errors[7] = value?.length > 0 && value?.length < 15 ?
                 "La mucosa oral debe tener mas de 15 carácteres" : false       
 
             return  errors[7]
 
         case "vulvalMucosa":
 
-            errors[8] = value.length > 0 && value.length < 15 ?
+            errors[8] = value?.length > 0 && value?.length < 15 ?
                 "La mucosa vulvar debe tener mas de 15 carácteres" : false       
 
             return  errors[8]
 
         case "rectalMucosa":
 
-            errors[9] = value.length > 0 && value.length < 15 ?
+            errors[9] = value?.length > 0 && value?.length < 15 ?
                 "La mucosa rectal debe tener mas de 15 carácteres" : false       
 
             return  errors[9]
 
         case "physicalsEye":
 
-            errors[10] = value.length > 0 && value.length < 15 ?
+            errors[10] = value?.length > 0 && value?.length < 15 ?
                 "El estado de los ojos debe tener mas de 15 carácteres" : false       
 
             return  errors[10]
 
         case "physicalsEars":
 
-            errors[11] = value.length > 0 && value.length < 15 ?
+            errors[11] = value?.length > 0 && value?.length < 15 ?
                 "El estado de los oidos debe tener mas de 15 carácteres" : false       
 
             return  errors[11]
 
         case "physicalsLinfaticmodules":
 
-            errors[12] = value.length > 0 && value.length < 15 ?
+            errors[12] = value?.length > 0 && value?.length < 15 ?
                 "El estado de los modulos linfaticos debe tener mas de 15 carácteres" : false       
 
             return  errors[12]
 
         case "physicalsSkinandanexes":
 
-            errors[13] = value.length > 0 && value.length < 15 ?
+            errors[13] = value?.length > 0 && value?.length < 15 ?
                 "El estado de la piel y anexos debe tener mas de 15 carácteres" : false       
 
             return  errors[13]
 
         case "physicalsLocomotion":
 
-            errors[14] = value.length > 0 && value.length < 15 ?
+            errors[14] = value?.length > 0 && value?.length < 15 ?
                 "El estado de la locomoción debe tener mas de 15 carácteres" : false       
 
             return  errors[14]
 
         case "physicalsMusclesqueletal":
 
-            errors[15] = value.length > 0 && value.length < 15 ?
+            errors[15] = value?.length > 0 && value?.length < 15 ?
                 "El estado de musculo esquelético debe tener mas de 15 carácteres" : false       
 
             return  errors[15]
         
         case "physicalsNervoussystem":
 
-            errors[16] = value.length > 0 && value.length < 15 ?
+            errors[16] = value?.length > 0 && value?.length < 15 ?
                 "El estado del sistema nervioso debe tener mas de 15 carácteres" : false       
 
             return  errors[16]
 
         case "physicalsCardiovascularsystem":
 
-            errors[17] = value.length > 0 && value.length < 15 ?
+            errors[17] = value?.length > 0 && value?.length < 15 ?
                 "El estado del sistema cardiovascular debe tener mas de 15 carácteres" : false       
 
             return  errors[17]
 
         case "physicalsRespiratorysystem":
 
-            errors[18] = value.length > 0 && value.length < 15 ?
+            errors[18] = value?.length > 0 && value?.length < 15 ?
                 "El estado del sistema respiratorio debe tener mas de 15 carácteres" : false       
 
             return  errors[18]
 
         case "physicalsDigestivesystem":
 
-            errors[18] = value.length > 0 && value.length < 15 ?
+            errors[18] = value?.length > 0 && value?.length < 15 ?
                 "El estado del sistema digestivo debe tener mas de 15 carácteres" : false       
 
             return  errors[18]
 
         case "physicalsGenitourinarysystem":
 
-            errors[19] = value.length > 0 && value.length < 15 ?
+            errors[19] = value?.length > 0 && value?.length < 15 ?
                 "El estado del sistema genitourinario debe tener mas de 15 carácteres" : false       
 
             return  errors[19]
@@ -283,9 +283,9 @@ const PhysiologicalConstants = props => {
                         className: classes.floatingLabelFocusStyle,
                     }}
                     onChange={handleChange}
-                    value={values.tlic}
-                    helperText={rules("tlic",values.tlic)}
-                    error = {rules("tlic",values.tlic)}
+                    value={values?.tlic}
+                    helperText={rules("tlic",values?.tlic)}
+                    error = {rules("tlic",values?.tlic)}
                 />
             </Grid>
             <Grid lg={4} md={4} xs={12} >
@@ -299,9 +299,9 @@ const PhysiologicalConstants = props => {
                         className: classes.floatingLabelFocusStyle,
                     }}
                     onChange={handleChange}
-                    value={values.heartRate}
-                    helperText={rules("heartRate",values.heartRate)}
-                    error = {rules("heartRate",values.heartRate)}
+                    value={values?.heartRate}
+                    helperText={rules("heartRate",values?.heartRate)}
+                    error = {rules("heartRate",values?.heartRate)}
                 />
             </Grid>
             <Grid lg={4} md={4} xs={12} >
@@ -315,9 +315,9 @@ const PhysiologicalConstants = props => {
                         className: classes.floatingLabelFocusStyle,
                     }}
                     onChange={handleChange}
-                    value={values.respiratoryRate}
-                    helperText={rules("respiratoryRate",values.respiratoryRate)}
-                    error = {rules("respiratoryRate",values.respiratoryRate)}
+                    value={values?.respiratoryRate}
+                    helperText={rules("respiratoryRate",values?.respiratoryRate)}
+                    error = {rules("respiratoryRate",values?.respiratoryRate)}
                 />
             </Grid>
         </Grid>
@@ -338,9 +338,9 @@ const PhysiologicalConstants = props => {
                         className: classes.floatingLabelFocusStyle,
                     }}
                     onChange={handleChange}
-                    value={values.heartBeat}
-                    helperText={rules("heartBeat",values.heartBeat)}
-                    error = {rules("heartBeat",values.heartBeat)}
+                    value={values?.heartBeat}
+                    helperText={rules("heartBeat",values?.heartBeat)}
+                    error = {rules("heartBeat",values?.heartBeat)}
                 />
             </Grid>
             <Grid lg={4} md={4} xs={12} >
@@ -354,9 +354,9 @@ const PhysiologicalConstants = props => {
                         className: classes.floatingLabelFocusStyle,
                     }}
                     onChange={handleChange}
-                    value={values.temperature}
-                    helperText={rules("temperature",values.temperature)}
-                    error = {rules("temperature",values.temperature)}
+                    value={values?.temperature}
+                    helperText={rules("temperature",values?.temperature)}
+                    error = {rules("temperature",values?.temperature)}
                 />
             </Grid>
             <Grid lg={4} md={4} xs={12} >
@@ -370,9 +370,9 @@ const PhysiologicalConstants = props => {
                         className: classes.floatingLabelFocusStyle,
                     }}
                     onChange={handleChange}
-                    value={values.weight}
-                    helperText={rules("weight",values.weight)}
-                    error = {rules("weight",values.weight)}
+                    value={values?.weight}
+                    helperText={rules("weight",values?.weight)}
+                    error = {rules("weight",values?.weight)}
                 />
             </Grid>
         </Grid>
@@ -381,7 +381,7 @@ const PhysiologicalConstants = props => {
         <Grid  container direction="row" justify="center" alignItems="center">
             <FormControl component="fieldset">
                 <RadioGroup style={useStyles.horizontalGroup} 
-                name="attitude" onChange={handleChange} value={ values.attitude }
+                name="attitude" onChange={handleChange} value={ values?.attitude }
                 aria-label="attitude">
                     
                     <FormControlLabel value="Astenico" control={<Radio/>} 
@@ -400,7 +400,7 @@ const PhysiologicalConstants = props => {
             <FormControl component="fieldset">
                 <RadioGroup style={useStyles.horizontalGroup} 
                      name="bodyCondition" onChange={handleChange}
-                     value={ values.bodyCondition }
+                     value={ values?.bodyCondition }
                     aria-label="bodyCondition">
                     
                     <FormControlLabel value="Caquetico" control={<Radio/>} 
@@ -423,7 +423,7 @@ const PhysiologicalConstants = props => {
             <FormControl component="fieldset">
                 <RadioGroup style={useStyles.horizontalGroup}
                     name="hidrationStatus" onChange={handleChange}
-                    value={ values.hidrationStatus }
+                    value={ values?.hidrationStatus }
                     aria-label="customerBenefit">
                     
                     <FormControlLabel value="Normal" control={<Radio/>} 
@@ -456,9 +456,9 @@ const PhysiologicalConstants = props => {
                     className: classes.floatingLabelFocusStyle,
                 }}
                 onChange={handleChange}
-                value={values.conjuntivalMucosa}
-                helperText={rules("conjuntivalMucosa",values.conjuntivalMucosa)}
-                error = {rules("conjuntivalMucosa",values.conjuntivalMucosa)}
+                value={values?.conjuntivalMucosa}
+                helperText={rules("conjuntivalMucosa",values?.conjuntivalMucosa)}
+                error = {rules("conjuntivalMucosa",values?.conjuntivalMucosa)}
             />
         </Grid>
 
@@ -475,9 +475,9 @@ const PhysiologicalConstants = props => {
                     className: classes.floatingLabelFocusStyle,
                 }}
                 onChange={handleChange}
-                value={values.oralMucosa}
-                helperText={rules("oralMucosa",values.oralMucosa)}
-                error = {rules("oralMucosa",values.oralMucosa)}
+                value={values?.oralMucosa}
+                helperText={rules("oralMucosa",values?.oralMucosa)}
+                error = {rules("oralMucosa",values?.oralMucosa)}
             />
         </Grid>
 
@@ -494,9 +494,9 @@ const PhysiologicalConstants = props => {
                     className: classes.floatingLabelFocusStyle,
                 }}
                 onChange={handleChange}
-                value={values.vulvalMucosa}
-                helperText={rules("vulvalMucosa",values.vulvalMucosa)}
-                error = {rules("vulvalMucosa",values.vulvalMucosa)}
+                value={values?.vulvalMucosa}
+                helperText={rules("vulvalMucosa",values?.vulvalMucosa)}
+                error = {rules("vulvalMucosa",values?.vulvalMucosa)}
             />
         </Grid>
 
@@ -513,9 +513,9 @@ const PhysiologicalConstants = props => {
                     className: classes.floatingLabelFocusStyle,
                 }}
                 onChange={handleChange}
-                value={values.rectalMucosa}
-                helperText={rules("rectalMucosa",values.rectalMucosa)}
-                error = {rules("rectalMucosa",values.rectalMucosa)}
+                value={values?.rectalMucosa}
+                helperText={rules("rectalMucosa",values?.rectalMucosa)}
+                error = {rules("rectalMucosa",values?.rectalMucosa)}
             />
         </Grid>
 
@@ -534,9 +534,9 @@ const PhysiologicalConstants = props => {
                     className: classes.floatingLabelFocusStyle,
                 }}
                 onChange={handleChange}
-                value={values.physicalsEye}
-                helperText={rules("physicalsEye",values.physicalsEye)}
-                error = {rules("physicalsEye",values.physicalsEye)}
+                value={values?.physicalsEye}
+                helperText={rules("physicalsEye",values?.physicalsEye)}
+                error = {rules("physicalsEye",values?.physicalsEye)}
         />
 
         <TextField
@@ -551,9 +551,9 @@ const PhysiologicalConstants = props => {
                     className: classes.floatingLabelFocusStyle,
                 }}
                 onChange={handleChange}
-                value={values.physicalsEars}
-                helperText={rules("physicalsEars",values.physicalsEars)}
-                error = {rules("physicalsEars",values.physicalsEars)}
+                value={values?.physicalsEars}
+                helperText={rules("physicalsEars",values?.physicalsEars)}
+                error = {rules("physicalsEars",values?.physicalsEars)}
         />
 
         <TextField
@@ -568,9 +568,9 @@ const PhysiologicalConstants = props => {
                     className: classes.floatingLabelFocusStyle,
                 }}
                 onChange={handleChange}
-                value={values.physicalsLinfaticmodules}
-                helperText={rules("physicalsLinfaticmodules",values.physicalsLinfaticmodules)}
-                error = {rules("physicalsLinfaticmodules",values.physicalsLinfaticmodules)}
+                value={values?.physicalsLinfaticmodules}
+                helperText={rules("physicalsLinfaticmodules",values?.physicalsLinfaticmodules)}
+                error = {rules("physicalsLinfaticmodules",values?.physicalsLinfaticmodules)}
         />
 
         <TextField
@@ -585,9 +585,9 @@ const PhysiologicalConstants = props => {
                     className: classes.floatingLabelFocusStyle,
                 }}
                 onChange={handleChange}
-                value={values.physicalsSkinandanexes}
-                helperText={rules("physicalsSkinandanexes",values.physicalsSkinandanexes)}
-                error = {rules("physicalsSkinandanexes",values.physicalsSkinandanexes)}
+                value={values?.physicalsSkinandanexes}
+                helperText={rules("physicalsSkinandanexes",values?.physicalsSkinandanexes)}
+                error = {rules("physicalsSkinandanexes",values?.physicalsSkinandanexes)}
         />
 
         <TextField
@@ -602,9 +602,9 @@ const PhysiologicalConstants = props => {
                     className: classes.floatingLabelFocusStyle,
                 }}
                 onChange={handleChange}
-                value={values.physicalsLocomotion}
-                helperText={rules("physicalsLocomotion",values.physicalsLocomotion)}
-                error = {rules("physicalsLocomotion",values.physicalsLocomotion)}
+                value={values?.physicalsLocomotion}
+                helperText={rules("physicalsLocomotion",values?.physicalsLocomotion)}
+                error = {rules("physicalsLocomotion",values?.physicalsLocomotion)}
         />
 
         <TextField
@@ -619,9 +619,9 @@ const PhysiologicalConstants = props => {
                     className: classes.floatingLabelFocusStyle,
                 }}
                 onChange={handleChange}
-                value={values.physicalsMusclesqueletal}
-                helperText={rules("physicalsMusclesqueletal",values.physicalsMusclesqueletal)}
-                error = {rules("physicalsMusclesqueletal",values.physicalsMusclesqueletal)}
+                value={values?.physicalsMusclesqueletal}
+                helperText={rules("physicalsMusclesqueletal",values?.physicalsMusclesqueletal)}
+                error = {rules("physicalsMusclesqueletal",values?.physicalsMusclesqueletal)}
         />
 
         <TextField
@@ -636,9 +636,9 @@ const PhysiologicalConstants = props => {
                     className: classes.floatingLabelFocusStyle,
                 }}
                 onChange={handleChange}
-                value={values.physicalsNervoussystem}
-                helperText={rules("physicalsNervoussystem",values.physicalsNervoussystem)}
-                error = {rules("physicalsNervoussystem",values.physicalsNervoussystem)}
+                value={values?.physicalsNervoussystem}
+                helperText={rules("physicalsNervoussystem",values?.physicalsNervoussystem)}
+                error = {rules("physicalsNervoussystem",values?.physicalsNervoussystem)}
         />
 
         <TextField
@@ -653,9 +653,9 @@ const PhysiologicalConstants = props => {
                     className: classes.floatingLabelFocusStyle,
                 }}
                 onChange={handleChange}
-                value={values.physicalsCardiovascularsystem}
-                helperText={rules("physicalsCardiovascularsystem",values.physicalsCardiovascularsystem)}
-                error = {rules("physicalsCardiovascularsystem",values.physicalsCardiovascularsystem)}
+                value={values?.physicalsCardiovascularsystem}
+                helperText={rules("physicalsCardiovascularsystem",values?.physicalsCardiovascularsystem)}
+                error = {rules("physicalsCardiovascularsystem",values?.physicalsCardiovascularsystem)}
         />
 
         <TextField
@@ -670,9 +670,9 @@ const PhysiologicalConstants = props => {
                     className: classes.floatingLabelFocusStyle,
                 }}
                 onChange={handleChange}
-                value={values.physicalsRespiratorysystem}
-                helperText={rules("physicalsRespiratorysystem",values.physicalsRespiratorysystem)}
-                error = {rules("physicalsCardiovascularsystem",values.physicalsCardiovascularsystem)}
+                value={values?.physicalsRespiratorysystem}
+                helperText={rules("physicalsRespiratorysystem",values?.physicalsRespiratorysystem)}
+                error = {rules("physicalsCardiovascularsystem",values?.physicalsCardiovascularsystem)}
         />
 
         <TextField
@@ -687,9 +687,9 @@ const PhysiologicalConstants = props => {
                     className: classes.floatingLabelFocusStyle,
                 }}
                 onChange={handleChange}
-                value={values.physicalsDigestivesystem}
-                helperText={rules("physicalsDigestivesystem",values.physicalsDigestivesystem)}
-                error = {rules("physicalsDigestivesystem",values.physicalsDigestivesystem)}
+                value={values?.physicalsDigestivesystem}
+                helperText={rules("physicalsDigestivesystem",values?.physicalsDigestivesystem)}
+                error = {rules("physicalsDigestivesystem",values?.physicalsDigestivesystem)}
         />
 
         <TextField
@@ -704,9 +704,9 @@ const PhysiologicalConstants = props => {
                     className: classes.floatingLabelFocusStyle,
                 }}
                 onChange={handleChange}
-                value={values.physicalsGenitourinarysystem}
-                helperText={rules("physicalsGenitourinarysystem",values.physicalsGenitourinarysystem)}
-                error = {rules("physicalsGenitourinarysystem",values.physicalsGenitourinarysystem)}
+                value={values?.physicalsGenitourinarysystem}
+                helperText={rules("physicalsGenitourinarysystem",values?.physicalsGenitourinarysystem)}
+                error = {rules("physicalsGenitourinarysystem",values?.physicalsGenitourinarysystem)}
         />
         <Typography variant="subtitle2">Lista de constantes registradas</Typography>
         <Divider/> 
@@ -792,14 +792,14 @@ const PhysiologicalConstants = props => {
                         })
 
                     }else{
-                        if(values.tlic === null || values.heartRate === null
-                            || values.respiratoryRate === null
-                            || values.heartBeat === ""
-                            || values.temperature === ""
-                            || values.weight === ""
-                            || values.attitude === ""
-                            || values.bodyCondition === ""
-                            || values.hidrationStatus === ""){
+                        if(values?.tlic === null || values?.heartRate === null
+                            || values?.respiratoryRate === null
+                            || values?.heartBeat === ""
+                            || values?.temperature === ""
+                            || values?.weight === ""
+                            || values?.attitude === ""
+                            || values?.bodyCondition === ""
+                            || values?.hidrationStatus === ""){
 
                             Swal.fire({
                                 icon: 'warning',

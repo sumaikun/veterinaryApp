@@ -8,8 +8,6 @@ import { pets } from "./pets";
 import { parameters } from "./parameters";
 import { patientReviews } from "./patientReviews";
 import { physiologicalConstants } from "./physiologicalConstant"
-import { diagnosticPlans } from "./diagnosticPlans"
-import { therapeuticPlans } from "./therapeuticPlans"
 import { appointments } from "./appointments"
 import { detectedDiseases } from "./detectedDiseases"
 import { patientFiles } from "./patientFiles"
@@ -27,8 +25,6 @@ const reducers = combineReducers({
   parameters,
   patientReviews,
   physiologicalConstants,
-  diagnosticPlans,
-  therapeuticPlans,
   appointments,
   detectedDiseases,
   patientFiles,

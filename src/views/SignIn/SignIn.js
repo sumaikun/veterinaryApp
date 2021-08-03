@@ -208,8 +208,6 @@ const SignIn = props => {
   const handleSignIn = event => {
     
     event.preventDefault()
-    console.log("it is time to login")
-    console.log(formState.values)
     props.loginUser(formState.values, ( success , error ) =>{
       if(success){
         history.push('/');

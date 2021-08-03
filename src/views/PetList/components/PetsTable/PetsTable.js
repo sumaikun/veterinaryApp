@@ -52,8 +52,6 @@ const PetsTable = props => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
 
-
-
   const handleSelectOne = (event) => {    
     setSelectedPet(event.target.value)
     props.addSelectedPet(event.target.value)

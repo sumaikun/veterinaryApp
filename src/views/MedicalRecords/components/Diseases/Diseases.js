@@ -76,7 +76,7 @@ const Diseases = props => {
 
     }
 
-    getDiseases()
+    //getDiseases()
   },[]);  
 
   const [values, setValues] = useState(new DetectedDiseaseModel())

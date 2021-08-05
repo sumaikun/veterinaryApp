@@ -139,7 +139,7 @@ const MedicalRecords = (props) => {
       }
     }
 
-    props.save(values, (res, err) => {
+    props.savePhysiologicalConstant(values, (res, err) => {
       if (res) {
         console.log("res end point", res);
 
@@ -371,7 +371,7 @@ const mapStateToProps = (state) => {
 
   const { pets } = state.pets;
 
-  const { selectedPatientReview } = state.patientReviews;
+  const { selectedPatientReview , patientReviews } = state.patientReviews;
 
   const { physiologicalConstants, selectedPhysiologicalConstant } =
     state.physiologicalConstants;
@@ -381,16 +381,15 @@ const mapStateToProps = (state) => {
   const { patientFiles } = state.patientFiles;
 
   const { detectedDiseases } = state.detectedDiseases;
-
-  //console.log("selectedPatientReview",selectedPatientReview)
+  
 
   return {
     //petsState: state.pets,
     pets,
     appState: state.app,
-    selectedPatientReview,
+    selectedPatientReview: patientReviews.length > 0 ? patientReviews[0] : selectedPatientReview,
     physiologicalConstants,
-    selectedPhysiologicalConstant,
+    selectedPhysiologicalConstant: physiologicalConstants.length > 0 ? physiologicalConstants[+physiologicalConstants.length-1] : selectedPhysiologicalConstant,
     appointments,
     auth: state.auth,
     patientFiles,

@@ -65,7 +65,6 @@ const PatientReview = (props) => {
   const [screenWidth, setscreenWidth] = useState(window.innerWidth);
 
   useEffect(() => {
-    console.log("patientReview", patientReview);
     setValues({ ...patientReview });
   }, [patientReview]);
 
@@ -453,9 +452,9 @@ const PatientReview = (props) => {
             variant="contained"
             style={{ marginTop: "10px" }}
             onClick={() => {
-              console.info("values", values);
+              //console.info("values", values);
 
-              console.log("errors", errors);
+              //console.log("errors", errors);
 
               let errorValidation = false;
 

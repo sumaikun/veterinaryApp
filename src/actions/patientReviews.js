@@ -47,6 +47,8 @@ import {
           const result = response.data ? response.data : []
 
           dispatch(setPatientReviews(result));
+
+          dispatch(selectPatientReview(result[0]));
           
           if(cb) { cb(result,false) }
           

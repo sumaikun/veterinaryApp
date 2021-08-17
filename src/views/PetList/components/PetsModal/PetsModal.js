@@ -50,7 +50,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PetsModal = (props) => {
-
   const { open, handleClose, openMedicinesModal, watch, pet, watchValues } =
     props;
 
@@ -59,6 +58,7 @@ const PetsModal = (props) => {
   useEffect(() => {}, []);
 
   useEffect(() => {
+    console.log("pet", pet);
     if (pet) {
       //if is required setting default date would bring the appointment information from that day
       props.getAppointmentsByPatientAndDate(
@@ -66,12 +66,12 @@ const PetsModal = (props) => {
         moment().format("Y-MM-DD"),
         (success, error) => {
           if (success && success[0]) {
-
+            console.log("success[0]", success[0]);
             setAppointment({
               ...success[0],
             });
 
-            props.handleProducts(success[0].products)
+            props.handleProducts(success[0].products);
 
             props.getMedicinesByAppointment(
               success[0]._id,
@@ -87,7 +87,7 @@ const PetsModal = (props) => {
   }, [pet]);
 
   const [appointment, setAppointment] = useState({
-    ReasonForConsultation: "",
+    reasonForConsultation: "",
     ResultsForConsultation: "",
     products: [],
   });
@@ -216,7 +216,6 @@ const PetsModal = (props) => {
   const frmAppointment = useRef();
 
   const ScheduleAppointment = (e) => {
-
     e.preventDefault();
 
     if (moment().diff(moment(appointment.appointmentDate), "hours") > 0) {
@@ -256,12 +255,13 @@ const PetsModal = (props) => {
   };
 
   const saveAppointment = (e) => {
-
     e.preventDefault();
 
     //console.log(props.selectedProducts,medicines,appointment)
 
-    appointment.products = props.selectedProducts.map((product) => product._id);
+    appointment.products = props.selectedProducts?.map(
+      (product) => product._id
+    );
 
     const copyArray = [];
 
@@ -562,14 +562,14 @@ const PetsModal = (props) => {
                                   <Avatar
                                     src={
                                       process.env.REACT_APP_SERVE_IMAGE +
-                                      product.picture
+                                      product?.picture
                                     }
                                     style={{ width: 100, height: 100 }}
                                   >
-                                    {getInitials(product.name)}
+                                    {getInitials(product?.name)}
                                   </Avatar>
                                   <span style={{ fontSize: 13 }}>
-                                    {product.name}
+                                    {product?.name}
                                   </span>
                                 </Grid>
                               ))}

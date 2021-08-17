@@ -1,6 +1,5 @@
 import "date-fns";
-import React, { useState, useRef } from "react";
-import clsx from "clsx";
+import React, { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/styles";
 import {
@@ -52,7 +51,16 @@ const doStyles = makeStyles((theme) => ({
 const PhysiologicalConstants = (props) => {
   const classes = doStyles();
 
-  const { saveOrUpdatePhysiologicalConstant, selectedPhysiologicalConstant } = props
+  const { saveOrUpdatePhysiologicalConstant, selectedPhysiologicalConstant } =
+    props;
+
+  const [values, setValues] = useState(selectedPhysiologicalConstant);
+
+  useEffect(() => {
+    if (selectedPhysiologicalConstant) {
+      setValues(selectedPhysiologicalConstant);
+    }
+  }, [selectedPhysiologicalConstant]);
 
   const handleChange = (event) => {
     //console.log(event,event.target)
@@ -62,8 +70,6 @@ const PhysiologicalConstants = (props) => {
       setData(event.target.name, event.target.value);
     }
   };
-
-  const [values, setValues] = useState(selectedPhysiologicalConstant);
 
   const [saveMode, setSaveMode] = useState();
 
@@ -283,7 +289,6 @@ const PhysiologicalConstants = (props) => {
                 _id: values._id || selectedPhysiologicalConstant.id,
               });
             }
-            
           }
         }}
       >

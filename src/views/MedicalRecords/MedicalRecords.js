@@ -45,7 +45,9 @@ import {
   getDetectedDisease,
   saveDetectedDisease,
 } from "actions/detectedDiseases";
+import { getProducts } from "actions/products";
 import AppointmentsModal from "views/PetList/components/PetsModal";
+import PetsMedicine from "views/PetList/components/PetsMedicine";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,11 +70,15 @@ const MedicalRecords = (props) => {
 
   const [open, setOpen] = useState();
 
+  const [open2, setOpen2] = useState();
+
   const [appointmenWatch, setAppointmenWatch] = useState(false);
 
   const [watchValues, setWatchValues] = useState();
 
   const [pet, setPet] = useState();
+
+  const [selectedProducts, setSelectedProducts] = useState([]);
 
   useEffect(() => {
     let mounted = true;
@@ -87,6 +93,8 @@ const MedicalRecords = (props) => {
       props.getPatientFilesByPatient(currentPatientId);
 
       props.getDetectedDisease(currentPatientId);
+
+      props.getProducts();
 
       mounted = false;
     }
@@ -230,6 +238,46 @@ const MedicalRecords = (props) => {
     });
   };
 
+  const selectProduct = (product) => {
+    const index = selectedProducts.findIndex(
+      (element) => element._id == product._id
+    );
+
+    if (index == -1) {
+      const copyProducts = JSON.parse(JSON.stringify(selectedProducts));
+
+      copyProducts.push(product);
+
+      setSelectedProducts(copyProducts);
+    }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleClose2 = () => {
+    setOpen2(false);
+  };
+
+  const handleOpen2 = () => {
+    setOpen2(true);
+  };
+
+  const handleProducts = (products) => {
+    let ArrayToHandle = [];
+
+    products.map((element) => {
+      const elemPush = props.products.filter(
+        (product) => product._id == element
+      )[0];
+      ArrayToHandle.push(elemPush);
+    });
+
+    console.log("ArrayToHandle", ArrayToHandle);
+
+    setSelectedProducts(ArrayToHandle);
+  };
   return (
     <>
       <div className={classes.root} style={{ marginTop: "25px" }}>
@@ -346,32 +394,33 @@ const MedicalRecords = (props) => {
       </div>
 
       <AppointmentsModal
+        selectedProducts={selectedProducts}
+        openMedicinesModal={handleOpen2}
         open={open}
-        auth={props.auth}
-        doctors={[]}
-        handleClose={() => setOpen(false)}
+        handleClose={handleClose}
         saveAppointment={props.saveAppointment}
         saveMedicine={props.saveMedicine}
         getAppointmentsByPatientAndDate={props.getAppointmentsByPatientAndDate}
         getMedicinesByAppointment={props.getMedicinesByAppointment}
-        patient={props.patient}
-        watch={appointmenWatch}
-        watchValues={watchValues}
-        saveCb={() => {
-          props.getAppointmentsByPatient(currentPatientId);
-        }}
+        pet={pet}
+        handleProducts={handleProducts}
+      />
+      <PetsMedicine
+        selectProduct={selectProduct}
+        products={props.products}
+        open={open2}
+        handleClose={handleClose2}
       />
     </>
   );
 };
 
 const mapStateToProps = (state) => {
-  
-  console.log("state mr",state)
+  //console.log("state mr", state);
 
   const { pets } = state.pets;
 
-  const { selectedPatientReview , patientReviews } = state.patientReviews;
+  const { selectedPatientReview } = state.patientReviews;
 
   const { physiologicalConstants, selectedPhysiologicalConstant } =
     state.physiologicalConstants;
@@ -381,19 +430,21 @@ const mapStateToProps = (state) => {
   const { patientFiles } = state.patientFiles;
 
   const { detectedDiseases } = state.detectedDiseases;
-  
+
+  const { products } = state.products;
 
   return {
     //petsState: state.pets,
     pets,
     appState: state.app,
-    selectedPatientReview: patientReviews.length > 0 ? patientReviews[0] : selectedPatientReview,
+    selectedPatientReview: selectedPatientReview,
     physiologicalConstants,
-    selectedPhysiologicalConstant: physiologicalConstants.length > 0 ? physiologicalConstants[+physiologicalConstants.length-1] : selectedPhysiologicalConstant,
+    selectedPhysiologicalConstant,
     appointments,
     auth: state.auth,
     patientFiles,
-    detectedDiseases
+    detectedDiseases,
+    products,
   };
 };
 
@@ -414,4 +465,5 @@ export default connect(mapStateToProps, {
   savePatientFile,
   getDetectedDisease,
   saveDetectedDisease,
+  getProducts,
 })(MedicalRecords);

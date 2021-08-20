@@ -42,7 +42,7 @@ import {
   saveAgendaAnnotation,
 } from "actions/agendaAnnotations";
 import {
-  getDetectedDisease,
+  getDetectedDiseasesByPatient,
   saveDetectedDisease,
 } from "actions/detectedDiseases";
 import { getProducts } from "actions/products";
@@ -92,7 +92,7 @@ const MedicalRecords = (props) => {
 
       props.getPatientFilesByPatient(currentPatientId);
 
-      props.getDetectedDisease(currentPatientId);
+      props.getDetectedDiseasesByPatient(currentPatientId);
 
       props.getProducts();
 
@@ -168,8 +168,6 @@ const MedicalRecords = (props) => {
   const saveOrUpdatePatientFile = (values, cb) => {
     values.patient = currentPatientId;
 
-    console.log("props.auth?.userType", props.auth);
-
     if (props.auth?.userType === 2) {
       values.doctor = props.auth?.user._id;
     }
@@ -212,6 +210,10 @@ const MedicalRecords = (props) => {
   const saveOrUpdateDetectedDisease = (values) => {
     //console.log("constant to save",values)
 
+    if (props.auth?.userType === 2) {
+      values.doctor = props.auth?.user._id;
+    }
+
     values.patient = currentPatientId;
 
     if (idPCToSave) {
@@ -226,7 +228,7 @@ const MedicalRecords = (props) => {
 
         if (res.data && res.data.id) {
           setIdDDToSave(res.data.id);
-          props.getDetectedDisease(currentPatientId);
+          props.getDetectedDiseasesByPatient(currentPatientId);
         }
 
         return Swal.fire({
@@ -416,7 +418,7 @@ const MedicalRecords = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  //console.log("state mr", state);
+  console.log("state mr", state);
 
   const { pets } = state.pets;
 
@@ -463,7 +465,7 @@ export default connect(mapStateToProps, {
   saveAgendaAnnotation,
   getAppointmentsByPatientAndDate,
   savePatientFile,
-  getDetectedDisease,
+  getDetectedDiseasesByPatient,
   saveDetectedDisease,
   getProducts,
 })(MedicalRecords);

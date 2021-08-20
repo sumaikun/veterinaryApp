@@ -261,7 +261,7 @@ const PatientFiles = props => {
                 {
                     props.patientFiles.slice(0).reverse().map( file => ( 
                     <TableRow>
-                        <TableCell>{ file.userDetails[0].name }</TableCell>
+                        <TableCell>{ file.doctorDetails[0]?.name }</TableCell>
                         <TableCell>{ file.name }</TableCell>
                         <TableCell>{ generateFileIcon(file.filePath) }</TableCell>
                         <TableCell>{ file.description }</TableCell>

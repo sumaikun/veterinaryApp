@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/styles";
 import {
-  Grid,
   Typography,
   ExpansionPanel,
   ExpansionPanelSummary,
@@ -46,7 +45,7 @@ import {
   saveDetectedDisease,
 } from "actions/detectedDiseases";
 import { getProducts } from "actions/products";
-import AppointmentsModal from "views/PetList/components/PetsModal";
+import AppointmentsModal from "views/PetList/components/AppointmentsModal";
 import PetsMedicine from "views/PetList/components/PetsMedicine";
 
 const useStyles = makeStyles((theme) => ({

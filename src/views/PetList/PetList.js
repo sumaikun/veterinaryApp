@@ -8,7 +8,7 @@ import { withStyles } from "@material-ui/styles";
 import {
   PetsToolbar,
   PetsTable,
-  PetsModal,
+  AppointmentsModal,
   PetsMedicine,
   PetsOwner,
 } from "./components";
@@ -290,7 +290,7 @@ class PetList extends Component {
             pets={this.state.pets}
           />
         </div>
-        <PetsModal
+        <AppointmentsModal
           selectedProducts={this.state.selectedProducts}
           openMedicinesModal={this.handleOpen2}
           open={this.state.open}

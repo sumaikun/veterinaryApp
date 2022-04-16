@@ -1,142 +1,141 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 //import { Link as RouterLink, withRouter } from 'react-router-dom';
-import { withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import validate from 'validate.js';
-import { makeStyles } from '@material-ui/styles';
+import { withRouter } from "react-router-dom";
+import PropTypes from "prop-types";
+import validate from "validate.js";
+import { makeStyles } from "@material-ui/styles";
 import {
   Grid,
   Button,
   IconButton,
   TextField,
   Typography,
-  Link
-} from '@material-ui/core';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+  Link,
+} from "@material-ui/core";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
-import { Facebook as FacebookIcon, Google as GoogleIcon } from 'icons';
+import { Facebook as FacebookIcon, Google as GoogleIcon } from "icons";
 
 import { connect } from "react-redux";
 
 import { loginUser } from "actions/auth";
 
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 const schema = {
   Username: {
-    presence: { allowEmpty: false, message: 'is required' },
+    presence: { allowEmpty: false, message: "is required" },
     email: true,
     length: {
-      maximum: 64
-    }
+      maximum: 64,
+    },
   },
   Password: {
-    presence: { allowEmpty: false, message: 'is required' },
+    presence: { allowEmpty: false, message: "is required" },
     length: {
-      maximum: 128
-    }
-  }
+      maximum: 128,
+    },
+  },
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.default,
-    height: '100%'
+    height: "100%",
   },
   grid: {
-    height: '100%'
+    height: "100%",
   },
   quoteContainer: {
-    [theme.breakpoints.down('md')]: {
-      display: 'none'
-    }
+    [theme.breakpoints.down("md")]: {
+      display: "none",
+    },
   },
   quote: {
     backgroundColor: theme.palette.neutral,
-    height: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     //backgroundImage: 'url(/images/auth.jpg)',
-    backgroundImage: 'url(https://placeimg.com/640/640/animals)',
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center',
+    backgroundImage: "url(https://placeimg.com/640/640/animals)",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center",
     opacity: 1,
-    transition: "3s"
+    transition: "3s",
   },
   quoteInner: {
-    textAlign: 'center',
-    flexBasis: '600px'
+    textAlign: "center",
+    flexBasis: "600px",
   },
   quoteText: {
     color: theme.palette.white,
-    fontWeight: 300
+    fontWeight: 300,
   },
   name: {
     marginTop: theme.spacing(3),
-    color: theme.palette.white
+    color: theme.palette.white,
   },
   bio: {
-    color: theme.palette.white
+    color: theme.palette.white,
   },
   contentContainer: {},
   content: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column'
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
   },
   contentHeader: {
-    display: 'flex',
-    alignItems: 'center',
+    display: "flex",
+    alignItems: "center",
     paddingTop: theme.spacing(5),
     paddingBototm: theme.spacing(2),
     paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2)
+    paddingRight: theme.spacing(2),
   },
   logoImage: {
-    marginLeft: theme.spacing(4)
+    marginLeft: theme.spacing(4),
   },
   contentBody: {
     flexGrow: 1,
-    display: 'flex',
-    alignItems: 'center',
-    [theme.breakpoints.down('md')]: {
-      justifyContent: 'center'
-    }
+    display: "flex",
+    alignItems: "center",
+    [theme.breakpoints.down("md")]: {
+      justifyContent: "center",
+    },
   },
   form: {
     paddingLeft: 100,
     paddingRight: 100,
     paddingBottom: 125,
     flexBasis: 700,
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down("sm")]: {
       paddingLeft: theme.spacing(2),
-      paddingRight: theme.spacing(2)
-    }
+      paddingRight: theme.spacing(2),
+    },
   },
   title: {
-    marginTop: theme.spacing(3)
+    marginTop: theme.spacing(3),
   },
   socialButtons: {
-    marginTop: theme.spacing(3)
+    marginTop: theme.spacing(3),
   },
   socialIcon: {
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(1),
   },
   sugestion: {
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
   },
   textField: {
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
   },
   signInButton: {
-    margin: theme.spacing(2, 0)
-  }
+    margin: theme.spacing(2, 0),
+  },
 }));
 
-const SignIn = props => {
-
+const SignIn = (props) => {
   //console.log("props",props);
 
   const { history } = props;
@@ -147,129 +146,120 @@ const SignIn = props => {
     isValid: false,
     values: {},
     touched: {},
-    errors: {}
+    errors: {},
   });
-
-
 
   useEffect(() => {
     const errors = validate(formState.values, schema);
 
-    setFormState(formState => ({
+    setFormState((formState) => ({
       ...formState,
       isValid: errors ? false : true,
-      errors: errors || {}
+      errors: errors || {},
     }));
   }, [formState.values]);
 
-  useEffect(()=>{
+  useEffect(() => {
+    const imagesArray = ["https://placeimg.com/640/640/animals"];
 
-    const imagesArray = [
-      "https://placeimg.com/640/640/people",
-      "https://placeimg.com/640/640/nature",
-      "https://placeimg.com/640/640/animals",
-      "https://placeimg.com/640/640/tech",
-    ]
-
-
-    setInterval(() => {
+    /*setInterval(() => {
       //console.log("changed", document.querySelector("#quote-background"))
       //console.log("random",Math.floor(Math.random() * 4))
-      const reloadElement = document.querySelector("#quote-background")
-      if(reloadElement){
-        reloadElement.style.backgroundImage = `url(${imagesArray[Math.floor(Math.random() * 4)]})`;
-      }      
-    }, 8000);
-  },[])
+      const reloadElement = document.querySelector("#quote-background");
+      if (reloadElement) {
+        reloadElement.style.backgroundImage = `url(${
+          imagesArray[Math.floor(Math.random() * 4)]
+        })`;
+      }
+    }, 8000);*/
+  }, []);
 
   const handleBack = () => {
     history.goBack();
   };
 
-  const handleChange = event => {
+  const handleChange = (event) => {
     event.persist();
 
-    setFormState(formState => ({
+    setFormState((formState) => ({
       ...formState,
       values: {
         ...formState.values,
         [event.target.name]:
-          event.target.type === 'checkbox'
+          event.target.type === "checkbox"
             ? event.target.checked
-            : event.target.value
+            : event.target.value,
       },
       touched: {
         ...formState.touched,
-        [event.target.name]: true
-      }
+        [event.target.name]: true,
+      },
     }));
   };
 
-  const handleSignIn = event => {
-    
-    event.preventDefault()
-    props.loginUser(formState.values, ( success , error ) =>{
-      if(success){
-        history.push('/');
+  const handleSignIn = (event) => {
+    event.preventDefault();
+    props.loginUser(formState.values, (success, error) => {
+      if (success) {
+        history.push("/");
       }
-      if(error){
-        
-        let errorText
+      if (error) {
+        let errorText;
 
         try {
-          errorText = error.response.status === 401 ? 'Las credenciales no son validas, vuelva a intentarlo' : 'Hay un problema con el servidor'
+          errorText =
+            error.response.status === 401
+              ? "Las credenciales no son validas, vuelva a intentarlo"
+              : "Hay un problema con el servidor";
+        } catch (error) {
+          errorText = "Hay un problema de conexión al servidor";
         }
-        catch(error) {
-           errorText =  "Hay un problema de conexión al servidor"
-        }
-        
+
         Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: errorText,          
-        })
+          icon: "error",
+          title: "Oops...",
+          text: errorText,
+        });
       }
-    })
+    });
     //
-  
   };
 
-  const hasError = field =>
+  const hasError = (field) =>
     formState.touched[field] && formState.errors[field] ? true : false;
 
   return (
     <div className={classes.root}>
-      <Grid
-        className={classes.grid}
-        container
-      >
-        <Grid
-          className={classes.quoteContainer}
-          item
-          lg={5}
-        >
+      <Grid className={classes.grid} container>
+        <Grid className={classes.quoteContainer} item lg={5}>
           <div id="quote-background" className={classes.quote}>
-            <div style={{width:"100%",height:"100%",backgroundColor:"rgba(1,1,1,0.4)",display:"flex",justifyContent:"center",alignItems:"center"}} >
+            <div
+              style={{
+                width: "100%",
+                height: "100%",
+                backgroundColor: "rgba(1,1,1,0.4)",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
               <div className={classes.quoteInner}>
-                <Typography
-                  className={classes.quoteText}
-                  variant="h1"
-                >
-                  El mejor médico del mundo es el veterinario: 
+                <Typography className={classes.quoteText} variant="h1">
+                  El mejor médico del mundo es el veterinario:
                 </Typography>
                 <div className={classes.person}>
                   <Typography
                     className={classes.name}
                     variant="body1"
-                    style={{fontWeight:"bold"}}
+                    style={{ fontWeight: "bold" }}
                   >
-                    El no puede preguntarles a sus 
-                  pacientes que les pasa, simplemente lo tienen que saber
+                    El no puede preguntarles a sus pacientes que les pasa,
+                    simplemente lo tienen que saber
                   </Typography>
                   <Typography
                     className={classes.bio}
                     variant="body2"
-                    style={{fontWeight:"bold"}}
+                    style={{ fontWeight: "bold" }}
                   >
                     Will Rogers
                   </Typography>
@@ -278,12 +268,7 @@ const SignIn = props => {
             </div>
           </div>
         </Grid>
-        <Grid
-          className={classes.content}
-          item
-          lg={7}
-          xs={12}
-        >
+        <Grid className={classes.content} item lg={7} xs={12}>
           <div className={classes.content}>
             <div className={classes.contentHeader}>
               <IconButton onClick={handleBack}>
@@ -291,28 +276,15 @@ const SignIn = props => {
               </IconButton>
             </div>
             <div className={classes.contentBody}>
-              <form
-                className={classes.form}
-                onSubmit={handleSignIn}
-              >
-                <Typography
-                  className={classes.title}
-                  variant="h2"
-                >
+              <form className={classes.form} onSubmit={handleSignIn}>
+                <Typography className={classes.title} variant="h2">
                   Bienvenidos a su sistema de gestión
                 </Typography>
-                
-                <Typography
-                  color="textSecondary"
-                  gutterBottom
-                >
+
+                <Typography color="textSecondary" gutterBottom>
                   Veterinaria
                 </Typography>
-                <Grid
-                  className={classes.socialButtons}
-                  container
-                  spacing={2}
-                >
+                <Grid className={classes.socialButtons} container spacing={2}>
                   <Grid item>
                     <Button
                       color="primary"
@@ -336,10 +308,8 @@ const SignIn = props => {
                       Login with Google
                     </Button>
                   </Grid>
-                </Grid> 
-                
-                
-                
+                </Grid>
+
                 <Typography
                   align="center"
                   className={classes.sugestion}
@@ -350,37 +320,41 @@ const SignIn = props => {
                 </Typography>
                 <TextField
                   className={classes.textField}
-                  error={hasError('Username')}
+                  error={hasError("Username")}
                   fullWidth
                   helperText={
-                    hasError('Username') ? formState.errors.Username[0] : null
+                    hasError("Username") ? formState.errors.Username[0] : null
                   }
                   label="Correo electrónico"
                   name="Username"
                   onChange={handleChange}
                   type="text"
-                  value={formState.values.Username || ''}
+                  value={formState.values.Username || ""}
                   variant="outlined"
                 />
                 <TextField
                   className={classes.textField}
-                  error={hasError('Password')}
+                  error={hasError("Password")}
                   fullWidth
                   helperText={
-                    hasError('Password') ? formState.errors.Password[0] : null
+                    hasError("Password") ? formState.errors.Password[0] : null
                   }
                   label="Contraseña"
                   name="Password"
                   onChange={handleChange}
                   type="password"
-                  value={formState.values.Password || ''}
+                  value={formState.values.Password || ""}
                   variant="outlined"
                 />
-                <Link  variant="body2" style={{cursor:"pointer"}}  onClick={ (e) => {
-                    e.preventDefault()  
-                    props.history.push("/forgot-password")
-                  }}>
-                    {"¿ Olvidaste la contraseña ? Haz click aqui"}
+                <Link
+                  variant="body2"
+                  style={{ cursor: "pointer" }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    props.history.push("/forgot-password");
+                  }}
+                >
+                  {"¿ Olvidaste la contraseña ? Haz click aqui"}
                 </Link>
                 <Button
                   className={classes.signInButton}
@@ -389,20 +363,24 @@ const SignIn = props => {
                   fullWidth
                   size="large"
                   type="submit"
-                  variant="contained"                  
+                  variant="contained"
                 >
                   INGRESAR
                 </Button>
 
-                <Grid item>          
-                  <Link  variant="body2" style={{cursor:"pointer"}} onClick={ (e) => {
-                    e.preventDefault()  
-                    props.history.push("/sign-up")
-                  }}>
+                <Grid item>
+                  <Link
+                    variant="body2"
+                    style={{ cursor: "pointer" }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      props.history.push("/sign-up");
+                    }}
+                  >
                     {"¿ No tienes una cuenta ? Registrarse"}
                   </Link>
                 </Grid>
-                
+
                 {/*  <Typography
                   color="textSecondary"
                   variant="body1"
@@ -416,7 +394,8 @@ const SignIn = props => {
                     Sign up
                   </Link>
                 </Typography> */}
-                <br/><br/>
+                <br />
+                <br />
               </form>
             </div>
           </div>
@@ -427,12 +406,11 @@ const SignIn = props => {
 };
 
 SignIn.propTypes = {
-  history: PropTypes.object
+  history: PropTypes.object,
 };
 
 const mapDispatchToProps = {
   loginUser,
- };
- 
-export default connect(null, mapDispatchToProps)(withRouter(SignIn));
+};
 
+export default connect(null, mapDispatchToProps)(withRouter(SignIn));

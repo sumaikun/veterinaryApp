@@ -38,7 +38,8 @@ const Routes = () => {
         to="/dashboard"
       />
       <RouteWithLayout
-        component={DashboardView}
+        //component={DashboardView}
+        component={PetListView}
         exact
         layout={MainLayout}
         authenticated={true}

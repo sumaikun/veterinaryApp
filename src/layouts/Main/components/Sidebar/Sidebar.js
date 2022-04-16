@@ -134,11 +134,11 @@ const Sidebar = props => {
   ];*/
 
   let pages = [
-    {
+    /*{
       title: 'Notificaciones',
       href: '/dashboard',
       icon: <DashboardIcon />
-    }
+    }*/
   ] 
 
   if(props.authState.user.role === "ADMIN")
